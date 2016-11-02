@@ -1,0 +1,52 @@
+{% extends "recording/base.html" %}
+{% load i18n %}
+{% load bootstrap %}
+{% load staticfiles %}
+{% load static %}
+{% block body %}
+<div class="panel panel-info">
+    <div class="panel-heading">
+        <div class="inline-block"><h3> Check your setup</h3></div>
+    </div>
+    <div class="panel-body">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="col-md-6 col-sm-6 .col-lg-6">
+                    <div class="videoContainer">
+                        <video id="localVideo" oncontextmenu="return false;" autoplay=""></video>
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-6 .col-lg-6">
+                    <div class="setup">
+                        Is the person’s face well lit (not lit from behind)?
+                    </div>
+                    <br>
+                    <div class="col-md-12  col-sm-12 col-xs-12" style="margin-bottom: 10px; text-align: center;">
+                        <img class="image" src="{% static 'img/recording/bad_face.png' %}" alt="Smiley face" height="42" width="42">
+                        <img class="image" src="{% static 'img/recording/good_face.png' %}" alt="Smiley face" height="42" width="42">
+                    </div>
+                    <div style="text-align: center;" class="col-md-12 col-sm-12 col-xs-12">
+                        <button class="btn btn-success" id="yes" onclick="location.href='{% url 'recording_setup3' %}'">
+                            Yes
+                        </button>
+                        <button class="btn btn-not" id="no" onclick="location.href='{% url 'home' %}'">No</button>
+                    </div>
+
+                    <div class="skip">
+                        <a class="skip" style=text-decoration:none; href="{% url 'home' %}">Skip setup
+                            check
+                        </a>
+
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="{% static 'js/recording/getUserMedia.js' %}"></script>
+<script src="{% static 'js/recording/setup1.js' %}"></script>
+{% endblock %}

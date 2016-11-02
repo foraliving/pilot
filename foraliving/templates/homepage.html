@@ -1,0 +1,103 @@
+{% extends "site_base.html" %}
+{% load i18n %}
+{% load bootstrap %}
+{% load staticfiles %}
+{% load static %}
+
+{% block head_title %}
+    {% trans "Home" %}
+{% endblock %}
+
+
+
+{% block body %}
+<header>
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/homepage.css' %}">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+</header>
+
+<div id="first-row" class="container-fluid" style="  ">
+
+	<div id="grey" class="container" style="  " >
+		<p>&nbsp;</p>
+
+
+		<span class="row" style="margin: 40px;">
+				<span class="col-sm-8">
+
+					<div id="sizechange" class="hidden-xs" style="  font-size:30pt; color: #5da4d2;" align="left">Welcome Pilot Teachers!</div>
+
+					<div class="visible-xs-inline" style=" text-align: center;  font-size:18pt; color: #5da4d2;" ><br>&nbsp;&nbsp;&nbsp;&nbsp;Welcome Pilot Teachers!<br></div><br>
+
+					<p style="color: #333333; font-size: 1.6vw;">We are excited about starting this pilot with you so that together we can design the best school driven solution fot building a community focused on providing students with an early start for finding their place in the world.</p>
+					<p style="color: #333333; font-size: 1.6vw;" >We believe if youth have opportunites to learn about the expectations of the workplace and the variety of careers available, they make better decisions about college, how much college debt to take on and will have fewer struggles finding work. It is our experience that many adults are very willing to help students in this process and will share their career experiences, given a viable process for doing so. Be assured that student safety is our top priority and we look forward to working with you to create a strong safety process.</p>
+				</span>
+
+				<span class="col-sm-4">
+					<div class="thumbnails">
+			         	<div class="span4">
+			         		<div class="thumbnail" style="  border: 1px solid #5da4d2 ; ">
+
+				                <div class="flex-video widescreen ">
+					                {% for demo in videoDemo %}
+					                	<iframe  src="{{demo.url}}" frameborder="0" allowfullscreen></iframe>
+					                {% endfor %}
+				                </div>
+
+
+				              <span class="caption">
+
+				               <span>About For A Living</span>
+
+				              </span>
+			         		</div>
+			         	 </div>
+		       		 </div>
+				</span>
+		</span>
+
+		<br><br>
+		<div  id="sizechange" style=" font-size:30pt; color: #5da4d2;">
+			&nbsp; Example videos created by the For A Living team
+		</div>
+
+		<!-- Jacquie's Videos -->
+		<!-- <div class="row"> -->
+			{% for video in videos %}
+				<div class="col-lg-4 col-sm-6">
+					<div class="thumbnails">
+			         	<div class="span4">
+			         		<div class="thumbnail" >
+				                <div class="flex-video widescreen ">
+				                 	<iframe width="560" height="315" src="{{video.url}}" frameborder="0" allowfullscreen></iframe>
+				                </div>
+					            <div class="caption">
+									<strong style=" font-size: 18pt; color: #808060; ">
+										{{video.name}}<br>
+									</strong>
+									<span style=" font-size: 13pt; color: #808060; ">
+										{{video.creation_date}}<br>
+									</span>
+				              </div>
+			         		</div>
+			         	</div>
+			         </div>
+				</div>
+			{% endfor %}
+		<!-- </div>		 -->
+
+		<hr>
+	</div>
+</div>
+
+
+
+
+{% endblock %}
+{% block scripts %}
+	<script type="text/javascript">
+
+	</script>
+{% endblock %}

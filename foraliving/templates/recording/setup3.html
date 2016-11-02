@@ -1,0 +1,112 @@
+{% extends "recording/base.html" %}
+{% load i18n %}
+{% load bootstrap %}
+{% load staticfiles %}
+{% load static %}
+{% block body %}
+<div class="panel panel-info">
+    <div class="panel-heading">
+        <div class="inline-block"><h3> Check your setup</h3></div>
+    </div>
+    <div class="panel-body">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="col-md-6 col-sm-6 .col-lg-6">
+                    <div class="videoContainer">
+                        <video id="localVideo" oncontextmenu="return false;" autoplay=""></video>
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-6 .col-lg-6">
+                    <div class="setup">
+                        Is your battery fully powered or are you plugged in?
+                    </div>
+                    <br>
+                    <div class="col-md-6  col-sm-6 col-xs-6" style="margin-bottom: 10px; text-align: center;">
+                        <div id="status" style="font-size:16px;"></div>
+                        <img class="image_battery" src="{% static 'img/recording/battery_full.jpg' %}" alt="Smiley face" height="20"
+                             width="20" id="charging" style="display:none;">
+                        <img class="image_battery" src="{% static 'img/recording/battery_disconect.png' %}" alt="Smiley face" height="20"
+                             width="20" id="disconnect" style="display:none;">
+                    </div>
+                    <div class="col-md-6 col-sm-6 col-xs-6" style="margin-bottom: 10px; text-align: center;">
+                        <div id="status_level" style="font-size:16px;"></div>
+                        <img class="image_battery" src="{% static 'img/recording/battery_charging.png' %}" alt="Smiley face" height="20"
+                             width="20" id="full" style="display:none;">
+                        <img class="image_battery" src="{% static 'recording/battery_low.png' %}" alt="Smiley face" height="20"
+                             width="20" id="low" style="display:none;">
+                    </div>
+                    <div style="text-align: center;" class="col-md-12 col-sm-12 col-xs-12">
+                        <button class="btn btn-success" id="yes" onclick="location.href='{% url 'recording_setup2' %}'">
+                            Yes
+                        </button>
+                        <button class="btn btn-not" id="no" onclick="location.href='{% url 'home' %}'">No</button>
+                    </div>
+
+                    <div class="skip">
+                        <a class="skip" style=text-decoration:none; href="{% url 'home' %}">Skip setup
+                            check
+                        </a>
+
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="{% static 'js/recording/getUserMedia.js' %}"></script>
+<script src="{% static 'js/recording/setup1.js' %}"></script>
+
+
+<script>
+    navigator.getBattery().then(function (battery) {
+        function updateAllBatteryInfo() {
+            updateChargeInfo();
+            updateLevelInfo();
+        }
+
+        updateAllBatteryInfo();
+
+        battery.addEventListener('chargingchange', function () {
+            updateChargeInfo();
+        });
+        function updateChargeInfo() {
+            battery_charging = ("Battery charging: "
+            + (battery.charging ? "Yes" : "No"));
+
+            $('#status').text(battery_charging);
+            if (battery.charging == true) {
+                $("#charging").show();
+                $("#disconnect").hide();
+            }
+            else {
+                $("#disconnect").show();
+                $("#charging").hide();
+            }
+
+        }
+
+        battery.addEventListener('levelchange', function () {
+            updateLevelInfo();
+        });
+        function updateLevelInfo() {
+            battery_level = ("Battery level: "
+            + battery.level * 100 + "%");
+            $('#status_level').text(battery_level);
+
+            if (battery.level <= 0.50) {
+                $("#low").show();
+                $("#full").hide();
+            } else {
+                $("#low").hide();
+                $("#full").show();
+            }
+
+        }
+
+    })
+</script>
+{% endblock %}

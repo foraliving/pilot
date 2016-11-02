@@ -1,0 +1,67 @@
+{% extends "recording/base.html" %}
+{% load i18n %}
+{% load bootstrap %}
+{% load staticfiles %}
+{% load static %}
+{% block body %}
+<div class="panel panel-info">
+    <div class="panel-heading">
+        <div class="inline-block"><h3> Setup Interview</h3></div>
+    </div>
+    <div class="panel-body">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div id="question1">
+                    <div class="question"> Are you and your interviewee in the same room?</div>
+                    <div id="option1">
+                        <div class="radio">
+                            <label><input type="radio" name="question1"  value="1">Yes</label>
+                        </div>
+                        <div class="radio">
+                            <label><input type="radio" name="question1" value="2">No</label>
+                        </div>
+                    </div>
+                </div>
+                <div id="question2" style="display:none;">
+                    <div id="option2">
+                        <div class="question">
+                            How will you record this interview?
+                        </div>
+                        <div class="radio">
+                            <label><input type="radio" name="question2" value="1">With two laptop computers (recommended when using
+                                laptop's
+                                internal camera)</label>
+                        </div>
+                        <div class="radio">
+                            <label><input type="radio" name="question2" value="2">On a mobile device that the camera filming the
+                                person
+                                in front
+                                of
+                                you</label>
+                        </div>
+                        <div class="radio">
+                            <label><input type="radio" name="question2" value="3">With a laptop with a external usb connected
+                                camera,
+                                facing the
+                                interviewee</label>
+                        </div>
+                        <div class="radio">
+                            <label><input type="radio" name="question2" value="4">One laptop with the camera facing me </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-footer">
+                <div class="clearfix">
+                    <div class="pull-right header-button">
+                        <button class="btn btn-success" id="next" type="submit">Next</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="{% static 'js/recording/setup_interview.js' %}"></script>
+{% endblock %}
