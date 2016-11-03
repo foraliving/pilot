@@ -1,7 +1,7 @@
 # For a living Project
 ## This repo will house the website (Django app) for the "For a Living" project
 
-### Please following the following directions to set up your environment.
+### Please following these directions to set up your environment. 
 
 * We strongly recommend that you run this inside of a python virtual environment. 
   * More info on what a virtual environment and how to run it can be found [here](http://docs.python-guide.org/en/latest/dev/virtualenvs/)
