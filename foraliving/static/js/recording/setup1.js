@@ -192,50 +192,6 @@ var desktopConstraints = {
     audio: true
 };
 
-//constraints for mobile browser
-var mobileConstraints = {
-
-    video: {
-        mandatory: {
-            maxWidth: 480,
-            maxHeight: 320,
-        }
-    },
-
-    audio: true
-}
-
-//if a user is using a mobile browser
-if (/Android|iPhone|iPad/i.test(navigator.userAgent)) {
-    var constraints = mobileConstraints;
-} else {
-    var constraints = desktopConstraints;
-}
-
-function hasUserMedia() {
-    //check if the browser supports the WebRTC
-    return !!(navigator.getUserMedia || navigator.webkitGetUserMedia ||
-    navigator.mozGetUserMedia);
-}
-
-if (hasUserMedia()) {
-
-    navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia ||
-        navigator.mozGetUserMedia;
-
-    //enabling video and audio channels
-    navigator.getUserMedia(constraints, function (stream) {
-        var video = document.querySelector('video');
-
-        //inserting our stream to the video tag
-        video.src = window.URL.createObjectURL(stream);
-
-    }, function (err) {
-    });
-} else {
-    alert("WebRTC is not supported");
-}
-
 // var button = document.getElementById('screenShareButton'),
 //         setButton = function (bool) {
 //             button.innerText = bool ? 'share screen' : 'stop sharing';
@@ -246,7 +202,7 @@ if (hasUserMedia()) {
 // webrtc.on('localScreenRemoved', function () {
 //     setButton(true);
 // });
-
+//
 // setButton(true);
 
 // button.onclick = function () {

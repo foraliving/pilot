@@ -11,7 +11,7 @@ $(document).ready(function () {
     });
 
     $("input[name='question2']").change(function (event) {
-        if ($("input[name='question2']:checked").val() == 1 || $("input[name='question2']:checked").val() == 2) {
+        if ($("input[name='question2']:checked").val() == 1) {
             alert("For the option, the option is not available");
         }
         else {
@@ -21,7 +21,7 @@ $(document).ready(function () {
 
     $('html').on('click', '#next', function (e) {
         e.preventDefault();
-        if ($("input[name='question2']:checked").val() == 3 || $("input[name='question2']:checked").val() == 4){
+        if ($("input[name='question2']:checked").val() == 2 || $("input[name='question2']:checked").val() == 3){
             window.location.href = '/foraliving/setup/';
         }
         else {

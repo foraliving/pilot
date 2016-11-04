@@ -23,26 +23,26 @@
                     <br>
                     <div class="col-md-6  col-sm-6 col-xs-6" style="margin-bottom: 10px; text-align: center;">
                         <div id="status" style="font-size:16px;"></div>
-                        <img class="image_battery" src="{% static 'img/recording/battery_full.jpg' %}" alt="Smiley face" height="20"
+                        <img class="image_battery img-responsive" src="{% static 'img/recording/battery_full.jpg' %}" alt="Smiley face" height="20"
                              width="20" id="charging" style="display:none;">
-                        <img class="image_battery" src="{% static 'img/recording/battery_disconect.png' %}" alt="Smiley face" height="20"
+                        <img class="image_battery img-responsive" src="{% static 'img/recording/battery_disconect.png' %}" alt="Smiley face" height="20"
                              width="20" id="disconnect" style="display:none;">
                     </div>
                     <div class="col-md-6 col-sm-6 col-xs-6" style="margin-bottom: 10px; text-align: center;">
                         <div id="status_level" style="font-size:16px;"></div>
-                        <img class="image_battery" src="{% static 'img/recording/battery_charging.png' %}" alt="Smiley face" height="20"
+                        <img class="image_battery img-responsive" src="{% static 'img/recording/battery_charging.png' %}" alt="Smiley face" height="20"
                              width="20" id="full" style="display:none;">
-                        <img class="image_battery" src="{% static 'recording/battery_low.png' %}" alt="Smiley face" height="20"
+                        <img class="image_battery img-responsive" src="{% static 'recording/battery_low.png' %}" alt="Smiley face" height="20"
                              width="20" id="low" style="display:none;">
                     </div>
                     <div style="text-align: center;" class="col-md-12 col-sm-12 col-xs-12">
-                        <button class="btn btn-success" id="yes" onclick="location.href='{% url 'recording_setup2' %}'">
+                        <button class="btn btn-success" id="yes" onclick="location.href='{% url 'question_interview' %}'">
                             Yes
                         </button>
                         <button class="btn btn-not" id="no" onclick="location.href='{% url 'home' %}'">No</button>
                     </div>
 
-                    <div class="skip">
+                    <div class="skip col-md-12 col-sm-12 col-xs-12">
                         <a class="skip" style=text-decoration:none; href="{% url 'home' %}">Skip setup
                             check
                         </a>

@@ -1,0 +1,82 @@
+{% extends "recording/base.html" %}
+{% load i18n %}
+{% load bootstrap %}
+{% load staticfiles %}
+{% load static %}
+{% block body %}
+<div class="panel panel-info">
+    <div class="panel-heading">
+        <div class="row">
+            <div class="col-sm-3 title-line-height">
+                <div class="btn-group">
+                    <button class='btn btn-success btn-title border-radius' id="back" onclick="location.href='{% url 'recording_setup' %}'"><i
+                            class="fa fa-arrow-left"
+                            aria-hidden="true"></i> Back to
+                        setup
+                    </button>
+                </div>
+            </div>
+            <div class="col-sm-6 text-center">
+                <h4 class="inline-title">Select your interview questions </h4>
+
+            </div>
+            <div class="col-sm-3 title-line-height text-right">
+                <div class="btn-group">
+                    <button class='btn btn-success btn-title border-radius' > Done <i
+                            class="fa fa-check-square"
+                            aria-hidden="true"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="panel-body">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <table class="table table-striped table-responsive ">
+                    <thead>
+                    <tr>
+                        <th class="code">Questions</th>
+                        <th class="pdf"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% if questions %}
+
+                    {% for question in questions %}
+                    <tr data-link="{% url 'recording' question_id=question.question.id %}">
+                        <td> {{question.question.name}}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    {% else %}
+                    <tr>
+                        <td colspan="3">No Questions are available.</td>
+                    </tr>
+                    {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="panel-footer">
+        <div class="clearfix">
+            <div class="pull-right header-button">
+                <button class="btn btn-success" id="add_question" type="submit"> Add questions <i
+                        class="fa fa-plus-square"
+                        aria-hidden="true"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="{% static 'js/recording/setup_interview.js' %}"></script>
+<script>
+
+    $('table.table tr').click(function () {
+        window.location.href = $(this).data('link');
+    });
+</script>
+{% endblock %}
