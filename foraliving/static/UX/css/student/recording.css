@@ -94,7 +94,7 @@
     margin-left: 5px;
     margin-right: 5px;
     margin-top: 3px;
-    display: block;
+    display: inline;
     margin: auto;
 }
 
@@ -221,10 +221,8 @@ video {
 
 @media (max-width: 766px) {
     video {
-        max-width: 500px;
-    !important;
-        max-height: 250px;
-    !important;
+        max-width: 600px;  !important;
+        max-height: 400px;  !important;
     }
 
     #custom-message {
@@ -236,10 +234,8 @@ video {
 
 @media (max-width: 600px) {
     video {
-        max-width: 300px;
-    !important;
-        max-height: 150px;
-    !important;
+        max-width: 400px;  !important;
+        max-height: 200px;  !important;
     }
 
     #custom-message {
@@ -249,18 +245,30 @@ video {
     }
 }
 
-@media (max-width: 300px) {
+@media (max-width: 358px) {
     video {
-        max-width: 200px;
-    !important;
-        max-height: 100px;
-    !important;
+        max-width: 350px;  !important;
+        max-height: 175px;  !important;
     }
 
     #custom-message {
         position: relative;
         text-align: center;
-        top: -75px;
+        top: -80px;
+    }
+}
+
+
+@media (max-width: 310px) {
+    video {
+        max-width: 250px;  !important;
+        max-height: 100px;  !important;
+    }
+
+    #custom-message {
+        position: relative;
+        text-align: center;
+        top: -142px;
     }
 
     #record {
@@ -269,8 +277,9 @@ video {
     }
 
     #count {
-        font-size: 24px;
+        font-size: 16px !important;
         text-align: center;
+        top: -159px !important;
     }
 }
 

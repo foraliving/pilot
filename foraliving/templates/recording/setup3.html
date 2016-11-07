@@ -17,26 +17,38 @@
                     </div>
                 </div>
                 <div class="col-md-6 col-sm-6 .col-lg-6">
-                    <div class="setup">
+                    <div class="setup" id="text-default" style="display: none;">
                         Is your battery fully powered or are you plugged in?
                     </div>
-                    <br>
-                    <div class="col-md-6  col-sm-6 col-xs-6" style="margin-bottom: 10px; text-align: center;">
-                        <div id="status" style="font-size:16px;"></div>
-                        <img class="image_battery img-responsive" src="{% static 'img/recording/battery_full.jpg' %}" alt="Smiley face" height="20"
-                             width="20" id="charging" style="display:none;">
-                        <img class="image_battery img-responsive" src="{% static 'img/recording/battery_disconect.png' %}" alt="Smiley face" height="20"
-                             width="20" id="disconnect" style="display:none;">
+                    <div class="setup" id="setup" style="display: none;">
+                        Your power supply is good
                     </div>
-                    <div class="col-md-6 col-sm-6 col-xs-6" style="margin-bottom: 10px; text-align: center;">
-                        <div id="status_level" style="font-size:16px;"></div>
-                        <img class="image_battery img-responsive" src="{% static 'img/recording/battery_charging.png' %}" alt="Smiley face" height="20"
+                    <div class="setup" id="setup2" style="display: none;">
+                        Your battery is low. Plug in before starting the interview
+                    </div>
+                    <br>
+                    <div class="col-md-12 col-sm-12 col-xs-12" style="margin-bottom: 10px; text-align: center;">
+                        <img class="image_battery img-responsive"
+                             src="{% static 'img/recording/battery_charging.png' %}" alt="Smiley face" height="20"
                              width="20" id="full" style="display:none;">
-                        <img class="image_battery img-responsive" src="{% static 'recording/battery_low.png' %}" alt="Smiley face" height="20"
+                        <img class="image_battery img-responsive" src="{% static 'img/recording/battery_low.png' %}"
+                             alt="Smiley face" height="20"
                              width="20" id="low" style="display:none;">
                     </div>
                     <div style="text-align: center;" class="col-md-12 col-sm-12 col-xs-12">
-                        <button class="btn btn-success" id="yes" onclick="location.href='{% url 'question_interview' %}'">
+                        <button class="btn btn-success" id="yes"
+                                onclick="location.href='{% url 'question_interview' %}'" style="display:none;">
+                            Next
+                        </button>
+                        <button class="btn btn-not" id="no" onclick="location.href='{% url 'question_interview' %}'"
+                                style="display:none;">I want to
+                            continue anyway
+                        </button>
+                    </div>
+                    <div style="text-align: center; display:none;" class="col-md-12 col-sm-12 col-xs-12"
+                         id="other_navigator">
+                        <button class="btn btn-success" id="yes"
+                                onclick="location.href='{% url 'question_interview' %}'">
                             Yes
                         </button>
                         <button class="btn btn-not" id="no" onclick="location.href='{% url 'home' %}'">No</button>
@@ -62,51 +74,67 @@
 
 
 <script>
-    navigator.getBattery().then(function (battery) {
-        function updateAllBatteryInfo() {
-            updateChargeInfo();
-            updateLevelInfo();
-        }
 
-        updateAllBatteryInfo();
+    var isOpera = (!!window.opr && !!opr.addons) || !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;
+    // Firefox 1.0+
+    var isFirefox = typeof InstallTrigger !== 'undefined';
+    // Safari 3.0+ "[object HTMLElementConstructor]"
+    var isSafari = Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0 || (function (p) {
+                return p.toString() === "[object SafariRemoteNotification]";
+            })(!window['safari'] || safari.pushNotification);
+    // Internet Explorer 6-11
+    var isIE = /*@cc_on!@*/false || !!document.documentMode;
+    // Edge 20+
+    var isEdge = !isIE && !!window.StyleMedia;
+    // Chrome 1+
+    var isChrome = !!window.chrome && !!window.chrome.webstore;
+    // Blink engine detection
+    var isBlink = (isChrome || isOpera) && !!window.CSS;
 
-        battery.addEventListener('chargingchange', function () {
-            updateChargeInfo();
-        });
-        function updateChargeInfo() {
-            battery_charging = ("Battery charging: "
-            + (battery.charging ? "Yes" : "No"));
 
-            $('#status').text(battery_charging);
-            if (battery.charging == true) {
-                $("#charging").show();
-                $("#disconnect").hide();
-            }
-            else {
-                $("#disconnect").show();
-                $("#charging").hide();
-            }
-
-        }
-
-        battery.addEventListener('levelchange', function () {
-            updateLevelInfo();
-        });
-        function updateLevelInfo() {
-            battery_level = ("Battery level: "
-            + battery.level * 100 + "%");
-            $('#status_level').text(battery_level);
-
-            if (battery.level <= 0.50) {
-                $("#low").show();
-                $("#full").hide();
-            } else {
-                $("#low").hide();
-                $("#full").show();
+    if (isChrome == true || isOpera == true || isFirefox == true) {
+        navigator.getBattery().then(function (battery) {
+            function updateAllBatteryInfo() {
+                updateLevelInfo();
             }
 
-        }
+            updateAllBatteryInfo();
 
-    })
+            battery.addEventListener('chargingchange', function () {
+                updateLevelInfo();
+            });
+
+            battery.addEventListener('levelchange', function () {
+                updateLevelInfo();
+            });
+            function updateLevelInfo() {
+                if (battery.level <= 0.35 && battery.charging == false) {
+                    $("#low").show();
+                    $("#setup2").show();
+                    $("#setup").hide();
+                    $("#full").hide();
+                    $("#yes").hide();
+                    $("#no").show();
+                    $(".btn-not").css("width", "auto");
+                } else {
+                    $("#setup2").hide();
+                    $("#setup").show();
+                    $("#low").hide();
+                    $("#full").show();
+                    $("#yes").show();
+                    $("#no").hide();
+                }
+            }
+
+        })
+    } else {
+        $("#text-default").show();
+        $("#other_navigator").show();
+        $("#low").show();
+        $("#full").show();
+
+    }
+
+
 </script>
 {% endblock %}

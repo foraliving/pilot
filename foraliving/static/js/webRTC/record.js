@@ -172,7 +172,7 @@ function startRecording() {
             $("#count").text(counter);
         }
         if (counter == 0) {
-            document.getElementById("count").style.fontSize = "50px";
+            document.getElementById("count").style.fontSize = "50%";
             $("#custom-message").text('recording started..');
             $("#count").text('Ask your question');
         }
