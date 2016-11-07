@@ -37,10 +37,10 @@
                     </div>
                     <div style="text-align: center;" class="col-md-12 col-sm-12 col-xs-12">
                         <button class="btn btn-success" id="yes"
-                                onclick="location.href='{% url 'question_interview' %}'" style="display:none;">
+                                onclick="location.href='{% url 'question_interview' interview_id=2 %}'" style="display:none;">
                             Next
                         </button>
-                        <button class="btn btn-not" id="no" onclick="location.href='{% url 'question_interview' %}'"
+                        <button class="btn btn-not" id="no" onclick="location.href='{% url 'question_interview' interview_id=2 %}'"
                                 style="display:none;">I want to
                             continue anyway
                         </button>
@@ -48,7 +48,7 @@
                     <div style="text-align: center; display:none;" class="col-md-12 col-sm-12 col-xs-12"
                          id="other_navigator">
                         <button class="btn btn-success" id="yes"
-                                onclick="location.href='{% url 'question_interview' %}'">
+                                onclick="location.href='{% url 'question_interview'  interview_id=2 %}'">
                             Yes
                         </button>
                         <button class="btn btn-not" id="no" onclick="location.href='{% url 'home' %}'">No</button>

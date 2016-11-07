@@ -49,8 +49,17 @@ class QuestionInterview(LoginRequiredMixin, generic.View):
     login_url = settings.LOGIN_URL
     question_view = 'recording/questions.html'
 
-    def get(self, request):
-        questions = Interview_Question_Map.objects.filter(interview=1)
+    def get(self, request, interview_id):
+        questions = Interview_Question_Map.objects.filter(interview=interview_id)
+        question_default = Interview_Question_Map.objects.filter(question_id=4, interview_id=interview_id)
+        if not questions:
+            new_data = Interview_Question_Map(interview_id=interview_id, question_id=4)
+            new_data.save()
+
+        elif not question_default:
+            new_data = Interview_Question_Map(interview_id=interview_id, question_id=4)
+            new_data.save()
+        questions = Interview_Question_Map.objects.filter(interview=interview_id)
         return render(request, self.question_view, {'questions': questions})
 
 class Recording(LoginRequiredMixin, generic.View):
