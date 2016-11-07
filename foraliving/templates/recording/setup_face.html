@@ -22,21 +22,24 @@
                     </div>
                     <br>
                     <div class="col-md-12  col-sm-12 col-xs-12" style="margin-bottom: 10px; text-align: center;">
-                        <img class="image" src="{% static 'img/recording/bad_face.png' %}" alt="Smiley face" height="42" width="42">
-                        <img class="image" src="{% static 'img/recording/good_face.png' %}" alt="Smiley face" height="42" width="42">
+                        <img class="image" src="{% static 'img/recording/bad_face.png' %}" alt="Smiley face" height="42"
+                             width="42">
+                        <img class="image" src="{% static 'img/recording/good_face.png' %}" alt="Smiley face"
+                             height="42" width="42">
                     </div>
                     <div style="text-align: center;" class="col-md-12 col-sm-12 col-xs-12">
-                        <button class="btn btn-success" id="yes" onclick="location.href='{% url 'recording_setup3' %}'">
+                        <button class="btn btn-success" id="yes"
+                                onclick="location.href='{% url 'recording_setup_battery' %}'">
                             Yes
                         </button>
-                        <button class="btn btn-not" id="no" onclick="location.href='{% url 'home' %}'">No</button>
+                        <button class="btn btn-not" id="no">No</button>
                     </div>
 
                     <div class="skip">
-                        <a class="skip" style=text-decoration:none; href="{% url 'home' %}">Skip setup
+                        <a class="skip" style=text-decoration:none;
+                           href="{% url 'question_interview' interview_id=1 %}">Skip setup
                             check
                         </a>
-
                     </div>
                 </div>
 
@@ -45,8 +48,15 @@
         </div>
     </div>
 </div>
+{% include 'recording/help.html' %}
 {% endblock %}
 {% block scripts %}
 <script src="{% static 'js/recording/getUserMedia.js' %}"></script>
 <script src="{% static 'js/recording/setup1.js' %}"></script>
+<script>
+    $('html').on('click', '#no', function (e) {
+        e.preventDefault();
+        $('#help-modal').modal();
+    });
+</script>
 {% endblock %}

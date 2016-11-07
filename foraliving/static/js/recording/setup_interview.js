@@ -22,7 +22,7 @@ $(document).ready(function () {
     $('html').on('click', '#next', function (e) {
         e.preventDefault();
         if ($("input[name='question2']:checked").val() == 2 || $("input[name='question2']:checked").val() == 3){
-            window.location.href = '/foraliving/setup/';
+            window.location.href = '/foraliving/setup_microphone/';
         }
         else {
             alert ("Please, select one option valid")

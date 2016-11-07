@@ -2,7 +2,7 @@ from django.conf.urls import include, url
 
 from django.contrib import admin
 from . import views
-from foraliving.recording import RecordingType, RecordingSetup, RecordingSetup2, RecordingSetup3, QuestionInterview, Recording
+from foraliving.recording import RecordingType, RecordingSetupMicrophone, RecordingSetupFace, RecordingSetupBattery, QuestionInterview, Recording
 
 urlpatterns = [
     url(r"^admin/", include(admin.site.urls)),
@@ -15,9 +15,9 @@ urlpatterns = [
 
     # recording urls
     url(r'^recording_type/$', RecordingType.as_view(), name='recording_type'),
-    url(r'^setup/$', RecordingSetup.as_view(), name='recording_setup'),
-    url(r'^setup2/$', RecordingSetup2.as_view(), name='recording_setup2'),
-    url(r'^setup3/$', RecordingSetup3.as_view(), name='recording_setup3'),
+    url(r'^setup_microphone/$', RecordingSetupMicrophone.as_view(), name='recording_setup_microphone'),
+    url(r'^setup_face/$', RecordingSetupFace.as_view(), name='recording_setup_face'),
+    url(r'^setup_battery/$', RecordingSetupBattery.as_view(), name='recording_setup_battery'),
     url(r'^question_interview/(?P<interview_id>\d+)/$', QuestionInterview.as_view(), name='question_interview'),
     url(r'^recording/(?P<question_id>\d+)/$', Recording.as_view(), name='recording'),
 ]

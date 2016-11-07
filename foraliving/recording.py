@@ -15,30 +15,30 @@ class RecordingType(LoginRequiredMixin, generic.View):
     def get(self, request):
         return render(request, self.recording_view)
 
-class RecordingSetup(LoginRequiredMixin, generic.View):
+class RecordingSetupMicrophone(LoginRequiredMixin, generic.View):
     """Generic view to display the recording setup (microphone),
     this will be shown after login success"""
     login_url = settings.LOGIN_URL
-    setup_view = 'recording/setup1.html'
+    setup_view = 'recording/setup_microphone.html'
 
     def get(self, request):
         return render(request, self.setup_view)
 
-class RecordingSetup2(LoginRequiredMixin, generic.View):
+class RecordingSetupFace(LoginRequiredMixin, generic.View):
     """Generic view to display the recording setup (face),
     this will be shown after login success"""
     login_url = settings.LOGIN_URL
-    setup_view = 'recording/setup2.html'
+    setup_view = 'recording/setup_face.html'
 
     def get(self, request):
         return render(request, self.setup_view)
 
 
-class RecordingSetup3(LoginRequiredMixin, generic.View):
+class RecordingSetupBattery(LoginRequiredMixin, generic.View):
     """Generic view to display the recording setup (battery),
     this will be shown after login success"""
     login_url = settings.LOGIN_URL
-    setup_view = 'recording/setup3.html'
+    setup_view = 'recording/setup_battery.html'
 
     def get(self, request):
         return render(request, self.setup_view)
@@ -50,14 +50,12 @@ class QuestionInterview(LoginRequiredMixin, generic.View):
     question_view = 'recording/questions.html'
 
     def get(self, request, interview_id):
+        practice_question = Question.objects.get(
+            name="What is your favorite book and why? (student practice question)")
         questions = Interview_Question_Map.objects.filter(interview=interview_id)
-        question_default = Interview_Question_Map.objects.filter(question_id=4, interview_id=interview_id)
-        if not questions:
-            new_data = Interview_Question_Map(interview_id=interview_id, question_id=4)
-            new_data.save()
-
-        elif not question_default:
-            new_data = Interview_Question_Map(interview_id=interview_id, question_id=4)
+        question_default = Interview_Question_Map.objects.filter(question_id=practice_question.id, interview_id=interview_id)
+        if not questions or not question_default:
+            new_data = Interview_Question_Map(interview_id=interview_id, question_id=practice_question.id)
             new_data.save()
         questions = Interview_Question_Map.objects.filter(interview=interview_id)
         return render(request, self.question_view, {'questions': questions})

@@ -37,10 +37,12 @@
                     </div>
                     <div style="text-align: center;" class="col-md-12 col-sm-12 col-xs-12">
                         <button class="btn btn-success" id="yes"
-                                onclick="location.href='{% url 'question_interview' interview_id=2 %}'" style="display:none;">
+                                onclick="location.href='{% url 'question_interview' interview_id=1 %}'"
+                                style="display:none;">
                             Next
                         </button>
-                        <button class="btn btn-not" id="no" onclick="location.href='{% url 'question_interview' interview_id=2 %}'"
+                        <button class="btn btn-not" id="no"
+                                onclick="location.href='{% url 'question_interview' interview_id=1 %}'"
                                 style="display:none;">I want to
                             continue anyway
                         </button>
@@ -48,17 +50,17 @@
                     <div style="text-align: center; display:none;" class="col-md-12 col-sm-12 col-xs-12"
                          id="other_navigator">
                         <button class="btn btn-success" id="yes"
-                                onclick="location.href='{% url 'question_interview'  interview_id=2 %}'">
+                                onclick="location.href='{% url 'question_interview'  interview_id=1 %}'">
                             Yes
                         </button>
-                        <button class="btn btn-not" id="no" onclick="location.href='{% url 'home' %}'">No</button>
+                        <button class="btn btn-not" id="no">No</button>
                     </div>
 
                     <div class="skip col-md-12 col-sm-12 col-xs-12">
-                        <a class="skip" style=text-decoration:none; href="{% url 'home' %}">Skip setup
+                        <a class="skip" style=text-decoration:none;
+                           href="{% url 'question_interview' interview_id=1 %}">Skip setup
                             check
                         </a>
-
                     </div>
                 </div>
 
@@ -67,6 +69,7 @@
         </div>
     </div>
 </div>
+{% include 'recording/help.html' %}
 {% endblock %}
 {% block scripts %}
 <script src="{% static 'js/recording/getUserMedia.js' %}"></script>
@@ -74,6 +77,10 @@
 
 
 <script>
+    $('html').on('click', '#no', function (e) {
+        e.preventDefault();
+        $('#help-modal').modal();
+    });
 
     var isOpera = (!!window.opr && !!opr.addons) || !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;
     // Firefox 1.0+
@@ -99,11 +106,9 @@
             }
 
             updateAllBatteryInfo();
-
             battery.addEventListener('chargingchange', function () {
                 updateLevelInfo();
             });
-
             battery.addEventListener('levelchange', function () {
                 updateLevelInfo();
             });
@@ -125,7 +130,6 @@
                     $("#no").hide();
                 }
             }
-
         })
     } else {
         $("#text-default").show();
@@ -134,7 +138,5 @@
         $("#full").show();
 
     }
-
-
 </script>
 {% endblock %}

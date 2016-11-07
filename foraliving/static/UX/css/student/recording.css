@@ -108,6 +108,12 @@ meter {
     height: 25px;
 }
 
+.modal-button {
+    background-color: #4cae4c;
+    border-color: #4cae4c;
+    border-style: solid;
+}
+
 .navbar-brand {
     float: left;
     height: 50px;
@@ -221,8 +227,10 @@ video {
 
 @media (max-width: 766px) {
     video {
-        max-width: 600px;  !important;
-        max-height: 400px;  !important;
+        max-width: 600px;
+    !important;
+        max-height: 400px;
+    !important;
     }
 
     #custom-message {
@@ -234,8 +242,10 @@ video {
 
 @media (max-width: 600px) {
     video {
-        max-width: 400px;  !important;
-        max-height: 200px;  !important;
+        max-width: 400px;
+    !important;
+        max-height: 200px;
+    !important;
     }
 
     #custom-message {
@@ -247,8 +257,10 @@ video {
 
 @media (max-width: 358px) {
     video {
-        max-width: 350px;  !important;
-        max-height: 175px;  !important;
+        max-width: 350px;
+    !important;
+        max-height: 175px;
+    !important;
     }
 
     #custom-message {
@@ -258,11 +270,12 @@ video {
     }
 }
 
-
 @media (max-width: 310px) {
     video {
-        max-width: 250px;  !important;
-        max-height: 100px;  !important;
+        max-width: 250px;
+    !important;
+        max-height: 100px;
+    !important;
     }
 
     #custom-message {
