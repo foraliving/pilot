@@ -1,0 +1,62 @@
+{% extends 'student/base.html' %}
+
+{% load staticfiles %}
+
+{% block head %}
+<html lang="{{ LANGUAGE_CODE }}">
+<head>
+    <meta charset="utf-8"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <title></title>
+    {% block viewport %}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% endblock %}
+    {% block styles %}
+    <link rel="stylesheet" href="{% static 'UX/css/student/recording.css' %}">
+    <link rel="stylesheet" href="{% static 'UX/css/simpleGridTemplate.css' %}">
+    {% endblock %}
+    {% block html5shim %}
+    <!-- HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <![endif]-->
+    {% endblock %}
+    {% endblock %}
+</head>
+{% block list %}
+<ul class="nav navbar-nav">
+    <li><a href="#">Assignment</a></li>
+    <li class="active"><a href="#">Complete Video</a></li>
+</ul>
+{% endblock %}
+{% block body %}
+<div class="container">
+    <div class="gallery">
+        <h3 style="text-align: center;">{{request.user.first_name}} {{request.user.last_name}}</h3>
+        {% if videos %}
+        <h2 style="text-align: center;">Send the videos you want to use for your assignment </h2>
+        {% for video in videos %}
+        <div class="col-xs-12 col-md-6 col-lg-3">
+            <div class="thumbnail"><a href="#">
+                <div class="embed-responsive embed-responsive-16by9">
+                    <iframe class="embed-responsive-item" src="{{video.url}}"
+                            frameborder="0" allowfullscreen=""></iframe>
+                </div>
+            </a>
+                <h4>{{video.name}}</h4>
+                <p class="tag">{{video.tags}}</p>
+            </div>
+        </div>
+        {% endfor %}
+        {% else %}
+            <h3 style="text-align: center;">You have not recorder any videos yet.</h3>
+        {% endif %}
+</div>
+</div>
+{% endblock %}
+{% block scripts %}{% endblock %}
+

@@ -242,10 +242,8 @@ video {
 
 @media (max-width: 600px) {
     video {
-        max-width: 400px;
-    !important;
-        max-height: 200px;
-    !important;
+        max-width: 400px;  !important;
+        max-height: 200px;  !important;
     }
 
     #custom-message {
@@ -257,10 +255,8 @@ video {
 
 @media (max-width: 358px) {
     video {
-        max-width: 350px;
-    !important;
-        max-height: 175px;
-    !important;
+        max-width: 350px; !important;
+        max-height: 175px; !important;
     }
 
     #custom-message {
@@ -272,10 +268,8 @@ video {
 
 @media (max-width: 310px) {
     video {
-        max-width: 250px;
-    !important;
-        max-height: 100px;
-    !important;
+        max-width: 250px;  !important;
+        max-height: 100px;  !important;
     }
 
     #custom-message {

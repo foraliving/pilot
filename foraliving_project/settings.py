@@ -52,6 +52,7 @@ SITE_NAME = 'For a Living'
 ROOT_URLCONF = 'foraliving_project.urls'
 LOGIN_URL = '/account/login/'
 LOGIN_EXEMPT = ()
+X_FRAME_OPTIONS = 'DENY'
 
 TEMPLATES = [
     {

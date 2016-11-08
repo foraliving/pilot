@@ -2,7 +2,9 @@ from django.conf.urls import include, url
 
 from django.contrib import admin
 from . import views
-from foraliving.recording import RecordingType, RecordingSetupMicrophone, RecordingSetupFace, RecordingSetupBattery, QuestionInterview, Recording
+from foraliving.recording import RecordingType, RecordingSetupMicrophone, RecordingSetupFace, RecordingSetupBattery, \
+    QuestionInterview, Recording
+from foraliving.student import CompleteVideo
 
 urlpatterns = [
     url(r"^admin/", include(admin.site.urls)),
@@ -20,4 +22,8 @@ urlpatterns = [
     url(r'^setup_battery/$', RecordingSetupBattery.as_view(), name='recording_setup_battery'),
     url(r'^question_interview/(?P<interview_id>\d+)/$', QuestionInterview.as_view(), name='question_interview'),
     url(r'^recording/(?P<question_id>\d+)/$', Recording.as_view(), name='recording'),
+
+    # student urls
+    url(r'^complete_video/$', CompleteVideo.as_view(), name='complete_video')
+
 ]
