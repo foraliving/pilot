@@ -35,6 +35,19 @@
     border-style: solid;
 }
 
+.btn-menu {
+    width: 180px;
+    color: white;
+    background-color: #4CAF50;
+    border-color: #4CAF50;
+    font-size: 18px;
+    border-style: groove;
+    margin-bottom: 3px;
+    margin-top: 3px;
+    margin-right: 5px;
+    border-style: solid;
+}
+
 .btn-primary, .btn-danger {
     width: 100px;
     max-height: 35px;
@@ -106,6 +119,17 @@
 meter {
     width: 300px;
     height: 25px;
+}
+
+.menu {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border: 1px;
+    border-style: dotted;
+    border-left: white;
+    border-right: white;
+    border-bottom: white;
+    padding-top: 11px;
 }
 
 .modal-button {
@@ -209,6 +233,14 @@ video {
     font-weight: bold;
 }
 
+.table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th {
+    padding: 8px;
+    line-height: 2.428571;
+    vertical-align: top;
+    border-top: 1px solid #ddd;
+}
+
+
 @media screen and (max-width: 320px) {
     .header-button {
         float: none !important;
@@ -218,19 +250,15 @@ video {
 
 @media (max-width: 800px) {
     video {
-        max-width: 400px;
-    !important;
-        max-height: 200px;
-    !important;
+        max-width: 400px; !important;
+        max-height: 200px; !important;
     }
 }
 
 @media (max-width: 766px) {
     video {
-        max-width: 600px;
-    !important;
-        max-height: 400px;
-    !important;
+        max-width: 600px; !important;
+        max-height: 400px; !important;
     }
 
     #custom-message {
@@ -242,8 +270,8 @@ video {
 
 @media (max-width: 600px) {
     video {
-        max-width: 400px;  !important;
-        max-height: 200px;  !important;
+        max-width: 400px; !important;
+        max-height: 200px; !important;
     }
 
     #custom-message {
@@ -268,8 +296,8 @@ video {
 
 @media (max-width: 310px) {
     video {
-        max-width: 250px;  !important;
-        max-height: 100px;  !important;
+        max-width: 250px; !important;
+        max-height: 100px; !important;
     }
 
     #custom-message {

@@ -1,0 +1,105 @@
+{% extends 'student/base.html' %}
+{% load staticfiles %}
+{% block head %}
+<html lang="{{ LANGUAGE_CODE }}">
+<head>
+    <meta charset="utf-8"/>
+    <title></title>
+    {% block viewport %}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% endblock %}
+    {% block styles %}
+    <link rel="stylesheet" href="{% static 'UX/css/student/recording.css' %}">
+    <link rel="stylesheet" href="{% static 'UX/css/simpleGridTemplate.css' %}">
+    {% endblock %}
+    {% block html5shim %}
+    <!-- HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <![endif]-->
+    {% endblock %}
+    {% endblock %}
+</head>
+{% block list %}
+<ul class="nav navbar-nav">
+    <li class="active"><a href="#">Assignment</a></li>
+    <li><a href="#">Complete Video</a></li>
+</ul>
+{% endblock %}
+{% block body %}
+<div class="container" style="display:table;">
+    <h3 style="text-align: center;">{{request.user.first_name}} {{request.user.last_name}}</h3>
+    <div class="panel panel-info">
+        <div class="panel-heading">
+        </div>
+        <div class="panel-body">
+            <div class="panel panel-default">
+                <div class="panel-body" style="font-size: 22px; margin-left: 20px; margin-right: 20px;">
+                    <table style="width: 100%;" class="table table-striped table-responsive">
+                        <tr>
+                            <td class="">
+                                1. Review complete assignment
+                            </td>
+                            <td class="" style="text-align: center;">
+                                <button class='btn btn-menu btn-title border-radius'> Assignment (PDF)
+                                </button>
+                            </td>
+                        <tr>
+                            <td class="" style="text-align: left;">
+                                2. How to conduct interview
+                            </td>
+                            <td class="" style="text-align: center;">
+                                <button class='btn btn-menu btn-title border-radius'> View
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="" style="text-align: left;">
+                                3. Select interview questions
+                            </td>
+                            <td class="" style="text-align: center;">
+                                {% if questions %}
+                                <button class='btn btn-menu btn-title border-radius'> Edit
+                                </button>
+                                {% else %}
+                                <button class='btn btn-menu btn-title border-radius'> Go
+                                </button>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="" style="text-align: left;">
+                                4. Conduct interview
+                            </td>
+                            <td class="" style="text-align: center;">
+                                <button class='btn btn-menu btn-title border-radius'> Go
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="" style="text-align: left;">
+                                5. Send completed videos to teacher
+                            </td>
+                            <td class="" style="text-align: center;">
+                                {% if videos %}
+                                <button class='btn btn-menu btn-title border-radius'> Go
+                                </button>
+                                {% else %}
+                                <button class='btn btn-menu btn-title border-radius' disabled> Go
+                                </button>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="panel-footer">
+            <div class="clearfix">
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}{% endblock %}
+

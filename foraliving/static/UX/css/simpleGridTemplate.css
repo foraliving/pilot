@@ -206,12 +206,13 @@ header {
 	padding-right: 15px;
 	float: left;
 }
-h4 {
-	color: #555555;
-	text-align: left;
-	font-weight: 300;
-	
-}
+
+/*h4 {*/
+	/*color: #555555;*/
+	/*text-align: left;*/
+	/*font-weight: 300;*/
+	/**/
+/*}*/
 h3 {
 	color: #6DC7D0;
 	text-align: left;
