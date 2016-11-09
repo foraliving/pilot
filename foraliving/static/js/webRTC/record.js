@@ -50,27 +50,6 @@ var constraints = {
     video: true
 };
 
-// navigator.getUserMedia = navigator.getUserMedia ||
-//                          navigator.webkitGetUserMedia ||
-//                          navigator.mozGetUserMedia;
-//
-// if (navigator.getUserMedia) {
-//    navigator.getUserMedia({ audio: true, video: { width: 1280, height: 720 } },
-//       function(stream) {
-//          var video = document.querySelector('video');
-//          video.src = window.URL.createObjectURL(stream);
-//          video.onloadedmetadata = function(e) {
-//            video.play();
-//          };
-//       },
-//       function(err) {
-//          console.log("The following error occurred: " + err.name);
-//       }
-//    );
-// } else {
-//    console.log("getUserMedia not supported");
-// }
-
 function handleSuccess(stream) {
     console.log('getUserMedia() got stream: ', stream);
     window.stream = stream;
@@ -85,13 +64,12 @@ function handleError(error) {
     console.log('navigator.getUserMedia error: ', error);
 }
 
-
 if (/Edge\/\d./i.test(navigator.userAgent)) {
     // This is Microsoft Edge
-    window.alert('Microsoft Edge');
     navigator.mediaDevices.getUserMedia({
         video: {
-            facingMode: "user"
+            facingMode: "user",
+            audio: true
         }
     }).then(function (stream) {
         var video = document.getElementById('gum');
