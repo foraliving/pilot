@@ -1,0 +1,41 @@
+{% extends 'student/base.html' %}
+{% load staticfiles %}
+{% block list %}
+<li class="active"><a href="{% url 'assignment' %}">Assignment</a></li>
+<li><a href="{% url 'complete_video' %}">Complete Video</a></li>
+{% endblock %}
+{% block body %}
+<div class="panel panel-info">
+    <div class="panel-heading">
+        <div class="inline-block" style="text-align: center;"><h3> Select at least three interview questions </h3></div>
+    </div>
+</div>
+<div class="panel-body">
+    <div class="panel panel-default">
+        <div class="panel-body" style="font-size: 18px;">
+            <form id="customer_specific" action="{% url 'select_question' interview_id=1%} " method="post"
+                  class="form">
+                {% csrf_token %}
+                {% if questions %}
+                {% for question in questions %}
+                <div class="checkbox" style="margin-bottom: 20px; margin-top: 20px;">
+                    <label><input type="checkbox" style="position:relative; margin-right: 10px;"
+                                  name="question" value="{{question.id}}">{{question.name}}</label>
+                </div>
+                {% endfor %}
+                {% else %}
+                <div colspan="3">No Questions are available.</div>
+                {% endif %}
+                <div class="form-group" style="text-align:center;">
+                    <button class="btn btn-menu" tyle="submit"
+                            onclick="location.href=''">
+                        Done
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+{% endblock %}

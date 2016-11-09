@@ -4,7 +4,7 @@ from django.contrib import admin
 from . import views
 from foraliving.recording import RecordingType, RecordingSetupMicrophone, RecordingSetupFace, RecordingSetupBattery, \
     QuestionInterview, Recording
-from foraliving.student import CompleteVideo, StudentAssignment, ConductVideo
+from foraliving.student import CompleteVideo, StudentAssignment, ConductVideo, SelectQuestion, SelectQuestionEdit
 
 urlpatterns = [
     url(r"^admin/", include(admin.site.urls)),
@@ -26,6 +26,8 @@ urlpatterns = [
     # student urls
     url(r'^complete_video/$', CompleteVideo.as_view(), name='complete_video'),
     url(r'^assignment/$', StudentAssignment.as_view(), name='assignment'),
-    url(r'^conduct_video/$', ConductVideo.as_view(), name='conduct_video')
+    url(r'^conduct_video/$', ConductVideo.as_view(), name='conduct_video'),
+    url(r'^select_question/(?P<interview_id>\d+)/$', SelectQuestion.as_view(), name='select_question'),
+    url(r'^select_question_edit/(?P<interview_id>\d+)/$', SelectQuestionEdit.as_view(), name='select_question_edit')
 
 ]
