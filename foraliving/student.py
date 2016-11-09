@@ -19,6 +19,7 @@ class CompleteVideo(LoginRequiredMixin, generic.View):
         videos = Video.objects.filter(created_by=request.user.id)
         return render(request, self.question_view, {'videos': videos})
 
+
 class StudentAssignment(LoginRequiredMixin, generic.View):
     """Generic view to display the assignment interface,
     this will be shown after login success"""
@@ -34,3 +35,13 @@ class StudentAssignment(LoginRequiredMixin, generic.View):
             interview = Interview.objects.get(interviewer_id=request.user.id)
             questions = Interview_Question_Map.objects.filter(interview_id=interview.id)
         return render(request, self.question_view, {'questions': questions, 'videos': videos})
+
+
+class ConductVideo(LoginRequiredMixin, generic.View):
+    """Generic view to display the assignment interface,
+    this will be shown after login success"""
+    login_url = settings.LOGIN_URL
+    question_view = 'student/conduct_video.html'
+
+    def get(self, request):
+        return render(request, self.question_view)

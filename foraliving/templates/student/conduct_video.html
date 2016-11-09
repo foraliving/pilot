@@ -1,0 +1,80 @@
+{% extends "student/base.html" %}
+{% load i18n %}
+{% load bootstrap %}
+{% load staticfiles %}
+{% load static %}
+{% block list %}
+<li class="active"><a href="{% url 'assignment' %}">Assignment</a></li>
+<li><a href="{% url 'complete_video' %}">Complete Video</a></li>
+{% endblock %}
+{% block body %}
+<div class="panel panel-info">
+    <div class="panel-heading">
+        <div class="inline-block" style="text-align: center;"><h3> Tips for conducting your interview</h3></div>
+    </div>
+</div>
+<div class="panel-body">
+    <div class="panel panel-default">
+        <div class="panel-body" style="font-size: 18px;">
+            <p>
+                1. Ask interviewee one of your questions and then listen as they answer. Take notes and ask follow-up
+                questions on things you found interesting or didn’t understand.
+            </p>
+            <p>
+                2. Don’t forget to thank your interviewee and let me them what you learned or what interested you about
+                their story after the interview is complete!
+            </p>
+        </div>
+    </div>
+</div>
+<div class="panel panel-info">
+    <div class="panel-heading">
+        <div class="inline-block" style="text-align: center;"><h3> About the assignment </h3></div>
+    </div>
+</div>
+<div class="panel-body">
+    <div class="panel panel-default">
+        <div class="panel-body" style="font-size: 18px;">
+            <p>
+                1. Each question will be a new video.
+            </p>
+            <p>
+                2. Practice the recording process with a parnter so that you will be ready for the real interview.
+            </p>
+            <p>
+                3. Be sure that the device or devices you are usings are fully charged. If you are using a computer,
+                plug it in!
+            </p>
+            <p>
+                4. You can start the recording over if something goes wrong.
+            </p>
+            <p>
+                5. If connecting to the person online, they will not be able to see you but will hear your voice.
+            </p>
+            <p>
+                6. If you are interviewing someone in person, you and your partner will put one computer facing the
+                interviewee and the other one facing you.
+            </p>
+            <ul style="list-style-type: square">
+                <li>
+                    The interviewee will log into For A Living on the computer that will record them.
+                </li>
+                <li>
+                    You and your partner will check the settings and control the recording on your computer.
+                </li>
+            </ul>
+        </div>
+        <div class="panel-footer" style="text-align: center;">
+            <div class="clearfix">
+                <button class="btn btn-menu"
+                        onclick="location.href=''">
+                   Done
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="{% static 'js/recording/setup_interview.js' %}"></script>
+{% endblock %}

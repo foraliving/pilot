@@ -233,13 +233,12 @@ video {
     font-weight: bold;
 }
 
-.table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th {
+.table > tbody > tr > td, .table > tbody > tr > th, .table > tfoot > tr > td, .table > tfoot > tr > th, .table > thead > tr > td, .table > thead > tr > th {
     padding: 8px;
     line-height: 2.428571;
     vertical-align: top;
     border-top: 1px solid #ddd;
 }
-
 
 @media screen and (max-width: 320px) {
     .header-button {
@@ -279,12 +278,24 @@ video {
         text-align: center;
         top: -100px;
     }
+
+        #assignment {
+        font-size: 12px !important;
+    }
+
+    .btn-menu {
+        width: 100px;
+        font-size: 10px;
+    }
+
 }
 
 @media (max-width: 358px) {
     video {
-        max-width: 350px; !important;
-        max-height: 175px; !important;
+        max-width: 350px;
+    !important;
+        max-height: 175px;
+    !important;
     }
 
     #custom-message {
@@ -292,12 +303,34 @@ video {
         text-align: center;
         top: -80px;
     }
+
+    #assignment {
+        font-size: 12px !important;
+    }
+
+    #assignment {
+        font-size: 12px !important;
+    }
+
+    .btn-menu {
+        width: 100px;
+        font-size: 10px;
+    }
 }
 
 @media (max-width: 310px) {
     video {
         max-width: 250px; !important;
         max-height: 100px; !important;
+    }
+
+    #assignment {
+        font-size: 12px !important;
+    }
+
+    .btn-menu {
+        width: 100px;
+        font-size: 10px;
     }
 
     #custom-message {
@@ -316,6 +349,13 @@ video {
         text-align: center;
         top: -159px !important;
     }
+
+    .btn-menu {
+        width: 100px;
+        font-size: 10px;
+        height: auto;
+    }
+
 }
 
 

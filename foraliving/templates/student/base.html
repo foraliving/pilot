@@ -29,41 +29,30 @@
 <body>
 <header>
     <div class="container">
-        <nav class="navbar navbar-default navbar-light">
-            <div class="container-fluid">
+        <nav class="navbar navbar-default navbar-fixed-top">
+            <div class="container">
                 <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                            aria-expanded="false" aria-controls="navbar">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
                     <a class="navbar-brand" href="http://foraliving.org"><img
-                            src="{% static 'UX/images/FAL-Logo.png' %}" class="img-responsive">
-                    </a>
-                    {% block list %}
-                    <ul class="nav navbar-nav">
-                        <li><a href="#">Assignment</a></li>
-                        <li><a href="#">Complete Video</a></li>
-                    </ul>
-                    {% endblock %}
+                            src="{% static 'UX/images/FAL-Logo.png' %}" class="img-responsive"></a>
                 </div>
-                <ul class="nav navbar-nav">
-                    <div class="clearfix">
-                        <div class="pull-right header-button">
-                            {% if request.user.is_authenticated %}
-                            <button class="btn btn-success" id="exit"
-                                    onclick="location.href='{% url 'account_login' %}'">Log
-                                out
-                            </button>
-                            {% endif %}
-                        </div>
-                        <ul class="nav navbar-nav pull-right">
-                            {% if request.user.is_authenticated %}
-                            <p class="navbar-text">
-                                <i class="fa fa-user"></i> {% user_display request.user %}
-                            </p>
-                            <li>
-                                <a href="{% url 'account_settings' %}"><i class="fa fa-cog"></i> {% trans "Settings" %}</a>
-                            </li>
-                            {% endif %}
-                        </ul>
-                    </div>
-                </ul>
+                <div id="navbar" class="navbar-collapse collapse" aria-expanded="false" style="height: 1px;">
+                    <ul class="nav navbar-nav navbar-right">
+                        {% block list %}
+                        <li><a href="#">Assignment</a></li>
+                        <li><a href="">Complete Videos</a></li>
+                        {% endblock %}
+                        <li> <a id="account_logout" href="{% url 'account_logout' %}"><i class="fa fa-power-off"></i> Log out</a></li>
+                    </ul>
+                    </li>
+                    </ul>
+                </div><!--/.nav-collapse -->
             </div>
         </nav>
     </div>
@@ -75,6 +64,7 @@
         {% include "_messages.html" %}
         {% block body %}
         <div class="container">
+            <h2></h2>
         </div>
         {% endblock %}
     </div>

@@ -24,8 +24,8 @@
 </head>
 {% block list %}
 <ul class="nav navbar-nav">
-    <li><a href="#">Assignment</a></li>
-    <li class="active"><a href="#">Complete Video</a></li>
+    <li ><a href="{% url 'assignment' %}">Assignment</a></li>
+    <li class="active"><a href="{% url 'complete_video' %}">Complete Video</a></li>
 </ul>
 {% endblock %}
 {% block body %}
