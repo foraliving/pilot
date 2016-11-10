@@ -21,11 +21,17 @@ $(document).ready(function () {
 
     $('html').on('click', '#next', function (e) {
         e.preventDefault();
-        if ($("input[name='question2']:checked").val() == 2 || $("input[name='question2']:checked").val() == 3){
-            window.location.href = '/foraliving/setup_microphone/';
+        if ($("input[name='question2']:checked").val() == 2 || $("input[name='question2']:checked").val() == 3) {
+            if (screen.orientation.type == "landscape" || screen.orientation.type == "landscape-primary"
+                || screen.orientation.type == "landscape-secundary") {
+                window.location.href = '/foraliving/setup_microphone/';
+            }
+            else {
+                window.location.href = '/foraliving/orientation/';
+            }
         }
         else {
-            alert ("Please, select one option valid")
+            alert("Please, select one option valid")
         }
     });
 

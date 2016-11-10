@@ -15,7 +15,7 @@
                     <div class="question"> Are you and your interviewee in the same room?</div>
                     <div id="option1">
                         <div class="radio">
-                            <label><input type="radio" name="question1"  value="1">Yes</label>
+                            <label><input type="radio" name="question1" value="1">Yes</label>
                         </div>
                         <div class="radio">
                             <label><input type="radio" name="question1" value="2">No</label>
@@ -28,15 +28,18 @@
                             How will you record this interview?
                         </div>
                         <div class="radio">
-                            <label><input type="radio" name="question2" value="1">With two laptop computers (recommended when using
+                            <label><input type="radio" name="question2" value="1">With two laptop computers (recommended
+                                when using
                                 laptop's
                                 internal camera)</label>
                         </div>
                         <div class="radio">
-                            <label><input type="radio" name="question2" value="2">On a mobile device, tablet or laptop with camera facing the interview</label>
+                            <label><input type="radio" name="question2" value="2">On a mobile device, tablet or laptop
+                                with camera facing the interview</label>
                         </div>
                         <div class="radio">
-                            <label><input type="radio" name="question2" value="3">One laptop with the camera facing me </label>
+                            <label><input type="radio" name="question2" value="3">One laptop with the camera facing me
+                            </label>
                         </div>
                     </div>
                 </div>
@@ -54,4 +57,10 @@
 {% endblock %}
 {% block scripts %}
 <script src="{% static 'js/recording/setup_interview.js' %}"></script>
+
+<script>
+    var query = window.matchMedia("(orientation:landscape)");
+    console.log("Device held " + (query.matches ? "horizontally" : "vertically"));
+
+</script>
 {% endblock %}

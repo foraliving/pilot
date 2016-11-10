@@ -69,3 +69,12 @@ class Recording(LoginRequiredMixin, generic.View):
     def get(self, request, question_id):
         questions = Question.objects.get(pk=question_id)
         return render(request, self.question_view, {'questions': questions, 'question_name': questions.name})
+
+class Orientation(LoginRequiredMixin, generic.View):
+    """Generic view to display the orientation page,
+    this will be shown after login success"""
+    login_url = settings.LOGIN_URL
+    setup_view = 'recording/orientation.html'
+
+    def get(self, request):
+        return render(request, self.setup_view)

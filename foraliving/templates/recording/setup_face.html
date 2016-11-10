@@ -37,18 +37,16 @@
 
                     <div class="skip">
                         <a class="skip" style=text-decoration:none;
-                           href="{% url 'question_interview' interview_id=1 %}">Skip setup
+                           href="{% url 'recording_setup_battery' %}">Skip setup
                             check
                         </a>
                     </div>
                 </div>
-
-
             </div>
         </div>
     </div>
 </div>
-{% include 'recording/help.html' %}
+{% include 'recording/help2.html' %}
 {% endblock %}
 {% block scripts %}
 <script src="{% static 'js/recording/getUserMedia.js' %}"></script>
