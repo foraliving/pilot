@@ -22,7 +22,7 @@
 </head>
 {% block list %}
     <li class="active"><a href="{% url 'assignment' %}">Assignment</a></li>
-    <li><a href="{% url 'complete_video' %}">Complete Video</a></li>
+    <li><a href="{% url 'complete_video' %}">Completed Videos</a></li>
 {% endblock %}
 {% block body %}
 <h3 style="text-align: center;">{{request.user.first_name}} {{request.user.last_name}}</h3>
@@ -63,7 +63,7 @@
             4. Conduct interview
         </td>
         <td class="" style="text-align: center;">
-            <button class='btn btn-menu btn-title border-radius' onclick="location.href='{% url 'recording_setup_microphone' %}'"> Go
+            <button class='btn btn-menu btn-title border-radius' onclick="location.href='{% url 'recording_type' %}'"> Go
             </button>
         </td>
     </tr>

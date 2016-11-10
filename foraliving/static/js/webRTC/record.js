@@ -150,7 +150,7 @@ function startRecording() {
             $("#count").text(counter);
         }
         if (counter == 0) {
-            document.getElementById("count").style.fontSize = "50%";
+            document.getElementById("count").style.fontSize = "250%";
             $("#custom-message").text('recording started..');
             $("#count").text('Ask your question');
         }
@@ -188,7 +188,7 @@ function startRecording() {
             mediaRecorder.start(10); // collect 10ms of data
             console.log('MediaRecorder started', mediaRecorder);
         }
-    }, 250);
+    }, 750);
 
 
 }
