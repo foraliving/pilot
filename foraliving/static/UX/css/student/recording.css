@@ -111,6 +111,16 @@
     margin: auto;
 }
 
+.image-rotation {
+    width: 400px;
+    height: 220px;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-top: 3px;
+    display: inline;
+    margin: auto;
+}
+
 .fa-lg {
     font-size: 2.5em;
     line-height: 1em;
@@ -197,7 +207,6 @@ meter {
     text-align: center;
     font-size: 20px;
     color: #3d8686;
-    margin-top: 10px;
     font-weight: bold;
 }
 
@@ -279,7 +288,7 @@ video {
         top: -100px;
     }
 
-        #assignment {
+    #assignment {
         font-size: 12px !important;
     }
 
@@ -288,14 +297,17 @@ video {
         font-size: 10px;
     }
 
+    meter {
+    width: 250px;
+    height: 25px;
+    }
+
 }
 
 @media (max-width: 358px) {
     video {
-        max-width: 350px;
-    !important;
-        max-height: 175px;
-    !important;
+        max-width: 350px; !important;
+        max-height: 175px; !important;
     }
 
     #custom-message {
@@ -315,6 +327,11 @@ video {
     .btn-menu {
         width: 100px;
         font-size: 10px;
+    }
+
+    meter {
+    width: 200px;
+    height: 25px;
     }
 }
 
@@ -354,6 +371,11 @@ video {
         width: 100px;
         font-size: 10px;
         height: auto;
+    }
+
+    meter {
+    width: 150px;
+    height: 25px;
     }
 
 }

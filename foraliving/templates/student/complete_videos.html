@@ -21,10 +21,8 @@
     {% endblock %}
 </head>
 {% block list %}
-<ul class="nav navbar-nav">
     <li ><a href="{% url 'assignment' %}">Assignment</a></li>
     <li class="active"><a href="{% url 'complete_video' %}">Completed Videos</a></li>
-</ul>
 {% endblock %}
 {% block body %}
 <div class="container">
@@ -46,7 +44,7 @@
         </div>
         {% endfor %}
         {% else %}
-        <h3 style="text-align: center;">You have not recorder any videos yet.</h3>
+        <h3 style="text-align: center;">You have not recorded any videos yet.</h3>
         {% endif %}
     </div>
 </div>

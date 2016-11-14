@@ -18,7 +18,7 @@
                 {% csrf_token %}
                 {% if questions %}
                 {% for question in questions %}
-                <div class="checkbox" style="margin-bottom: 20px; margin-top: 20px;">
+                <div class="checkbox" style="margin-bottom: 20px; margin-top: 20px; font-size:20px;">
                     <label><input type="checkbox" style="position:relative; margin-right: 10px;"
                                   name="question" value="{{question.id}}">{{question.name}}</label>
                 </div>

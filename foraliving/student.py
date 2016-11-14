@@ -30,10 +30,12 @@ class StudentAssignment(LoginRequiredMixin, generic.View):
         videos = Video.objects.filter(created_by=request.user.id)
         if not interview:
             questions = ""
+            question_number = ""
         else:
             interview = Interview.objects.get(interviewer_id=request.user.id)
             questions = Interview_Question_Map.objects.filter(interview_id=interview.id)
-        return render(request, self.question_view, {'questions': questions, 'videos': videos})
+            question_number = Interview_Question_Map.objects.filter(interview_id=interview.id).count()
+        return render(request, self.question_view, {'questions': questions, 'videos': videos, 'question_number': question_number})
 
 
 class ConductVideo(LoginRequiredMixin, generic.View):

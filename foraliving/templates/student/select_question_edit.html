@@ -18,13 +18,13 @@
                 {% csrf_token %}
                 {% for question in questions %}
                 {% if question.2  == "yes" %}
-                <div class="checkbox" style="margin-bottom: 20px; margin-top: 20px;">
+                <div class="checkbox" style="margin-bottom: 20px; margin-top: 20px; font-size:20px;">
                     <label><input type="checkbox" checked style="position:relative; margin-right: 10px;"
                                   name="question" value="{{question.0}}">{{question.1}}</label>
                 </div>
                 {% else %}
-                <div class="checkbox" style="margin-bottom: 20px; margin-top: 20px;">
-                    <label><input type="checkbox" style="position:relative; margin-right: 10px;"
+                <div class="checkbox" style="margin-bottom: 20px; margin-top: 20px; font-size:20px;">
+                    <label><input type="checkbox" style=" position:relative; margin-right: 10px;"
                                   name="question" value="{{question.0}}">{{question.1}}</label>
                 </div>
                 {% endif %}

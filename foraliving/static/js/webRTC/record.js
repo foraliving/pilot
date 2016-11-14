@@ -121,6 +121,7 @@ function sleep(milliseconds) {
 
 function toggleRecording() {
     if (recordButton.textContent === 'Start Recording' || recordButton.textContent === "Try Again") {
+        document.getElementById("gum").style.filter = "invert(0)";
         startRecording();
         document.getElementById("count").style.fontSize = "80px";
     } else {
@@ -135,6 +136,7 @@ function toggleRecording() {
 function startRecording() {
     recordButton.textContent = 'Stop Recording';
     $("#custom-message").text("Recording starts in ..");
+    document.getElementById("gum").style.filter = "invert(0.18)";
     $("#count").text(5);
     $("#custom-message").show();
     $("#count").show();
@@ -155,6 +157,7 @@ function startRecording() {
             $("#count").text('Ask your question');
         }
         if (counter == -2) {
+            document.getElementById("gum").style.filter = "invert(0)";
             $("#custom-message").hide();
             $("#count").hide();
             clearInterval(interval);
@@ -194,6 +197,7 @@ function startRecording() {
 }
 
 function stopRecording() {
+    document.getElementById("gum").style.filter = "invert(0)";
     if (mediaRecorder === undefined || mediaRecorder.state == "inactive") {
         console.log('Not record');
     }
