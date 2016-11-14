@@ -1,0 +1,168 @@
+[
+  {
+    "model": "auth.group",
+    "pk": 1,
+    "fields": {
+      "name": "Student",
+      "permissions": [
+        40
+      ]
+    }
+  },
+  {
+    "pk": 1,
+    "model": "auth.user",
+    "fields": {
+      "username": "volunteer_admin",
+      "first_name": "Volunteer",
+      "last_name": "",
+      "is_active": true,
+      "is_superuser": true,
+      "is_staff": true,
+      "last_login": "2008-09-05 12:40:34",
+      "groups": [],
+      "user_permissions": [],
+      "password": "pbkdf2_sha256$30000$pOAjkIh9uSt3$W3ZN4v4dui8TDQhhvWU5ucDu/G1wqljjwfsGKgN5rbQ=",
+      "email": "admin@foraliving.org"
+    }
+  },
+  {
+    "pk": 2,
+    "model": "auth.user",
+    "fields": {
+      "username": "student_admin",
+      "first_name": "Student",
+      "last_name": "",
+      "is_active": true,
+      "is_superuser": true,
+      "is_staff": true,
+      "last_login": "2008-09-05 12:40:34",
+      "groups": [],
+      "user_permissions": [],
+      "password": "pbkdf2_sha256$30000$pOAjkIh9uSt3$W3ZN4v4dui8TDQhhvWU5ucDu/G1wqljjwfsGKgN5rbQ=",
+      "email": "admin@foraliving.org"
+    }
+  },
+  {
+    "model": "foraliving.LMS",
+    "pk": 1,
+    "fields": {
+      "name": "Default LMS",
+      "url": "www.foraliving.org"
+    }
+  },
+  {
+    "model": "foraliving.School",
+    "pk": 1,
+    "fields": {
+      "lms": 1,
+      "name": "Default School",
+      "url": "www.foraliving.org"
+    }
+  },
+  {
+    "model": "foraliving.User_Add_Ons",
+    "pk": 1,
+    "fields": {
+      "user": 1,
+      "school": 1,
+      "lms": 1
+    }
+  },
+  {
+    "model": "foraliving.User_Add_Ons",
+    "pk": 2,
+    "fields": {
+      "user": 2,
+      "school": 1,
+      "lms": 1
+    }
+  },
+  {
+    "model": "foraliving.Question",
+    "pk": 1,
+    "fields": {
+      "name": "What is the best part of your job?",
+      "created_by": 1,
+      "creation_date": "2016-11-11"
+    }
+  },
+  {
+    "model": "foraliving.Question",
+    "pk": 2,
+    "fields": {
+      "name": "Did you know what you wanted to do when you graduated from high school? Is it what you are doing now?",
+      "created_by": 1,
+      "creation_date": "2016-11-11"
+    }
+  },
+  {
+    "model": "foraliving.Question",
+    "pk": 3,
+    "fields": {
+      "name": "What was the most challenging experience of your career and what did you learn from it?",
+      "created_by": 1,
+      "creation_date": "2016-11-11"
+    }
+  },
+  {
+    "model": "foraliving.Question",
+    "pk": 4,
+    "fields": {
+      "name": "Describe how your college major relates to your career path.",
+      "created_by": 1,
+      "creation_date": "2016-11-11"
+    }
+  },
+  {
+    "model": "foraliving.Question",
+    "pk": 5,
+    "fields": {
+      "name": "What is your favorite book and why? (student practice question)",
+      "created_by": 1,
+      "creation_date": "2016-11-11"
+    }
+  },
+  {
+    "model": "foraliving.interview",
+    "pk": 1,
+    "fields": {
+      "interviewer": 2,
+      "interviewee": 1,
+      "group": 1,
+      "date": "2016-11-03T00:00:00Z"
+    }
+  },
+  {
+    "model": "foraliving.interview",
+    "pk": 2,
+    "fields": {
+      "interviewer": 1,
+      "interviewee": 2,
+      "group": 1,
+      "date": "2016-11-03T00:00:00Z"
+    }
+  },
+  {
+    "model": "foraliving.video",
+    "pk": 1,
+    "fields": {
+      "name": "Carrer Educator",
+      "url": "https://www.youtube.com/embed/48ZzVjAbA1s?rel=0",
+      "tags": "homepage",
+      "created_by": 2,
+      "creation_date": "2016-05-05T00:00:00Z"
+    }
+  },
+  {
+    "model": "foraliving.video",
+    "pk": 2,
+    "fields": {
+      "name": "Carrer Educator",
+      "url": "https://www.youtube.com/embed/48ZzVjAbA1s?rel=0",
+      "tags": "homepage",
+      "created_by": 2,
+      "creation_date": "2016-05-05T00:00:00Z"
+    }
+  }
+]

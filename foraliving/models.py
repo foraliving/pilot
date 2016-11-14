@@ -16,6 +16,7 @@ class LMS(models.Model):
 	def __unicode__(self):
 		return self.name
 
+
 class LMS_Web_Service(models.Model):
 	web_service_name = models.CharField(max_length=128)
 	# depending on the options we might be able to do a choicefield here
