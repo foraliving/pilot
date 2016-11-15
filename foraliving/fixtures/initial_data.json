@@ -82,7 +82,7 @@
     "model": "foraliving.Question",
     "pk": 1,
     "fields": {
-      "name": "What is the best part of your job?",
+      "name": "What is your favorite book and why? (student practice question)",
       "created_by": 1,
       "creation_date": "2016-11-11"
     }
@@ -91,7 +91,7 @@
     "model": "foraliving.Question",
     "pk": 2,
     "fields": {
-      "name": "Did you know what you wanted to do when you graduated from high school? Is it what you are doing now?",
+      "name": "What is your job and how do you spend your time at work?",
       "created_by": 1,
       "creation_date": "2016-11-11"
     }
@@ -100,7 +100,7 @@
     "model": "foraliving.Question",
     "pk": 3,
     "fields": {
-      "name": "What was the most challenging experience of your career and what did you learn from it?",
+      "name": "What would surprise most people about your job?",
       "created_by": 1,
       "creation_date": "2016-11-11"
     }
@@ -109,7 +109,7 @@
     "model": "foraliving.Question",
     "pk": 4,
     "fields": {
-      "name": "Describe how your college major relates to your career path.",
+      "name": "In what ways, if any, did your interests as a kid lead you on your career path?",
       "created_by": 1,
       "creation_date": "2016-11-11"
     }
@@ -118,7 +118,169 @@
     "model": "foraliving.Question",
     "pk": 5,
     "fields": {
-      "name": "What is your favorite book and why? (student practice question)",
+      "name": "How does your college major relate to your current job?",
+      "created_by": 1,
+      "creation_date": "2016-11-11"
+    }
+  },
+  {
+    "model": "foraliving.Question",
+    "pk": 6,
+    "fields": {
+      "name": "What personality trait has helped you most in doing a good job at work?",
+      "created_by": 1,
+      "creation_date": "2016-11-11"
+    }
+  },
+  {
+    "model": "foraliving.Question",
+    "pk": 7,
+    "fields": {
+      "name": "Did you know what you wanted to do for a living when you graduated from high school? Is it what you are doing now?",
+      "created_by": 1,
+      "creation_date": "2016-11-11"
+    }
+  },
+  {
+    "model": "foraliving.Question",
+    "pk": 8,
+    "fields": {
+      "name": "What advice do you wish you’d had when you graduated from high school?",
+      "created_by": 1,
+      "creation_date": "2016-11-11"
+    }
+  },
+  {
+    "model": "foraliving.Question",
+    "pk": 9,
+    "fields": {
+      "name": "If a student is interested in doing what you do, what are the most important things they should consider?",
+      "created_by": 1,
+      "creation_date": "2016-11-11"
+    }
+  },
+  {
+    "model": "foraliving.Question",
+    "pk": 10,
+    "fields": {
+      "name": "How have your perceptions about work changed since you graduated from high school?",
+      "created_by": 1,
+      "creation_date": "2016-11-11"
+    }
+  },
+  {
+    "model": "foraliving.Question",
+    "pk": 11,
+    "fields": {
+      "name": "How and why did you decide to do what you do?",
+      "created_by": 1,
+      "creation_date": "2016-11-11"
+    }
+  },
+  {
+    "model": "foraliving.Question",
+    "pk": 12,
+    "fields": {
+      "name": "What has been the most important lesson you have learned about yourself since graduating from college?",
+      "created_by": 1,
+      "creation_date": "2016-11-11"
+    }
+  },
+  {
+    "model": "foraliving.Question",
+    "pk": 13,
+    "fields": {
+      "name": "What do you enjoy most about your job?",
+      "created_by": 1,
+      "creation_date": "2016-11-11"
+    }
+  },
+  {
+    "model": "foraliving.Question",
+    "pk": 14,
+    "fields": {
+      "name": "In what ways has your job changed over the years and how have you dealt with it?",
+      "created_by": 1,
+      "creation_date": "2016-11-11"
+    }
+  },
+  {
+    "model": "foraliving.Question",
+    "pk": 15,
+    "fields": {
+      "name": "What was your most creative idea at work?",
+      "created_by": 1,
+      "creation_date": "2016-11-11"
+    }
+  },
+  {
+    "model": "foraliving.Question",
+    "pk": 16,
+    "fields": {
+      "name": "What did you learn from some of your first jobs?",
+      "created_by": 1,
+      "creation_date": "2016-11-11"
+    }
+  },
+  {
+    "model": "foraliving.Question",
+    "pk": 17,
+    "fields": {
+      "name": "What was your first job?",
+      "created_by": 1,
+      "creation_date": "2016-11-11"
+    }
+  },
+  {
+    "model": "foraliving.Question",
+    "pk": 18,
+    "fields": {
+      "name": "What career advice changed your life and how?",
+      "created_by": 1,
+      "creation_date": "2016-11-11"
+    }
+  },
+  {
+    "model": "foraliving.Question",
+    "pk": 19,
+    "fields": {
+      "name": "What dissimilar jobs have you had. What made you effective in these different jobs?",
+      "created_by": 1,
+      "creation_date": "2016-11-11"
+    }
+  },
+  {
+    "model": "foraliving.Question",
+    "pk": 20,
+    "fields": {
+      "name": "If you could do it over, would you pick the same college major?",
+      "created_by": 1,
+      "creation_date": "2016-11-11"
+    }
+  },
+  {
+    "model": "foraliving.Question",
+    "pk": 21,
+    "fields": {
+      "name": "What’s the hardest part of your job?",
+      "created_by": 1,
+      "creation_date": "2016-11-11"
+    }
+  },
+  {
+    "model": "foraliving.Question",
+    "pk": 22,
+    "fields": {
+      "name": "Describe a challenge at work that you learned from?",
+      "created_by": 1,
+      "creation_date": "2016-11-11"
+    }
+  },
+  {
+    "model": "foraliving.Question",
+    "pk": 23,
+    "fields": {
+      "name": "How would you rate your job on a scale 1 to 10 and why?",
       "created_by": 1,
       "creation_date": "2016-11-11"
     }
