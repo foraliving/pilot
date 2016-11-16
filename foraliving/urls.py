@@ -5,6 +5,7 @@ from . import views
 from foraliving.recording import RecordingType, RecordingSetupMicrophone, RecordingSetupFace, RecordingSetupBattery, \
     QuestionInterview, Recording, Orientation
 from foraliving.student import CompleteVideo, StudentAssignment, ConductVideo, SelectQuestion, SelectQuestionEdit
+from foraliving.volunteer import VolunteerProfile
 
 urlpatterns = [
     url(r"^admin/", include(admin.site.urls)),
@@ -29,6 +30,9 @@ urlpatterns = [
     url(r'^assignment/$', StudentAssignment.as_view(), name='assignment'),
     url(r'^conduct_video/$', ConductVideo.as_view(), name='conduct_video'),
     url(r'^select_question/(?P<interview_id>\d+)/$', SelectQuestion.as_view(), name='select_question'),
-    url(r'^select_question_edit/(?P<interview_id>\d+)/$', SelectQuestionEdit.as_view(), name='select_question_edit')
+    url(r'^select_question_edit/(?P<interview_id>\d+)/$', SelectQuestionEdit.as_view(), name='select_question_edit'),
+
+    # volunteer uls
+    url(r'^volunteer/profile/(?P<user_id>\d+)/$', VolunteerProfile.as_view(), name='volunteer_profile')
 
 ]

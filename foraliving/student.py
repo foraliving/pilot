@@ -43,7 +43,8 @@ class StudentAssignment(LoginRequiredMixin, generic.View):
                 print (group)
             except ObjectDoesNotExist:
                 group = ""
-        return render(request, self.question_view, {'questions': questions, 'videos': videos, 'question_number': question_number, 'group': group})
+        return render(request, self.question_view, {
+            'questions': questions, 'videos': videos, 'question_number': question_number, 'group': group, 'interview': interview})
 
 
 class ConductVideo(LoginRequiredMixin, generic.View):

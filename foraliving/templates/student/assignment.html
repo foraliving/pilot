@@ -70,9 +70,15 @@
         </td>
     </tr>
     <tr>
+        {% if interview %}
+        <td class="" style="text-align: left;">
+            4. Conduct interview with <a href="{% url 'volunteer_profile' user_id=interview.interviewee.user.id %}">{{interview.interviewee.user.first_name}} </a>
+        </td>
+        {% else %}
         <td class="" style="text-align: left;">
             4. Conduct interview
         </td>
+        {% endif %}
         <td class="" style="text-align: center;">
             <button class='btn btn-menu btn-title border-radius' onclick="location.href='{% url 'recording_type' %}'">
                 Go
