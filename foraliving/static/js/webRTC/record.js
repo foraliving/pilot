@@ -123,7 +123,6 @@ function toggleRecording() {
     if (recordButton.textContent === 'Start Recording' || recordButton.textContent === "Try Again") {
         document.getElementById("gum").style.filter = "invert(0)";
         startRecording();
-        document.getElementById("count").style.fontSize = "80px";
     } else {
         stopRecording();
         recordButton.textContent = 'Try Again';
@@ -140,6 +139,7 @@ function startRecording() {
     $("#count").text(5);
     $("#custom-message").show();
     $("#count").show();
+
     var counter = 5;
     var interval = setInterval(function () {
         counter--;
@@ -152,14 +152,16 @@ function startRecording() {
             $("#count").text(counter);
         }
         if (counter == 0) {
-            document.getElementById("count").style.fontSize = "250%";
+            // document.getElementById("count").style.fontSize = "170%";
             $("#custom-message").text('recording started..');
-            $("#count").text('Ask your question');
+            $("#count").hide();
+            $("#count-replace").show();
+            $("#count-replace").text('Ask your question');
         }
         if (counter == -2) {
             document.getElementById("gum").style.filter = "invert(0)";
             $("#custom-message").hide();
-            $("#count").hide();
+            $("#count-replace").hide();
             clearInterval(interval);
             recordedBlobs = [];
             var options = {mimeType: 'video/webm;codecs=vp9'};

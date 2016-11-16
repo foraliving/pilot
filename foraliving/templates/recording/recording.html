@@ -12,13 +12,14 @@
         <div class="panel panel-default">
             <div class="panel-body">
                 <div class="row">
-                    <div class="col-md-6 col-sm-6 .col-lg-6">
+                    <div class="col-md-6 col-sm-6 .col-lg-6" style="text-align: center;">
                         <video id="gum" autoplay muted></video>
                         <div style="display:none;" id="custom-message">Recording starts in ..
                             <br>
 
                         </div>
                         <div id="count" style="display:none;"> 5</div>
+                        <div id="count-replace" style="display:none;"> Ask your question</div>
                     </div>
                     <div class="col-md-6 col-sm-6 .col-lg-6" style="text-align: center;">
                         <!--<video id="recorded" autoplay loop></video>-->
@@ -41,6 +42,12 @@
 <script src="{% static 'js/webRTC/adapter.js' %}"></script>
 <script src="{% static 'js/webRTC/record.js' %}"></script>
 <script>
+    var orientation = screen.orientation || screen.mozOrientation || screen.msOrientation;
 
+    if (orientation.type == "landscape-primary") {
+    } else if (orientation.type == "landscape-secondary") {
+    } else {
+        alert("Rotate your screen to landscape for the best user experience during the interview.");
+    }
 </script>
 {% endblock %}
