@@ -35,6 +35,10 @@ saveButton.onclick = save;
 // playButton.onclick = play;
 downloadButton.onclick = download;
 
+var h1 = document.getElementsByTagName('h1')[0],
+    seconds = 0, minutes = 0, hours = 0,
+    t;
+
 // window.isSecureContext could be used for Chrome
 var isSecureOrigin = location.protocol === 'https:' ||
     location.hostname === 'localhost';
@@ -49,7 +53,7 @@ if (!isSecureOrigin) {
 
 var constraints = {
     audio: true,
-    video: { facingMode: "environment" }
+    video: {facingMode: "environment"}
 };
 
 function handleSuccess(stream) {
@@ -94,11 +98,6 @@ function handleSourceOpen(event) {
     console.log('Source buffer: ', sourceBuffer);
 }
 
-// recordedVideo.addEventListener('error', function(ev) {
-//   console.error('MediaRecording.recordedMedia.error()');
-//   alert('Your browser can not play\n\n' + recordedVideo.src
-//     + '\n\n media clip. event: ' + JSON.stringify(ev));
-// }, true);
 
 function handleDataAvailable(event) {
     if (event.data && event.data.size > 0) {
@@ -130,6 +129,7 @@ function toggleRecording() {
         startRecording();
     } else {
         stopRecording();
+        clearTimeout(t);
         recordButton.textContent = 'Try Again';
         // playButton.disabled = false;
         downloadButton.disabled = false;
@@ -141,6 +141,10 @@ function toggleRecording() {
 function startRecording() {
     recordButton.textContent = 'Stop Recording';
     $("#custom-message").text("Recording starts in ..");
+    h1.textContent = "00:00:00";
+    seconds = 0;
+    minutes = 0;
+    hours = 0;
     document.getElementById("gum").style.filter = "invert(0.18)";
     $("#count").text(5);
     $("#custom-message").show();
@@ -194,6 +198,7 @@ function startRecording() {
             }
             try {
                 mediaRecorder = new MediaRecorder(window.stream, options);
+                timer();
             } catch (e) {
                 console.error('Exception while creating MediaRecorder: ' + e);
                 alert('Exception while creating MediaRecorder: '
@@ -267,6 +272,24 @@ function csrfSafeMethod(method) {
     return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
 }
 
+function add() {
+    seconds++;
+    if (seconds >= 60) {
+        seconds = 0;
+        minutes++;
+        if (minutes >= 60) {
+            minutes = 0;
+            hours++;
+        }
+    }
+    h1.textContent = (hours ? (hours > 9 ? hours : "0" + hours) : "00") + ":" + (minutes ? (minutes > 9 ? minutes : "0" + minutes) : "00") + ":" + (seconds > 9 ? seconds : "0" + seconds);
+    timer();
+}
+
+function timer() {
+    t = setTimeout(add, 1000);
+}
+// timer();
 
 function save() {
     var blob = new Blob(recordedBlobs, {type: 'video/webm'});
