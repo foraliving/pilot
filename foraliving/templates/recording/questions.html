@@ -44,7 +44,7 @@
                     {% if questions %}
 
                     {% for question in questions %}
-                    <tr data-link="{% url 'recording' question_id=question.question.id %}">
+                    <tr data-link="{% url 'recording' question_id=question.id %}">
                         <td> {{question.question.name}}
                         </td>
                     </tr>

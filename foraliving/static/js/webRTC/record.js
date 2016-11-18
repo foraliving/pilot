@@ -27,9 +27,11 @@ var gumVideo = document.querySelector('video#gum');
 // var recordedVideo = document.querySelector('video#recorded');
 
 var recordButton = document.querySelector('button#record');
+var saveButton = document.querySelector('button#save');
 // var playButton = document.querySelector('button#play');
 var downloadButton = document.querySelector('button#download');
 recordButton.onclick = toggleRecording;
+saveButton.onclick = save;
 // playButton.onclick = play;
 downloadButton.onclick = download;
 
@@ -47,7 +49,7 @@ if (!isSecureOrigin) {
 
 var constraints = {
     audio: true,
-    video: true
+    video: { facingMode: "environment" }
 };
 
 function handleSuccess(stream) {
@@ -120,7 +122,10 @@ function sleep(milliseconds) {
 
 
 function toggleRecording() {
+    $("#count-replace").hide();
     if (recordButton.textContent === 'Start Recording' || recordButton.textContent === "Try Again") {
+        $("#record").css('background-color', '#fe5919');
+        $("#save").hide();
         document.getElementById("gum").style.filter = "invert(0)";
         startRecording();
     } else {
@@ -128,6 +133,7 @@ function toggleRecording() {
         recordButton.textContent = 'Try Again';
         // playButton.disabled = false;
         downloadButton.disabled = false;
+        $("#count-replace").hide();
     }
 }
 
@@ -147,16 +153,25 @@ function startRecording() {
             clearInterval(interval);
             $("#custom-message").hide();
             $("#count").hide();
+            $("#count-replace").hide();
         }
         if (counter >= 1) {
             $("#count").text(counter);
+            $("#count-replace").hide();
         }
         if (counter == 0) {
-            // document.getElementById("count").style.fontSize = "170%";
+            $("#count-replace").show();
             $("#custom-message").text('recording started..');
             $("#count").hide();
-            $("#count-replace").show();
-            $("#count-replace").text('Ask your question');
+            if (recordButton.textContent == "Try Again") {
+                $("#count-replace").hide();
+                $("#custom-message").hide();
+            }
+        }
+        if (counter == -1) {
+            $("#count-replace").hide();
+            $("#custom-message").hide();
+
         }
         if (counter == -2) {
             document.getElementById("gum").style.filter = "invert(0)";
@@ -204,19 +219,18 @@ function stopRecording() {
         console.log('Not record');
     }
     else {
+        $("#save").show();
+        $("#record").css('background-color', '#808080');
         mediaRecorder.stop();
         console.log('Recorded Blobs: ', recordedBlobs);
     }
     $("#custom-message").hide();
     $("#count").hide();
+    $("#count-replace").hide();
 
     // recordedVideo.controls = true;
 }
 
-// function play() {
-//   var superBuffer = new Blob(recordedBlobs, {type: 'video/webm'});
-//   recordedVideo.src = window.URL.createObjectURL(superBuffer);
-// }
 
 function download() {
     var blob = new Blob(recordedBlobs, {type: 'video/webm'});
@@ -231,6 +245,67 @@ function download() {
         document.body.removeChild(a);
         window.URL.revokeObjectURL(url);
     }, 100);
+}
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie != '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+var csrftoken = getCookie('csrftoken');
+function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+
+
+function save() {
+    var blob = new Blob(recordedBlobs, {type: 'video/webm'});
+    var fd = new FormData();
+    fd.append('file', 'test1.webm');
+    fd.append('data', blob);
+    fd.append('interview_question', $("#interview_question").val());
+
+    // Open the connection.
+    var csrfcookie = function () {
+        var cookieValue = null,
+            name = 'csrftoken';
+        if (document.cookie && document.cookie !== '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    };
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', '/foraliving/video/save/', true);
+    xhr.setRequestHeader('X-CSRFToken', csrfcookie());
+    xhr.onload = function () {
+        if (xhr.status === 200) {
+            // File(s) uploaded.
+            alert("yes")
+        } else {
+            alert('An error occurred!');
+        }
+    };
+
+    xhr.send(fd);
+
+
 }
 
 

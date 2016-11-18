@@ -7,47 +7,54 @@
 <div class="panel panel-info">
     <div class="panel-heading">
         <div class="inline-block"><h3> {{question_name}}</h3></div>
+        <button class="btn btn-warning" id="download" style="display:none; margin-top:33%;">
+            Download
+        </button>
     </div>
     <div class="panel-body">
         <div class="panel panel-default">
             <div class="panel-body">
                 <div class="row">
                     <div class="col-md-6 col-sm-6 .col-lg-6" style="text-align: center;">
-                        <video id="gum" autoplay muted></video>
+                        <video id="gum" autoplay loop></video>
                         <div style="display:none;" id="custom-message">Recording starts in ..
                             <br>
-
                         </div>
                         <div id="count" style="display:none;"> 5</div>
                         <div id="count-replace" style="display:none;"> Ask your question</div>
                     </div>
-                    <div class="col-md-6 col-sm-6 .col-lg-6" style="text-align: center;">
-                        <!--<video id="recorded" autoplay loop></video>-->
-                        <button class="btn btn-warning" id="record">Start Recording</button>
+                    <div class="col-md-6 col-sm-6 .col-lg-6"
+                         style="text-align: center; margin-top: 15%;">
                         <div class="row">
-                            <button class="btn btn-warning" id="save" style="display:none;">Save</button>
-                            <button class="btn btn-warning" id="download" style="display:none; margin-top:33%;">
-                                Download
-                            </button>
+                            <div class="col-md-12col-sm-12 .col-lg-12">
+                                <button class="btn btn-warning" id="save" style="display:none;">Save</button>
+                            </div>
                         </div>
-
+                        <div class="row">
+                            <div class="col-md-12col-sm-12 .col-lg-12">
+                                <button class="btn btn-warning" id="record">Start Recording</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</div>
-{% endblock %}
-{% block scripts %}
-<script src="{% static 'js/webRTC/adapter.js' %}"></script>
-<script src="{% static 'js/webRTC/record.js' %}"></script>
-<script>
-    var orientation = screen.orientation || screen.mozOrientation || screen.msOrientation;
+        <div style="display:none">
+            <input type="hidden" name="csrfmiddlewaretoken" value="$csrf_token"/>
+            <input type="hidden" name="interview_question" id="interview_question" value="{{questions.id}}"/>
+        </div>
 
-    if (orientation.type == "landscape-primary") {
-    } else if (orientation.type == "landscape-secondary") {
-    } else {
-        alert("Rotate your screen to landscape for the best user experience during the interview.");
-    }
-</script>
-{% endblock %}
+        {% endblock %}
+        {% block scripts %}
+        <script src="{% static 'js/webRTC/adapter.js' %}"></script>
+        <script src="{% static 'js/webRTC/record.js' %}"></script>
+        <script>
+            var orientation = screen.orientation || screen.mozOrientation || screen.msOrientation;
+
+            if (orientation.type == "landscape-primary") {
+            } else if (orientation.type == "landscape-secondary") {
+            } else {
+                alert("Rotate your screen to landscape for the best user experience during the interview.");
+            }
+        </script>
+        {% endblock %}

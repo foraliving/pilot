@@ -43,7 +43,9 @@ MIDDLEWARE_CLASSES = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     "account.middleware.LocaleMiddleware",
     "account.middleware.TimezoneMiddleware",
+
     # "LoginRequiredMiddleware"
+
 ]
 
 SITE_ID = 1
@@ -53,6 +55,8 @@ ROOT_URLCONF = 'foraliving_project.urls'
 LOGIN_URL = '/account/login/'
 LOGIN_EXEMPT = ()
 X_FRAME_OPTIONS = 'DENY'
+
+ALLOWED_HOSTS = ['192.241.156.220', 'localhost', '127.0.0.1']
 
 TEMPLATES = [
     {
@@ -138,3 +142,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/dev/howto/static-files/
 
 STATIC_URL = '/static/'
+PROJECT_PATH = os.path.realpath(os.path.dirname(__file__))
+MEDIA_ROOT = PROJECT_PATH + '/media'
+MEDIA_URL = '/media/'

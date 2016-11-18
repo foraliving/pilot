@@ -1,9 +1,10 @@
+from django.conf import settings
 from django.conf.urls import include, url
-
+from django.conf.urls.static import static
 from django.contrib import admin
 from . import views
 from foraliving.recording import RecordingType, RecordingSetupMicrophone, RecordingSetupFace, RecordingSetupBattery, \
-    QuestionInterview, Recording, Orientation
+    QuestionInterview, Recording, Orientation, SaveRecording, protected_serve
 from foraliving.student import CompleteVideo, StudentAssignment, ConductVideo, SelectQuestion, SelectQuestionEdit
 from foraliving.volunteer import VolunteerProfile
 
@@ -33,6 +34,10 @@ urlpatterns = [
     url(r'^select_question_edit/(?P<interview_id>\d+)/$', SelectQuestionEdit.as_view(), name='select_question_edit'),
 
     # volunteer uls
-    url(r'^volunteer/profile/(?P<user_id>\d+)/$', VolunteerProfile.as_view(), name='volunteer_profile')
+    url(r'^volunteer/profile/(?P<user_id>\d+)/$', VolunteerProfile.as_view(), name='volunteer_profile'),
+    url(r'^video/save/$', SaveRecording.as_view(), name='save_recording')
 
 ]
+
+urlpatterns += [
+               ] + static(settings.MEDIA_URL, protected_serve, document_root=settings.MEDIA_ROOT)
