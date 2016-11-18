@@ -28,6 +28,7 @@ class RecordingType(LoginRequiredMixin, generic.View):
     def get(self, request):
         return render(request, self.recording_view)
 
+
 class RecordingSetupMicrophone(LoginRequiredMixin, generic.View):
     """Generic view to display the recording setup (microphone),
     this will be shown after login success"""
@@ -36,6 +37,7 @@ class RecordingSetupMicrophone(LoginRequiredMixin, generic.View):
 
     def get(self, request):
         return render(request, self.setup_view)
+
 
 class RecordingSetupFace(LoginRequiredMixin, generic.View):
     """Generic view to display the recording setup (face),
@@ -56,6 +58,7 @@ class RecordingSetupBattery(LoginRequiredMixin, generic.View):
     def get(self, request):
         return render(request, self.setup_view)
 
+
 class QuestionInterview(LoginRequiredMixin, generic.View):
     """Generic view to display the question of the interview,
     this will be shown after login success"""
@@ -71,7 +74,8 @@ class QuestionInterview(LoginRequiredMixin, generic.View):
             new_data = Interview_Question_Map(interview_id=interview_id, question_id=practice_question.id)
             new_data.save()
         questions = Interview_Question_Map.objects.filter(interview=interview_id)
-        return render(request, self.question_view, {'questions': questions})
+        return render(request, self.question_view, {'questions': questions, 'interview': interview_id})
+
 
 class Recording(LoginRequiredMixin, generic.View):
     """Generic view to display the recording interface,
@@ -82,6 +86,7 @@ class Recording(LoginRequiredMixin, generic.View):
     def get(self, request, question_id):
         questions =  Interview_Question_Map.objects.get(pk=question_id)
         return render(request, self.question_view, {'questions': questions, 'question_name': questions.question.name})
+
 
 class Orientation(LoginRequiredMixin, generic.View):
     """Generic view to display the orientation page,

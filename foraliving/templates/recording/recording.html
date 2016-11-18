@@ -4,6 +4,10 @@
 {% load staticfiles %}
 {% load static %}
 {% block body %}
+{% block styles %}
+<link rel="stylesheet" href="{% static 'UX/css/student/recording.css' %}">
+<link rel="stylesheet" href="{% static 'UX/css/student/overlay.css' %}">
+{% endblock %}
 <div class="panel panel-info">
     <div class="panel-heading">
         <div class="inline-block"><h3> {{question_name}}</h3></div>
@@ -12,6 +16,9 @@
         </button>
     </div>
     <div class="panel-body">
+        <div class="overlay">
+            <div class="saving-message" style="font-size:60px;">Video Saving</div>
+        </div>
         <div class="panel panel-default">
             <div class="panel-body">
                 <div class="row">
@@ -27,7 +34,9 @@
                          style="text-align: center; margin-top: 10%;">
                         <div class="row">
                             <div class="col-md-12col-sm-12 .col-lg-12">
-                                <h1><time>00:00:00</time></h1>
+                                <h1>
+                                    <time>00:00:00</time>
+                                </h1>
                             </div>
                         </div>
                         <div class="row">
@@ -44,22 +53,26 @@
                 </div>
             </div>
         </div>
-        <div style="display:none">
-            <input type="hidden" name="csrfmiddlewaretoken" value="$csrf_token"/>
-            <input type="hidden" name="interview_question" id="interview_question" value="{{questions.id}}"/>
-        </div>
+    </div>
+</div>
+<div style="display:none">
+    <input type="hidden" name="csrfmiddlewaretoken" value="$csrf_token"/>
+    <input type="hidden" name="interview_question" id="interview_question" value="{{questions.id}}"/>
+    <input type="hidden" name="interview" id="interview" value="{{questions.interview.id}}"/>
+</div>
 
-        {% endblock %}
-        {% block scripts %}
-        <script src="{% static 'js/webRTC/adapter.js' %}"></script>
-        <script src="{% static 'js/webRTC/record.js' %}"></script>
-        <script>
-            var orientation = screen.orientation || screen.mozOrientation || screen.msOrientation;
+{% endblock %}
+{% block scripts %}
+<script src="{% static 'js/webRTC/adapter.js' %}"></script>
+<script src="{% static 'js/webRTC/record.js' %}"></script>
+<script>
+    var orientation = screen.orientation || screen.mozOrientation || screen.msOrientation;
 
-            if (orientation.type == "landscape-primary") {
-            } else if (orientation.type == "landscape-secondary") {
-            } else {
-                alert("Rotate your screen to landscape for the best user experience during the interview.");
-            }
-        </script>
-        {% endblock %}
+    if (orientation.type == "landscape-primary") {
+    } else if (orientation.type == "landscape-secondary") {
+    } else {
+        alert("Rotate your screen to landscape for the best user experience during the interview.");
+    }
+
+</script>
+{% endblock %}

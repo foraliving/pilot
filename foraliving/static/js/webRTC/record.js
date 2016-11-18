@@ -289,9 +289,30 @@ function add() {
 function timer() {
     t = setTimeout(add, 1000);
 }
-// timer();
 
 function save() {
+
+    var sizeTheOverlays = function () {
+        $(".overlay").resize().each(function () {
+            var h = $(this).parent().outerHeight();
+            var w = $(this).parent().outerWidth();
+            $(this).css("height", h);
+            $(this).css("width", w);
+        });
+    };
+
+    sizeTheOverlays();
+
+
+    var width = $(window).width();
+    $(window).resize(function () {
+        if ($(this).width() != width) {
+            width = $(this).width();
+            sizeTheOverlays();
+        }
+    });
+
+
     var blob = new Blob(recordedBlobs, {type: 'video/webm'});
     var fd = new FormData();
     fd.append('file', 'test1.webm');
@@ -314,18 +335,21 @@ function save() {
         }
         return cookieValue;
     };
+
+    $('.overlay').css({opacity: 2});
+    var interview = $("#interview").val();
     var xhr = new XMLHttpRequest();
     xhr.open('POST', '/foraliving/video/save/', true);
     xhr.setRequestHeader('X-CSRFToken', csrfcookie());
     xhr.onload = function () {
         if (xhr.status === 200) {
-            // File(s) uploaded.
-            alert("yes")
+            $('.overlay').css({opacity: 0});
+            window.location = "/foraliving/question_interview/" + interview + "/";
+
         } else {
             alert('An error occurred!');
         }
     };
-
     xhr.send(fd);
 
 
