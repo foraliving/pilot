@@ -336,14 +336,29 @@ function save() {
         return cookieValue;
     };
 
-    $('.overlay').css({opacity: 2});
+    // $('.overlay').css({opacity: 2});
+    var customElement = $("<div>", {
+        id: "countdown",
+        css: {
+            "font-size": "40px",
+            "display": "flex",
+            "margin-bottom": "20%"
+        },
+        text: "Video Saving"
+    });
+
+    $.LoadingOverlay("show", {
+        custom: customElement
+    });
+
     var interview = $("#interview").val();
     var xhr = new XMLHttpRequest();
     xhr.open('POST', '/foraliving/video/save/', true);
     xhr.setRequestHeader('X-CSRFToken', csrfcookie());
     xhr.onload = function () {
         if (xhr.status === 200) {
-            $('.overlay').css({opacity: 0});
+            // $('.overlay').css({opacity: 0});
+            $.LoadingOverlay("hide");
             window.location = "/foraliving/question_interview/" + interview + "/";
 
         } else {

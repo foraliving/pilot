@@ -5,7 +5,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 from django.views import generic
 from django.contrib.auth.models import User, Group
-from foraliving.models import Video, Interview_Question_Map, Interview, Question, User_Group_Role_Map
+from foraliving.models import Video, Interview_Question_Map, Interview, Question, User_Group_Role_Map, Interview_Question_Video_Map
 from django.views.decorators.clickjacking import xframe_options_exempt
 
 
@@ -29,6 +29,7 @@ class StudentAssignment(LoginRequiredMixin, generic.View):
 
     def get(self, request):
         group = None
+        exist_video = None
         interview = Interview.objects.filter(interviewer_id=request.user.id)
         videos = Video.objects.filter(created_by=request.user.id)
         if not interview:
@@ -43,8 +44,12 @@ class StudentAssignment(LoginRequiredMixin, generic.View):
                 print (group)
             except ObjectDoesNotExist:
                 group = ""
+        for question in questions:
+            interview_question_video = Interview_Question_Video_Map.objects.filter(interview_question=question.id)
+            if interview_question_video:
+                exist_video = True
         return render(request, self.question_view, {
-            'questions': questions, 'videos': videos, 'question_number': question_number, 'group': group, 'interview': interview})
+            'questions': questions, 'videos': videos, 'question_number': question_number, 'group': group, 'interview': interview, 'exist_video': exist_video})
 
 
 class ConductVideo(LoginRequiredMixin, generic.View):

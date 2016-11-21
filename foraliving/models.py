@@ -183,7 +183,7 @@ class Question_Video_Map(models.Model):
 		return str(self.question) + ':' + str(self.video)
 
 class Interview_Question_Video_Map(models.Model):
-	interview_question = models.ForeignKey(Question_Video_Map, on_delete=models.CASCADE, )
+	interview_question = models.ForeignKey(Interview_Question_Map, on_delete=models.CASCADE, )
 	video = models.ForeignKey(Video, on_delete=models.CASCADE, )
 
 	class Meta:

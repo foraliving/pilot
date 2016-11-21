@@ -97,7 +97,7 @@ WSGI_APPLICATION = 'foraliving_project.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'foraliving',
+        'NAME': 'fal_dev',
         'USER': 'noelia',
         'PASSWORD': 'v1@r0.n3t',
         'HOST': 'localhost',
