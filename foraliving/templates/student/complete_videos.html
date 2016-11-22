@@ -21,25 +21,31 @@
     {% endblock %}
 </head>
 {% block list %}
-    <li ><a href="{% url 'assignment' %}">Assignment</a></li>
-    <li class="active"><a href="{% url 'complete_video' %}">Completed Videos</a></li>
+<li><a href="{% url 'assignment' %}">Assignment</a></li>
+<li class="active"><a href="{% url 'complete_video' %}">Completed Videos</a></li>
 {% endblock %}
 {% block body %}
 <div class="container">
     <div class="gallery">
-        <h3 style="text-align: center;">{{request.user.first_name}} {{request.user.last_name}}</h3>
+        {% if group %}
+        <h3 style="text-align: center;"> {{group.name}} Assignment</h3>
+        {% else %}
+        <h3 style="text-align: center;">{{request.user.first_name}} {{request.user.last_name}} Assignment</h3>
+        {% endif %}
         {% if videos %}
         <h2 style="text-align: center;">Send the videos you want to use for your assignment </h2>
         {% for video in videos %}
         <div class="col-xs-12 col-md-6 col-lg-3">
             <div class="thumbnail"><a href="#">
                 <div class="embed-responsive embed-responsive-16by9">
-                    <iframe class="embed-responsive-item" src="{{video.url}}"
-                            frameborder="0" allowfullscreen=""></iframe>
+                    <video  controls>
+                        <source src="/foraliving/media/{{video.video.url}}">
+                    </video>
                 </div>
             </a>
-                <h4>{{video.name}}</h4>
-                <p class="tag">{{video.tags}}</p>
+                <h4>{{video.interview_question.interview.interviewee.user.first_name}}</h4>
+                <p class="tag">{{video.video.name}}</p>
+                <p class="text_column">{{video.video.tags}}</p>
             </div>
         </div>
         {% endfor %}

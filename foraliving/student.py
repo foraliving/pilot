@@ -5,7 +5,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 from django.views import generic
 from django.contrib.auth.models import User, Group
-from foraliving.models import Video, Interview_Question_Map, Interview, Question, User_Group_Role_Map, Interview_Question_Video_Map
+from foraliving.models import Video, Interview_Question_Map, Interview, Question, User_Group_Role_Map, Interview_Question_Video_Map, User_Add_Ons
 from django.views.decorators.clickjacking import xframe_options_exempt
 
 
@@ -17,8 +17,18 @@ class CompleteVideo(LoginRequiredMixin, generic.View):
 
     @xframe_options_exempt
     def get(self, request):
-        videos = Video.objects.filter(created_by=request.user.id)
-        return render(request, self.question_view, {'videos': videos})
+        try:
+            group = Group.objects.get(user=request.user.id)
+            user_group = User.objects.get(groups=group)
+            users = User_Add_Ons.objects.filter(user=user_group)
+            video_user = Video.objects.filter(created_by__in=users)
+            videos= Interview_Question_Video_Map.objects.filter(video__in=video_user)
+        except ObjectDoesNotExist:
+            group = None
+            print ("b")
+            video_user = Video.objects.filter(created_by=request.user.id)
+            videos = Interview_Question_Video_Map.objects.filter(video=video_user)
+        return render(request, self.question_view, {'videos': videos, 'group': group})
 
 
 class StudentAssignment(LoginRequiredMixin, generic.View):
@@ -41,7 +51,6 @@ class StudentAssignment(LoginRequiredMixin, generic.View):
             question_number = Interview_Question_Map.objects.filter(interview_id=interview.id).count()
             try:
                 group = Group.objects.get(user=request.user.id)
-                print (group)
             except ObjectDoesNotExist:
                 group = ""
         for question in questions:
