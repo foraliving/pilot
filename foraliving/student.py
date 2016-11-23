@@ -21,6 +21,11 @@ class CompleteVideo(LoginRequiredMixin, generic.View):
 
     @xframe_options_exempt
     def get(self, request):
+        count = 0
+        count_approved = 0
+        count_pending = 0
+        show_count = 0
+
         try:
             group = Group.objects.get(user=request.user.id)
             user_group = User.objects.get(groups=group)
@@ -31,8 +36,22 @@ class CompleteVideo(LoginRequiredMixin, generic.View):
             group = None
             video_user = Video.objects.filter(created_by=request.user.id)
             videos = Interview_Question_Video_Map.objects.filter(video__in=video_user)
+
+        if videos:
+            for data in videos:
+                if data.video.status == "Under Review by teacher":
+                    count = count + 1
+                if data.video.status == "pending":
+                    count_pending = count_pending + 1
+                if data.video.status == "Approved by teacher":
+                    count_approved = count_approved + 1
+
+            if count !=0 or count_pending != 0:
+                show_count = True
+
         volunteer = Volunteer_User_Add_Ons.objects.get(pk=videos[0].interview_question.interview.interviewee.id)
-        return render(request, self.question_view, {'videos': videos, 'group': group, 'volunteer': volunteer})
+
+        return render(request, self.question_view, {'videos': videos, 'group': group, 'volunteer': volunteer, 'show_count': show_count, 'count_approved': count_approved})
 
 
 class StudentAssignment(LoginRequiredMixin, generic.View):

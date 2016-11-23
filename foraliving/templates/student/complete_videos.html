@@ -34,6 +34,13 @@
         {% endif %}
         {% if videos %}
         <h2 style="text-align: center;">Send the videos you want to use for your assignment </h2>
+        {% if show_count == True %}
+        {% if count_approved == 1 %}
+        <h2 style="text-align: center; color:green;"> {{count_approved}} video has been approved!</h2>
+        {% else %}
+        <h2 style="text-align: center; color:green;"> {{count_approved}} videos has been approved!</h2>
+        {% endif %}
+        {% endif %}
         {% for video in videos %}
         <div class="col-xs-12 col-md-6 col-lg-3">
             {% if video.video.status == "pending"%}
