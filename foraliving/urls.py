@@ -5,7 +5,7 @@ from django.contrib import admin
 from . import views
 from foraliving.recording import RecordingType, RecordingSetupMicrophone, RecordingSetupFace, RecordingSetupBattery, \
     QuestionInterview, Recording, Orientation, SaveRecording, protected_serve
-from foraliving.student import CompleteVideo, StudentAssignment, ConductVideo, SelectQuestion, SelectQuestionEdit
+from foraliving.student import CompleteVideo, StudentAssignment, ConductVideo, SelectQuestion, SelectQuestionEdit, SendEmail
 from foraliving.volunteer import VolunteerProfile
 
 urlpatterns = [
@@ -32,6 +32,7 @@ urlpatterns = [
     url(r'^conduct_video/$', ConductVideo.as_view(), name='conduct_video'),
     url(r'^select_question/(?P<interview_id>\d+)/$', SelectQuestion.as_view(), name='select_question'),
     url(r'^select_question_edit/(?P<interview_id>\d+)/$', SelectQuestionEdit.as_view(), name='select_question_edit'),
+    url(r'^send_video/(?P<video_id>\d+)/$', SendEmail.as_view(), name='send_email'),
 
     # volunteer uls
     url(r'^volunteer/profile/(?P<user_id>\d+)/$', VolunteerProfile.as_view(), name='volunteer_profile'),

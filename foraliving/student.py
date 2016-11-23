@@ -1,11 +1,15 @@
+from datetime import date
+from django.conf import settings
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render, redirect
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
-from django.views import generic
 from django.contrib.auth.models import User, Group
-from foraliving.models import Video, Interview_Question_Map, Interview, Question, User_Group_Role_Map, Interview_Question_Video_Map, User_Add_Ons
+from django.views import generic
+from mail_templated import EmailMessage
+from foraliving.models import Video, Interview_Question_Map, Interview, Question, \
+    User_Group_Role_Map, Interview_Question_Video_Map, User_Add_Ons, Volunteer_User_Add_Ons, Assignment
 from django.views.decorators.clickjacking import xframe_options_exempt
 
 
@@ -25,10 +29,10 @@ class CompleteVideo(LoginRequiredMixin, generic.View):
             videos= Interview_Question_Video_Map.objects.filter(video__in=video_user)
         except ObjectDoesNotExist:
             group = None
-            print ("b")
             video_user = Video.objects.filter(created_by=request.user.id)
-            videos = Interview_Question_Video_Map.objects.filter(video=video_user)
-        return render(request, self.question_view, {'videos': videos, 'group': group})
+            videos = Interview_Question_Video_Map.objects.filter(video__in=video_user)
+        volunteer = Volunteer_User_Add_Ons.objects.get(pk=videos[0].interview_question.interview.interviewee.id)
+        return render(request, self.question_view, {'videos': videos, 'group': group, 'volunteer': volunteer})
 
 
 class StudentAssignment(LoginRequiredMixin, generic.View):
@@ -122,3 +126,32 @@ class SelectQuestionEdit(LoginRequiredMixin, generic.View):
             new_data.save()
         messages.success(request, "Questions Edited Successfully")
         return redirect(self.assignment_view)
+
+
+class SendEmail(LoginRequiredMixin, generic.View):
+    """Generic view to send the email by teacher"""
+    login_url = settings.LOGIN_URL
+    complete_videos_view = 'complete_video'
+
+    def get(self, request, video_id):
+        interview_question_video = Interview_Question_Video_Map.objects.get(video=video_id)
+
+        assignment = Assignment.objects.get(pk=interview_question_video.interview_question.interview.assignment.id)
+
+        interview_question = Interview_Question_Map.objects.filter(interview=interview_question_video.interview_question.interview)
+        interview_question_video_map = Interview_Question_Video_Map.objects.filter(interview_question=interview_question)
+
+        count = 0
+        for data in interview_question_video_map:
+            if data.video.status == "Under Review by teacher":
+                count = count + 1
+
+        if count >= 1:
+            email_to = assignment.falClass.teacher.user.email
+            message = EmailMessage('student/send_email.html', {'assignment': assignment}, "noelia.pazos@viaro.net",
+                                   to=[email_to])
+            message.send()
+        video = Video.objects.get(pk=video_id)
+        video.status = 'Under Review by teacher'
+        video.save()
+        return redirect(self.complete_videos_view)

@@ -1,0 +1,27 @@
+{% extends "mail_templated/base.tpl" %}
+{% block subject %}
+Foraliving
+{% endblock %}
+{% block body %}
+New videos
+{% endblock %}
+{% block html %}
+{% load staticfiles %}
+<div class="container">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="panel panel-default">
+                    </div>
+                    <div class="panel-heading">
+                        <h2 style="text-align: left"> {{assignment.falClass.teacher.user.first_name}} {{assignment.falClass.teacher.user.last_name}} have one or more videos to approve on www.foraliving.org </h2>
+                    </div>
+                    <br>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+{% endblock %}

@@ -48,6 +48,20 @@
     border-style: solid;
 }
 
+
+.btn-video {
+    width: 180px;
+    color: white;
+    background-color: #4CAF50;
+    border-color: #4CAF50;
+    font-size: 18px;
+    border-style: groove;
+    margin-bottom: 3px;
+    margin-top: 3px;
+    margin-right: 5px;
+    border-style: solid;
+}
+
 .btn-primary, .btn-danger {
     width: 100px;
     max-height: 35px;
@@ -265,6 +279,12 @@ video {
         float: none !important;
     }
 
+}
+
+@media (max-width: 1200px) {
+    .video-message {
+        padding-top: 7% !important;
+    }
 }
 
 @media (max-width: 992px) {

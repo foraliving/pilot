@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     'bootstrapform',
     'metron',
     'sslserver',
+    'mail_templated',
     # 'mptt',
 ]
 
@@ -144,3 +145,6 @@ STATIC_URL = '/static/'
 PROJECT_PATH = os.path.realpath(os.path.dirname(__file__))
 MEDIA_ROOT = PROJECT_PATH + '/media'
 MEDIA_URL = '/media/'
+
+EMAIL_BACKEND = "sgbackend.SendGridBackend"
+SENDGRID_API_KEY = "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"

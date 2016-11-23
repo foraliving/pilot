@@ -154,7 +154,7 @@ class SaveRecording(LoginRequiredMixin, generic.View):
         # #create video
         user_add = User_Add_Ons.objects.get(user=request.user.id)
         video = Video(name=interview_question.question.name, url=path, tags="student", created_by=user_add,
-                      creation_date=today)
+                      creation_date=today, status="pending")
         video.save()
 
         # #create question_video

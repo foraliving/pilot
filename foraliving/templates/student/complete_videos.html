@@ -36,24 +36,51 @@
         <h2 style="text-align: center;">Send the videos you want to use for your assignment </h2>
         {% for video in videos %}
         <div class="col-xs-12 col-md-6 col-lg-3">
-            <div class="thumbnail"><a href="#">
-                <div class="embed-responsive embed-responsive-16by9">
-                    <video  controls>
-                        <source src="/foraliving/media/{{video.video.url}}">
-                    </video>
+            {% if video.video.status == "pending"%}
+            <div class="thumbnail" style="border: 2px solid black;">
+                {% elif video.video.status == "Under Review by teacher" %}
+                <div class="thumbnail" style="border: 2px solid red;">
+                    {% else %}
+                    <div class="thumbnail" style="border: 2px solid green;">
+                        {% endif %}
+                        <div style="text-align: right;"> Delete</div>
+                        <div class="embed-responsive embed-responsive-16by9">
+                            <video controls>
+                                <source src="/foraliving/media/{{video.video.url}}">
+                            </video>
+                        </div>
+                        <h4>{{video.interview_question.interview.interviewee.user.first_name}}</h4>
+                        <p class="tag">{{volunteer.workTitle}}</p>
+                        <p class="text_column">{{video.video.name}}</p>
+                        <p></p>
+                        {% if video.video.status == "pending"%}
+                        <div style="text-align: center;">
+                            <button class='btn btn-video btn-title border-radius'
+                                    onclick="location.href='{% url 'send_email' video_id=video.video.id %}'"
+                                    style="font-size:14px;"> Send by teacher
+                            </button>
+                        </div>
+                        {% elif video.video.status == "Under Review by teacher" %}
+                        <div style="text-align: center;">
+                            <p class="video-message"
+                               style="text-align: center; font-size: 14px; margin-bottom: 8px; padding-top: 21%; color:black;">
+                                {{video.video.status}} </p>
+                        </div>
+                        {% else %}
+                        <div style="text-align: center;">
+                            <p class="video-message"
+                               style="text-align: center; font-size: 14px; margin-bottom: 8px; padding-top: 21%; color:green;">
+                                {{video.video.status}} </p>
+                        </div>
+                        {% endif %}
+                    </div>
                 </div>
-            </a>
-                <h4>{{video.interview_question.interview.interviewee.user.first_name}}</h4>
-                <p class="tag">{{video.video.name}}</p>
-                <p class="text_column">{{video.video.tags}}</p>
+                {% endfor %}
+                {% else %}
+                <h3 style="text-align: center;">You have not recorded any videos yet.</h3>
+                {% endif %}
             </div>
         </div>
-        {% endfor %}
-        {% else %}
-        <h3 style="text-align: center;">You have not recorded any videos yet.</h3>
-        {% endif %}
-    </div>
-</div>
-{% endblock %}
-{% block scripts %}{% endblock %}
+        {% endblock %}
+        {% block scripts %}{% endblock %}
 

@@ -6,6 +6,7 @@ from django.views import generic
 from django.contrib.auth.models import User
 from foraliving.models import Volunteer_User_Add_Ons
 
+
 class VolunteerProfile(LoginRequiredMixin, generic.View):
     """Generic view to display the volunteer profile,
     this will be shown after login success"""

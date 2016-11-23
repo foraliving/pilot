@@ -123,11 +123,22 @@ class Class(models.Model):
 	def __unicode__(self):
 		return str(self.school) + ':' + str(self.teacher)
 
+class Assignment(models.Model):
+	title = models.CharField(max_length=128)
+	falClass = models.ForeignKey(Class, on_delete=models.CASCADE)
+	document = models.CharField(max_length=128)
+	due_date = models.DateTimeField()
+	creation_date = models.DateTimeField()
+
+	def __unicode__(self):
+		return str(self.title) + ' (' + str(falClass) + ')'
+
 class Interview(models.Model):
 	interviewer = models.ForeignKey(User_Add_Ons, on_delete=models.CASCADE, related_name='interviewer', )
 	interviewee = models.ForeignKey(User_Add_Ons, on_delete=models.CASCADE, related_name='interviewee', )
 	group = models.ForeignKey(Group)
 	date = models.DateTimeField()
+	assignment = models.ForeignKey(Assignment, on_delete=models.CASCADE, related_name='assignment')
 
 	def __unicode__(self):
 		return 'Interview of ' + str(interviewee) + ' by ' + str(interviewer)
@@ -167,6 +178,7 @@ class Video(models.Model):
 	tags = models.CharField(max_length=128, null=True, blank=True, )
 	created_by = models.ForeignKey(User_Add_Ons, on_delete=models.CASCADE, )
 	creation_date = models.DateTimeField(default=datetime.now, blank=True)
+	status = models.CharField(max_length=128)
 
 	def __unicode__(self):
 		return str(self.name) + ' (' + str(self.creation_date) + ')'
@@ -206,15 +218,6 @@ class Video_Comment(models.Model):
 	def __unicode__(self):
 		return str(self.video) + ' (' + str(created_by) + ', ' + str(creation_date) + ')'
 
-class Assignment(models.Model):
-	title = models.CharField(max_length=128)
-	falClass = models.ForeignKey(Class, on_delete=models.CASCADE)
-	document = models.CharField(max_length=128)
-	due_date = models.DateTimeField()
-	creation_date = models.DateTimeField()
-
-	def __unicode__(self):
-		return str(self.title) + ' (' + str(falClass) + ')'
 
 class Assignment_Submission(models.Model):
 	name = models.CharField(max_length=128)
