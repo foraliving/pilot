@@ -21,8 +21,8 @@
     {% endblock %}
 </head>
 {% block list %}
-<li class="active"><a href="{% url 'assignment' %}">Assignment</a></li>
-<li><a href="{% url 'complete_video' %}">Completed Videos</a></li>
+<li class="active"><a href="{% url 'assignment' interview_id=interview.id %}">Assignment</a></li>
+<li><a href="{% url 'complete_video' interview_id=interview.id%}">Completed Videos</a></li>
 {% endblock %}
 {% block body %}
 {% if group %}
@@ -44,7 +44,7 @@
             2. How to conduct interview
         </td>
         <td class="" style="text-align: center;">
-            <button class='btn btn-menu btn-title border-radius' onclick="location.href='{% url 'conduct_video' %}'">
+            <button class='btn btn-menu btn-title border-radius' onclick="location.href='{% url 'conduct_video' interview_id=interview.id%}'">
                 View
             </button>
         </td>
@@ -61,21 +61,21 @@
             {% if exist_video %}
             {% if questions %}
             <button class='btn btn-menu btn-title border-radius'
-                    onclick="location.href='{% url 'select_question_edit' interview_id=1 %}'" disabled> Edit
+                    onclick="location.href='{% url 'select_question_edit' interview_id=interview.id %}'" disabled> Edit
             </button>
             {% else %}
             <button class='btn btn-menu btn-title border-radius'
-                    onclick="location.href='{% url 'select_question' interview_id=1 %}'" disabled> Go
+                    onclick="location.href='{% url 'select_question' interview_id=interview.id %}'" disabled> Go
             </button>
             {% endif %}
             {% else %}
             {% if questions %}
             <button class='btn btn-menu btn-title border-radius'
-                    onclick="location.href='{% url 'select_question_edit' interview_id=1 %}'"> Edit
+                    onclick="location.href='{% url 'select_question_edit' interview_id=interview.id %}'"> Edit
             </button>
             {% else %}
             <button class='btn btn-menu btn-title border-radius'
-                    onclick="location.href='{% url 'select_question' interview_id=1 %}'"> Go
+                    onclick="location.href='{% url 'select_question' interview_id=interview.id %}'"> Go
             </button>
             {% endif %}
             {% endif %}
@@ -102,8 +102,8 @@
             5. Send completed videos to teacher
         </td>
         <td class="" style="text-align: center;">
-            {% if videos %}
-            <button class='btn btn-menu btn-title border-radius' onclick="location.href='{% url 'complete_video' %}'">
+            {% if exist_video %}
+            <button class='btn btn-menu btn-title border-radius' onclick="location.href='{% url 'complete_video' interview_id=interview.id %}'">
                 Go
             </button>
             {% else %}

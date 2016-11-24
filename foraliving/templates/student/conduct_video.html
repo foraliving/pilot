@@ -4,8 +4,8 @@
 {% load staticfiles %}
 {% load static %}
 {% block list %}
-<li class="active"><a href="{% url 'assignment' %}">Assignment</a></li>
-<li><a href="{% url 'complete_video' %}">Completes Videos</a></li>
+<li class="active"><a href="{% url 'assignment' interview_id=interview %}">Assignment</a></li>
+<li><a href="{% url 'complete_video' interview_id=interview %}">Completes Videos</a></li>
 {% endblock %}
 {% block body %}
 <div class="panel panel-info">
@@ -67,7 +67,7 @@
         <div class="panel-footer" style="text-align: center;">
             <div class="clearfix">
                 <button class="btn btn-menu"
-                        onclick="location.href='{% url 'assignment' %}'">
+                        onclick="location.href='{% url 'assignment' interview_id=interview %}'">
                    Done
                 </button>
             </div>

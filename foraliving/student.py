@@ -20,24 +20,23 @@ class CompleteVideo(LoginRequiredMixin, generic.View):
     question_view = 'student/complete_videos.html'
 
     @xframe_options_exempt
-    def get(self, request):
+    def get(self, request, interview_id):
         count = 0
         count_approved = 0
         count_pending = 0
         show_count = 0
+        volunteer = ""
 
         try:
             group = Group.objects.get(user=request.user.id)
-            user_group = User.objects.get(groups=group)
-            users = User_Add_Ons.objects.filter(user=user_group)
-            video_user = Video.objects.filter(created_by__in=users)
-            videos= Interview_Question_Video_Map.objects.filter(video__in=video_user)
         except ObjectDoesNotExist:
             group = None
-            video_user = Video.objects.filter(created_by=request.user.id)
-            videos = Interview_Question_Video_Map.objects.filter(video__in=video_user)
+
+        interview_question = Interview_Question_Map.objects.filter(interview_id__in=interview_id)
+        videos = Interview_Question_Video_Map.objects.filter(interview_question__in=interview_question)
 
         if videos:
+            volunteer = Volunteer_User_Add_Ons.objects.get(pk=videos[0].interview_question.interview.interviewee.id)
             for data in videos:
                 if data.video.status == "Under Review by teacher":
                     count = count + 1
@@ -49,9 +48,9 @@ class CompleteVideo(LoginRequiredMixin, generic.View):
             if count !=0 or count_pending != 0:
                 show_count = True
 
-        volunteer = Volunteer_User_Add_Ons.objects.get(pk=videos[0].interview_question.interview.interviewee.id)
 
-        return render(request, self.question_view, {'videos': videos, 'group': group, 'volunteer': volunteer, 'show_count': show_count, 'count_approved': count_approved})
+
+        return render(request, self.question_view, {'videos': videos, 'group': group, 'volunteer': volunteer, 'show_count': show_count, 'count_approved': count_approved, 'interview': interview_id})
 
 
 class StudentAssignment(LoginRequiredMixin, generic.View):
@@ -60,38 +59,34 @@ class StudentAssignment(LoginRequiredMixin, generic.View):
     login_url = settings.LOGIN_URL
     question_view = 'student/assignment.html'
 
-    def get(self, request):
+    def get(self, request, interview_id):
         group = None
         exist_video = None
-        interview = Interview.objects.filter(interviewer_id=request.user.id)
+        interview = Interview.objects.get(pk=interview_id)
         videos = Video.objects.filter(created_by=request.user.id)
-        if not interview:
-            questions = ""
-            question_number = ""
-        else:
-            interview = Interview.objects.get(interviewer_id=request.user.id)
-            questions = Interview_Question_Map.objects.filter(interview_id=interview.id)
-            question_number = Interview_Question_Map.objects.filter(interview_id=interview.id).count()
-            try:
-                group = Group.objects.get(user=request.user.id)
-            except ObjectDoesNotExist:
-                group = ""
+
+        questions = Interview_Question_Map.objects.filter(interview_id=interview_id)
+        question_number = Interview_Question_Map.objects.filter(interview_id=interview.id).count()
+        try:
+            group = Group.objects.get(user=request.user.id)
+        except ObjectDoesNotExist:
+            group = ""
         for question in questions:
             interview_question_video = Interview_Question_Video_Map.objects.filter(interview_question=question.id)
             if interview_question_video:
                 exist_video = True
         return render(request, self.question_view, {
-            'questions': questions, 'videos': videos, 'question_number': question_number, 'group': group, 'interview': interview, 'exist_video': exist_video})
+            'questions': questions, 'question_number': question_number, 'group': group, 'interview': interview, 'exist_video': exist_video})
 
 
 class ConductVideo(LoginRequiredMixin, generic.View):
     """Generic view to display the how conduct video interface,
     this will be shown after login success"""
     login_url = settings.LOGIN_URL
-    question_view = 'student/conduct_video.html'
+    conduct_view = 'student/conduct_video.html'
 
-    def get(self, request):
-        return render(request, self.question_view)
+    def get(self, request, interview_id):
+        return render(request, self.conduct_view, {'interview': interview_id})
 
 
 class SelectQuestion(LoginRequiredMixin, generic.View):
@@ -103,7 +98,7 @@ class SelectQuestion(LoginRequiredMixin, generic.View):
 
     def get(self, request, interview_id):
         questions = Question.objects.all()
-        return render(request, self.question_view, {'questions': questions})
+        return render(request, self.question_view, {'questions': questions, 'interview_id': interview_id})
 
     def post(self, request, interview_id):
         selected_values = request.POST.getlist('question')
@@ -112,7 +107,7 @@ class SelectQuestion(LoginRequiredMixin, generic.View):
             new_data = Interview_Question_Map(interview_id=interview_id, question_id=values)
             new_data.save()
         messages.success(request, "Questions Added Successfully")
-        return redirect(self.assignment_view)
+        return redirect(self.assignment_view, interview_id=interview_id)
 
 
 class SelectQuestionEdit(LoginRequiredMixin, generic.View):
@@ -135,7 +130,7 @@ class SelectQuestionEdit(LoginRequiredMixin, generic.View):
                 if select_question.question.id == question.id:
                     all[2] = "yes"
             new_question.append(all)
-        return render(request, self.question_view, {'questions': new_question, 'select_questions': select_questions})
+        return render(request, self.question_view, {'questions': new_question, 'select_questions': select_questions, 'interview_id': interview_id})
 
     def post(self, request, interview_id):
         selected_values = request.POST.getlist('question')
@@ -144,13 +139,12 @@ class SelectQuestionEdit(LoginRequiredMixin, generic.View):
             new_data = Interview_Question_Map(interview_id=interview_id, question_id=values)
             new_data.save()
         messages.success(request, "Questions Edited Successfully")
-        return redirect(self.assignment_view)
+        return redirect(self.assignment_view, interview_id=interview_id)
 
 
 class SendEmail(LoginRequiredMixin, generic.View):
     """Generic view to send the email by teacher"""
     login_url = settings.LOGIN_URL
-    complete_videos_view = 'complete_video'
 
     def get(self, request, video_id):
         interview_question_video = Interview_Question_Video_Map.objects.get(video=video_id)
@@ -166,11 +160,13 @@ class SendEmail(LoginRequiredMixin, generic.View):
                 count = count + 1
 
         if count >= 1:
+            print (count, 'this is a count')
             email_to = assignment.falClass.teacher.user.email
             message = EmailMessage('student/send_email.html', {'assignment': assignment}, "noelia.pazos@viaro.net",
                                    to=[email_to])
             message.send()
+
         video = Video.objects.get(pk=video_id)
         video.status = 'Under Review by teacher'
         video.save()
-        return redirect(self.complete_videos_view)
+        return redirect('complete_video', interview_id=interview_question_video.interview_question.interview.id)

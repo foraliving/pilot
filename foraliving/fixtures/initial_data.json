@@ -14,8 +14,8 @@
     "model": "auth.user",
     "fields": {
       "username": "volunteer_admin",
-      "first_name": "Volunteer",
-      "last_name": "",
+      "first_name": "Vivian",
+      "last_name": "Aguilar",
       "is_active": true,
       "is_superuser": true,
       "is_staff": true,

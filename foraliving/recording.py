@@ -1,7 +1,7 @@
 import os
 import psycopg2
 from django.db import connection
-
+from django.http import JsonResponse
 cursor = connection.cursor()
 from datetime import datetime
 from django.conf import settings
@@ -168,4 +168,4 @@ class SaveRecording(LoginRequiredMixin, generic.View):
         # save the video
         path = default_storage.save(path, ContentFile(file.read()))
         tmp_file = os.path.join(settings.MEDIA_ROOT, path)
-        return HttpResponseRedirect(reverse_lazy('assignment'))
+        return JsonResponse("Done", safe=False)

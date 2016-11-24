@@ -1,8 +1,8 @@
 {% extends 'student/base.html' %}
 {% load staticfiles %}
 {% block list %}
-<li class="active"><a href="{% url 'assignment' %}">Assignment</a></li>
-<li><a href="{% url 'complete_video' %}">Completed Videos</a></li>
+<li class="active"><a href="{% url 'assignment' interview_id=interview_id %}">Assignment</a></li>
+<li><a href="{% url 'complete_video' interview_id=interview_id%}">Completed Videos</a></li>
 {% endblock %}
 {% block body %}
 <div class="panel panel-info">
@@ -13,7 +13,7 @@
 <div class="panel-body">
     <div class="panel panel-default">
         <div class="panel-body" style="font-size: 18px;">
-            <form id="customer_specific" action="{% url 'select_question_edit' interview_id=1%} " method="post"
+            <form id="customer_specific" action="{% url 'select_question_edit' interview_id=interview_id%} " method="post"
                   class="form">
                 {% csrf_token %}
                 {% for question in questions %}

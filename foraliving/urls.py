@@ -27,9 +27,9 @@ urlpatterns = [
     url(r'^orientation/$', Orientation.as_view(), name='orientation'),
 
     # student urls
-    url(r'^complete_video/$', CompleteVideo.as_view(), name='complete_video'),
-    url(r'^assignment/$', StudentAssignment.as_view(), name='assignment'),
-    url(r'^conduct_video/$', ConductVideo.as_view(), name='conduct_video'),
+    url(r'^complete_video/(?P<interview_id>\d+)/$', CompleteVideo.as_view(), name='complete_video'),
+    url(r'^assignment/(?P<interview_id>\d+)/$', StudentAssignment.as_view(), name='assignment'),
+    url(r'^conduct_video/(?P<interview_id>\d+)/$', ConductVideo.as_view(), name='conduct_video'),
     url(r'^select_question/(?P<interview_id>\d+)/$', SelectQuestion.as_view(), name='select_question'),
     url(r'^select_question_edit/(?P<interview_id>\d+)/$', SelectQuestionEdit.as_view(), name='select_question_edit'),
     url(r'^send_video/(?P<video_id>\d+)/$', SendEmail.as_view(), name='send_email'),
