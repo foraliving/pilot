@@ -44,6 +44,23 @@
     }
   },
   {
+    "pk": 3,
+    "model": "auth.user",
+    "fields": {
+      "username": "teacher_admin",
+      "first_name": "Jacquie",
+      "last_name": "B",
+      "is_active": true,
+      "is_superuser": true,
+      "is_staff": true,
+      "last_login": "2008-09-05 12:40:34",
+      "groups": [],
+      "user_permissions": [],
+      "password": "pbkdf2_sha256$30000$pOAjkIh9uSt3$W3ZN4v4dui8TDQhhvWU5ucDu/G1wqljjwfsGKgN5rbQ=",
+      "email": "jacquieued@gmail.com "
+    }
+  },
+  {
     "model": "foraliving.LMS",
     "pk": 1,
     "fields": {
@@ -76,6 +93,82 @@
       "user": 2,
       "school": 1,
       "lms": 1
+    }
+  },
+  {
+    "model": "foraliving.User_Add_Ons",
+    "pk": 3,
+    "fields": {
+      "user": 3,
+      "school": 1,
+      "lms": 1
+    }
+  },
+  {
+    "model": "foraliving.Skill",
+    "pk": 1,
+    "fields": {
+      "name": "numerical"
+    }
+  },
+  {
+    "model": "foraliving.Interest",
+    "pk": 1,
+    "fields": {
+      "name": "education"
+    }
+  },
+  {
+    "model": "foraliving.Volunteer_User_Add_Ons",
+    "pk": 1,
+    "fields": {
+      "user": 1,
+      "phone": "1801-22343",
+      "canGetText": true,
+      "workTitle": "Educator",
+      "isBusinessOwner": true,
+      "workIndustry": "Education",
+      "yearsInIndustry": 6,
+      "linkedinProfile": "wwww.linkedin.com",
+      "yearsSinceHSGraduation": 3,
+      "collegeLevel": 1,
+      "collegeMajor": 2,
+      "skills": 1,
+      "interests": 1
+    }
+  },
+  {
+    "model": "foraliving.Class",
+    "pk": 1,
+    "fields": {
+      "school": 1,
+      "lms": 1,
+      "teacher": 1,
+      "name": "History",
+      "academic_year": 2,
+      "semester": 1
+    }
+  },
+  {
+    "model": "foraliving.Assignment",
+    "pk": 1,
+    "fields": {
+      "title": "Teacher Interview",
+      "falClass": 1,
+      "document": "wwww.foraliving.org",
+      "due_date": "2016-12-10",
+      "creation_date": "2016-05-10"
+    }
+  },
+  {
+    "model": "foraliving.Assignment",
+    "pk": 2,
+    "fields": {
+      "title": "Designer Interview",
+      "falClass": 1,
+      "document": "wwww.foraliving.org",
+      "due_date": "2016-12-10",
+      "creation_date": "2016-05-10"
     }
   },
   {
@@ -292,7 +385,8 @@
       "interviewer": 2,
       "interviewee": 1,
       "group": 1,
-      "date": "2016-11-03T00:00:00Z"
+      "date": "2016-11-03T00:00:00Z",
+      "assignment": 1
     }
   },
   {
@@ -302,7 +396,8 @@
       "interviewer": 1,
       "interviewee": 2,
       "group": 1,
-      "date": "2016-11-03T00:00:00Z"
+      "date": "2016-11-03T00:00:00Z",
+      "assignment": 2
     }
   },
   {
@@ -312,7 +407,7 @@
       "name": "Carrer Educator",
       "url": "https://www.youtube.com/embed/48ZzVjAbA1s?rel=0",
       "tags": "homepage",
-      "created_by": 1,
+      "created_by": 3,
       "creation_date": "2016-05-05T00:00:00Z"
     }
   },
@@ -323,7 +418,7 @@
       "name": "Carrer Educator",
       "url": "https://www.youtube.com/embed/48ZzVjAbA1s?rel=0",
       "tags": "homepage",
-      "created_by": 1,
+      "created_by": 3,
       "creation_date": "2016-05-05T00:00:00Z"
     }
   }
