@@ -11,9 +11,11 @@
             <img class="image-rotation img-responsive"
                  src="{% static 'img/recording/rotate.png' %}">
         </p>
-        <p> Also, to avoid creating a shaky video, steady your device by placing your elbows on a table or resting your arms on the
+        <p> Also, to avoid creating a shaky video, steady your device by placing your elbows on a table or resting your
+            arms on the
             back of a chair.</p>
     </div>
+    <input type="hidden" value="{{interview}}" id="interview_id">
 
 </container>
 {% endblock %}
@@ -22,9 +24,10 @@
 <script>
     screen.orientation.addEventListener('change', function () {
         console.log('new orientation is ', screen.orientation.type);
-        if (screen.orientation.type == "landscape" || screen.orientation.type == "landscape-primary"
-                || screen.orientation.type == "landscape-secundary") {
-            window.location.href = '/foraliving/setup_microphone/';
+        var interview = $("#interview_id").val();
+        var mql = window.matchMedia("(orientation: portrait)");
+        if (mql.matches == false) {
+            window.location.href = '/foraliving/setup_microphone/' + interview;
         }
     });
 </script>

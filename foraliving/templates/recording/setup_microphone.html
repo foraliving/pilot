@@ -28,14 +28,14 @@
                     </div>
                     <div style="text-align: center;" class="col-md-12 col-sm-12 col-xs-12">
                         <button class="btn btn-success" id="yes"
-                                onclick="location.href='{% url 'recording_setup_face' %}'">Yes
+                                onclick="location.href='{% url 'recording_setup_face' interview_id=interview%}'">Yes
                         </button>
                         <button class="btn btn-not" id="no">No</button>
                     </div>
 
                     <div class="skip" style="margin-top:23%;">
                         <a class="skip" style="text-decoration:none;"
-                           href="{% url 'recording_setup_face' %}">Skip setup
+                           href="{% url 'recording_setup_face' interview_id=interview%}">Skip setup
                             check
                         </a>
                     </div>

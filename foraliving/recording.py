@@ -30,8 +30,8 @@ class RecordingType(LoginRequiredMixin, generic.View):
 
     recording_view = 'recording/recording_type.html'
 
-    def get(self, request):
-        return render(request, self.recording_view)
+    def get(self, request, interview_id):
+        return render(request, self.recording_view, {'interview': interview_id})
 
 
 class RecordingSetupMicrophone(LoginRequiredMixin, generic.View):
@@ -40,8 +40,8 @@ class RecordingSetupMicrophone(LoginRequiredMixin, generic.View):
     login_url = settings.LOGIN_URL
     setup_view = 'recording/setup_microphone.html'
 
-    def get(self, request):
-        return render(request, self.setup_view)
+    def get(self, request, interview_id):
+        return render(request, self.setup_view, {'interview': interview_id})
 
 
 class RecordingSetupFace(LoginRequiredMixin, generic.View):
@@ -50,8 +50,8 @@ class RecordingSetupFace(LoginRequiredMixin, generic.View):
     login_url = settings.LOGIN_URL
     setup_view = 'recording/setup_face.html'
 
-    def get(self, request):
-        return render(request, self.setup_view)
+    def get(self, request, interview_id):
+        return render(request, self.setup_view, {'interview': interview_id})
 
 
 class RecordingSetupBattery(LoginRequiredMixin, generic.View):
@@ -60,8 +60,8 @@ class RecordingSetupBattery(LoginRequiredMixin, generic.View):
     login_url = settings.LOGIN_URL
     setup_view = 'recording/setup_battery.html'
 
-    def get(self, request):
-        return render(request, self.setup_view)
+    def get(self, request, interview_id):
+        return render(request, self.setup_view, {'interview': interview_id})
 
 
 class QuestionInterview(LoginRequiredMixin, generic.View):
@@ -92,13 +92,13 @@ class QuestionInterview(LoginRequiredMixin, generic.View):
         interview_question_map = Interview_Question_Map.objects.filter(interview=interview_id)
 
         cursor_q = conn.cursor()
-        cursor_q.execute("""SELECT * FROM foraliving_interview_question_map as IQ inner join foraliving_question as Q on IQ.question_id=Q.id WHERE   IQ.id NOT IN ( SELECT interview_question_id FROM    foraliving_interview_question_video_map) """)
+        cursor_q.execute("""SELECT * FROM foraliving_interview_question_map as IQ inner join foraliving_question as Q on IQ.question_id=Q.id WHERE interview_id=%s AND IQ.id NOT IN ( SELECT interview_question_id FROM    foraliving_interview_question_video_map)""", interview_id)
         questions = cursor_q.fetchall()
         cursor_q.close()
 
         cursor_v = conn.cursor()
         cursor_v.execute(
-            """SELECT Q.name, IQ.id, count(*) from foraliving_interview_question_map as IQ  inner join foraliving_interview_question_video_map as IQV  on IQV.interview_question_id =IQ.id  inner join foraliving_question as Q on Q.id=IQ.question_id where IQ.interview_id=1 group by Q.name, IQ.id""")
+            """SELECT Q.name, IQ.id, count(*) from foraliving_interview_question_map as IQ  inner join foraliving_interview_question_video_map as IQV  on IQV.interview_question_id =IQ.id  inner join foraliving_question as Q on Q.id=IQ.question_id where IQ.interview_id=%s group by Q.name, IQ.id""", interview_id)
         results = cursor_v.fetchall()
         for result in results:
             all = []
@@ -132,8 +132,8 @@ class Orientation(LoginRequiredMixin, generic.View):
     login_url = settings.LOGIN_URL
     setup_view = 'recording/orientation.html'
 
-    def get(self, request):
-        return render(request, self.setup_view)
+    def get(self, request, interview_id):
+        return render(request, self.setup_view, {'interview': interview_id})
 
 
 class SaveRecording(LoginRequiredMixin, generic.View):
@@ -169,3 +169,4 @@ class SaveRecording(LoginRequiredMixin, generic.View):
         path = default_storage.save(path, ContentFile(file.read()))
         tmp_file = os.path.join(settings.MEDIA_ROOT, path)
         return JsonResponse("Done", safe=False)
+

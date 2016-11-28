@@ -18,13 +18,13 @@ urlpatterns = [
     url(r"^volunteer-signup/", views.volunteerSignup, name='vSignup'),
 
     # recording urls
-    url(r'^recording_type/$', RecordingType.as_view(), name='recording_type'),
-    url(r'^setup_microphone/$', RecordingSetupMicrophone.as_view(), name='recording_setup_microphone'),
-    url(r'^setup_face/$', RecordingSetupFace.as_view(), name='recording_setup_face'),
-    url(r'^setup_battery/$', RecordingSetupBattery.as_view(), name='recording_setup_battery'),
+    url(r'^recording_type/(?P<interview_id>\d+)/$', RecordingType.as_view(), name='recording_type'),
+    url(r'^setup_microphone/(?P<interview_id>\d+)/$', RecordingSetupMicrophone.as_view(), name='recording_setup_microphone'),
+    url(r'^setup_face/(?P<interview_id>\d+)/$', RecordingSetupFace.as_view(), name='recording_setup_face'),
+    url(r'^setup_battery/(?P<interview_id>\d+)/$', RecordingSetupBattery.as_view(), name='recording_setup_battery'),
     url(r'^question_interview/(?P<interview_id>\d+)/$', QuestionInterview.as_view(), name='question_interview'),
     url(r'^recording/(?P<question_id>\d+)/$', Recording.as_view(), name='recording'),
-    url(r'^orientation/$', Orientation.as_view(), name='orientation'),
+    url(r'^orientation/(?P<interview_id>\d+)/$', Orientation.as_view(), name='orientation'),
 
     # student urls
     url(r'^complete_video/(?P<interview_id>\d+)/$', CompleteVideo.as_view(), name='complete_video'),

@@ -21,13 +21,16 @@ $(document).ready(function () {
 
     $('html').on('click', '#next', function (e) {
         e.preventDefault();
+        var interview = $("#interview_id").val();
+        var query = window.matchMedia("(orientation:landscape)");
+        console.log("Device held " + (query.matches ? "horizontally" : "vertically"));
+
         if ($("input[name='question2']:checked").val() == 2 || $("input[name='question2']:checked").val() == 3) {
-            if (screen.orientation.type == "landscape" || screen.orientation.type == "landscape-primary"
-                || screen.orientation.type == "landscape-secundary") {
-                window.location.href = '/foraliving/setup_microphone/';
+            if (query.matches == true) {
+                window.location.href = '/foraliving/setup_microphone/' + interview;
             }
             else {
-                window.location.href = '/foraliving/orientation/';
+                window.location.href = '/foraliving/orientation/' + interview;
             }
         }
         else {

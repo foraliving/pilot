@@ -65,10 +65,9 @@
 <script src='{% static "js/recording/loadingoverlay.min.js" %}'></script>
 <script>
     var orientation = screen.orientation || screen.mozOrientation || screen.msOrientation;
+    var query = window.matchMedia("(orientation:landscape)");
 
-    if (orientation.type == "landscape-primary") {
-    } else if (orientation.type == "landscape-secondary") {
-    } else {
+    if (query.matches == false) {
         alert("Rotate your screen to landscape for the best user experience during the interview.");
     }
 

@@ -31,8 +31,8 @@
     "model": "auth.user",
     "fields": {
       "username": "student_admin",
-      "first_name": "Student",
-      "last_name": "",
+      "first_name": "Noelia",
+      "last_name": "Pazos",
       "is_active": true,
       "is_superuser": true,
       "is_staff": true,
@@ -408,7 +408,8 @@
       "url": "https://www.youtube.com/embed/48ZzVjAbA1s?rel=0",
       "tags": "homepage",
       "created_by": 3,
-      "creation_date": "2016-05-05T00:00:00Z"
+      "creation_date": "2016-05-05T00:00:00Z",
+      "status": "pending"
     }
   },
   {
@@ -419,7 +420,8 @@
       "url": "https://www.youtube.com/embed/48ZzVjAbA1s?rel=0",
       "tags": "homepage",
       "created_by": 3,
-      "creation_date": "2016-05-05T00:00:00Z"
+      "creation_date": "2016-05-05T00:00:00Z",
+      "status": "pending"
     }
   }
 ]

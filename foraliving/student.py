@@ -152,16 +152,17 @@ class SendEmail(LoginRequiredMixin, generic.View):
         assignment = Assignment.objects.get(pk=interview_question_video.interview_question.interview.assignment.id)
 
         interview_question = Interview_Question_Map.objects.filter(interview=interview_question_video.interview_question.interview)
-        interview_question_video_map = Interview_Question_Video_Map.objects.filter(interview_question=interview_question)
+        interview_question_video_map = Interview_Question_Video_Map.objects.filter(interview_question__in=interview_question)
 
         count = 0
         for data in interview_question_video_map:
             if data.video.status == "Under Review by teacher":
+                print (data.video.status)
                 count = count + 1
 
-        if count >= 1:
-            print (count, 'this is a count')
+        if count == 0:
             email_to = assignment.falClass.teacher.user.email
+            email_to = "noelia.pazos@viaro.net"
             message = EmailMessage('student/send_email.html', {'assignment': assignment}, "noelia.pazos@viaro.net",
                                    to=[email_to])
             message.send()
