@@ -45,12 +45,12 @@ class CompleteVideo(LoginRequiredMixin, generic.View):
                 if data.video.status == "Approved by teacher":
                     count_approved = count_approved + 1
 
-            if count !=0 or count_pending != 0:
+            if count != 0 or count_pending != 0:
                 show_count = True
 
-
-
-        return render(request, self.question_view, {'videos': videos, 'group': group, 'volunteer': volunteer, 'show_count': show_count, 'count_approved': count_approved, 'interview': interview_id})
+        return render(request, self.question_view,
+                      {'videos': videos, 'group': group, 'volunteer': volunteer, 'show_count': show_count,
+                       'count_approved': count_approved, 'interview': interview_id})
 
 
 class StudentAssignment(LoginRequiredMixin, generic.View):
@@ -76,7 +76,8 @@ class StudentAssignment(LoginRequiredMixin, generic.View):
             if interview_question_video:
                 exist_video = True
         return render(request, self.question_view, {
-            'questions': questions, 'question_number': question_number, 'group': group, 'interview': interview, 'exist_video': exist_video})
+            'questions': questions, 'question_number': question_number, 'group': group, 'interview': interview,
+            'exist_video': exist_video})
 
 
 class ConductVideo(LoginRequiredMixin, generic.View):
@@ -121,20 +122,29 @@ class SelectQuestionEdit(LoginRequiredMixin, generic.View):
         new_question = []
         questions = Question.objects.all()
         select_questions = Interview_Question_Map.objects.filter(interview_id=interview_id)
+        interview_question_videos = Interview_Question_Video_Map.objects.filter(interview_question__in=select_questions)
         for question in questions:
             all = []
             all.append(question.id)
             all.append(question.name)
             all.append("no")
-            for select_question in select_questions:
-                if select_question.question.id == question.id:
-                    all[2] = "yes"
+            for sq in select_questions:
+                if sq.question.id == question.id:
+                    all[2] = "selected"
+                    for iqv in interview_question_videos:
+                        if iqv.interview_question.question.id == sq.question.id:
+                            all[2] = "yes"
             new_question.append(all)
-        return render(request, self.question_view, {'questions': new_question, 'select_questions': select_questions, 'interview_id': interview_id})
+        return render(request, self.question_view,
+                      {'questions': new_question, 'select_questions': select_questions, 'interview_id': interview_id})
 
     def post(self, request, interview_id):
         selected_values = request.POST.getlist('question')
-        select_questions = Interview_Question_Map.objects.filter(interview_id=interview_id).delete()
+        sqv = request.POST.getlist('iq')
+
+        for data in sqv:
+            Interview_Question_Map.objects.filter(interview_id=interview_id, question_id=data).delete()
+
         for values in selected_values:
             new_data = Interview_Question_Map(interview_id=interview_id, question_id=values)
             new_data.save()
@@ -151,21 +161,22 @@ class SendEmail(LoginRequiredMixin, generic.View):
 
         assignment = Assignment.objects.get(pk=interview_question_video.interview_question.interview.assignment.id)
 
-        interview_question = Interview_Question_Map.objects.filter(interview=interview_question_video.interview_question.interview)
-        interview_question_video_map = Interview_Question_Video_Map.objects.filter(interview_question__in=interview_question)
+        interview_question = Interview_Question_Map.objects.filter(
+            interview=interview_question_video.interview_question.interview)
+        interview_question_video_map = Interview_Question_Video_Map.objects.filter(
+            interview_question__in=interview_question)
 
         count = 0
         for data in interview_question_video_map:
             if data.video.status == "Under Review by teacher":
-                print (data.video.status)
                 count = count + 1
 
         if count == 0:
             email_to = assignment.falClass.teacher.user.email
-            email_to = "noelia.pazos@viaro.net"
             message = EmailMessage('student/send_email.html', {'assignment': assignment}, "noelia.pazos@viaro.net",
                                    to=[email_to])
             message.send()
+            print (message)
 
         video = Video.objects.get(pk=video_id)
         video.status = 'Under Review by teacher'

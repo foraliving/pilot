@@ -57,7 +57,7 @@
       "groups": [],
       "user_permissions": [],
       "password": "pbkdf2_sha256$30000$pOAjkIh9uSt3$W3ZN4v4dui8TDQhhvWU5ucDu/G1wqljjwfsGKgN5rbQ=",
-      "email": "jacquieued@gmail.com "
+      "email": "jacquieued@gmail.com"
     }
   },
   {
@@ -143,7 +143,7 @@
     "fields": {
       "school": 1,
       "lms": 1,
-      "teacher": 1,
+      "teacher": 3,
       "name": "History",
       "academic_year": 2,
       "semester": 1

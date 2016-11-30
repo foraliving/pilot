@@ -13,19 +13,33 @@
 <div class="panel-body">
     <div class="panel panel-default">
         <div class="panel-body" style="font-size: 18px;">
-            <form id="customer_specific" action="{% url 'select_question_edit' interview_id=interview_id%} " method="post"
+            <form id="customer_specific" action="{% url 'select_question_edit' interview_id=interview_id%} "
+                  method="post"
                   class="form">
                 {% csrf_token %}
                 {% for question in questions %}
-                {% if question.2  == "yes" %}
-                <div class="checkbox" style="margin-bottom: 20px; margin-top: 20px; font-size:20px;">
-                    <label><input type="checkbox" checked style="position:relative; margin-right: 10px;"
-                                  name="question" value="{{question.0}}">{{question.1}}</label>
-                </div>
-                {% else %}
+                {% if question.2 == "no" %}
                 <div class="checkbox" style="margin-bottom: 20px; margin-top: 20px; font-size:20px;">
                     <label><input type="checkbox" style=" position:relative; margin-right: 10px;"
                                   name="question" value="{{question.0}}">{{question.1}}</label>
+                </div>
+                {% elif question.2 == "selected" %}
+                <div class="checkbox" style="margin-bottom: 20px; margin-top: 20px; font-size:20px;">
+                    <label><input type="checkbox" checked style=" position:relative; margin-right: 10px;"
+                                  name="question" value="{{question.0}}">{{question.1}}</label>
+                </div>
+                <input type="hidden" name="iq" value="{{question.0}}">
+                {% endif %}
+                {% endfor %}
+                {% for question in questions %}
+                {% if question.2 == "yes" %}
+                <div>
+                    <div class="checkbox" style="margin-bottom: 20px; margin-top: 20px; font-size:20px; display: flex;">
+                        <label><input type="checkbox" checked disabled="disabled"
+                                      style="position:relative; margin-right: 10px;"
+                                      name="iq" value="{{question.0}}">{{question.1}}</label>
+                        <p style="font-weight: bold;"> (answered)</p>
+                    </div>
                 </div>
                 {% endif %}
                 {% endfor %}
