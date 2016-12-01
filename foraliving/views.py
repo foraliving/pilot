@@ -8,9 +8,12 @@ from foraliving.recording import *
 
 # Create your views here.
 def index(request):
-	videoDemo = Video.objects.filter(tags__contains='homepage', tags__icontains='demo')
-	videos = Video.objects.filter(tags__contains='homepage', ).exclude(tags__icontains='demo')
-	return render(request,'homepage.html', {'videos' : videos, 'videoDemo' : videoDemo, }) 
+	if request.user.is_authenticated():
+		return redirect('videos')
+	else:
+		videoDemo = Video.objects.filter(tags__contains='homepage', tags__icontains='demo')
+		videos = Video.objects.filter(tags__contains='homepage', ).exclude(tags__icontains='demo')
+	return render(request,'homepage.html', {'videos' : videos, 'videoDemo' : videoDemo, })
 
 def twopage(request):
 	return render(request,'home.html') 
@@ -46,4 +49,4 @@ def volunteerSignup(request):
 	interestForm = newInterestForm()
 	skillForm = newSkillForm()
 		
-	return render(request, 'volunteer_signup.html', {'skillForm' : skillForm, 'interestForm' : interestForm, 'userForm': userForm, 'infoForm': infoForm}, )
+	return render(request, 'volunteer/volunteer_signup.html', {'skillForm' : skillForm, 'interestForm' : interestForm, 'userForm': userForm, 'infoForm': infoForm}, )

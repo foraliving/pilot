@@ -54,6 +54,7 @@ SITE_NAME = 'For a Living'
 
 ROOT_URLCONF = 'foraliving_project.urls'
 LOGIN_URL = '/account/login/'
+LOGIN_REDIRECT_URL = '/foraliving/'
 LOGIN_EXEMPT = ()
 
 ALLOWED_HOSTS = ['192.241.156.220', 'localhost', '127.0.0.1']

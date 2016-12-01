@@ -135,7 +135,7 @@ class Assignment(models.Model):
 
 class Interview(models.Model):
 	interviewer = models.ForeignKey(User_Add_Ons, on_delete=models.CASCADE, related_name='interviewer', )
-	interviewee = models.ForeignKey(User_Add_Ons, on_delete=models.CASCADE, related_name='interviewee', )
+	interviewee = models.ForeignKey(User, on_delete=models.CASCADE, related_name='interviewee', )
 	group = models.ForeignKey(Group)
 	date = models.DateTimeField()
 	assignment = models.ForeignKey(Assignment, on_delete=models.CASCADE, related_name='assignment')

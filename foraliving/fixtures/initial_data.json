@@ -37,7 +37,9 @@
       "is_superuser": true,
       "is_staff": true,
       "last_login": "2008-09-05 12:40:34",
-      "groups": [],
+      "groups": [
+        1
+      ],
       "user_permissions": [],
       "password": "pbkdf2_sha256$30000$pOAjkIh9uSt3$W3ZN4v4dui8TDQhhvWU5ucDu/G1wqljjwfsGKgN5rbQ=",
       "email": "admin@foraliving.org"
@@ -61,6 +63,42 @@
     }
   },
   {
+    "pk": 4,
+    "model": "auth.user",
+    "fields": {
+      "username": "volunteer2",
+      "first_name": "Avni",
+      "last_name": "B",
+      "is_active": true,
+      "is_superuser": true,
+      "is_staff": true,
+      "last_login": "2008-09-05 12:40:34",
+      "groups": [],
+      "user_permissions": [],
+      "password": "pbkdf2_sha256$30000$pOAjkIh9uSt3$W3ZN4v4dui8TDQhhvWU5ucDu/G1wqljjwfsGKgN5rbQ=",
+      "email": "avni321@gmail.com"
+    }
+  },
+  {
+    "pk": 5,
+    "model": "auth.user",
+    "fields": {
+      "username": "student_admin2",
+      "first_name": "Noelia",
+      "last_name": "Pazos",
+      "is_active": true,
+      "is_superuser": true,
+      "is_staff": true,
+      "last_login": "2008-09-05 12:40:34",
+      "groups": [
+        1
+      ],
+      "user_permissions": [],
+      "password": "pbkdf2_sha256$30000$pOAjkIh9uSt3$W3ZN4v4dui8TDQhhvWU5ucDu/G1wqljjwfsGKgN5rbQ=",
+      "email": "admin@foraliving.org"
+    }
+  },
+  {
     "model": "foraliving.LMS",
     "pk": 1,
     "fields": {
@@ -78,17 +116,17 @@
     }
   },
   {
-    "model": "foraliving.User_Add_Ons",
-    "pk": 1,
+    "model": "foraliving.School",
+    "pk": 2,
     "fields": {
-      "user": 1,
-      "school": 1,
-      "lms": 1
+      "lms": 1,
+      "name": "Default School 2",
+      "url": "www.foraliving.org"
     }
   },
   {
     "model": "foraliving.User_Add_Ons",
-    "pk": 2,
+    "pk": 1,
     "fields": {
       "user": 2,
       "school": 1,
@@ -97,10 +135,19 @@
   },
   {
     "model": "foraliving.User_Add_Ons",
-    "pk": 3,
+    "pk": 2,
     "fields": {
       "user": 3,
       "school": 1,
+      "lms": 1
+    }
+  },
+  {
+    "model": "foraliving.User_Add_Ons",
+    "pk": 3,
+    "fields": {
+      "user": 5,
+      "school": 2,
       "lms": 1
     }
   },
@@ -143,7 +190,7 @@
     "fields": {
       "school": 1,
       "lms": 1,
-      "teacher": 3,
+      "teacher": 2,
       "name": "History",
       "academic_year": 2,
       "semester": 1
@@ -172,11 +219,22 @@
     }
   },
   {
+    "model": "foraliving.Assignment",
+    "pk": 3,
+    "fields": {
+      "title": "Programming Interview",
+      "falClass": 1,
+      "document": "wwww.foraliving.org",
+      "due_date": "2016-12-10",
+      "creation_date": "2016-05-10"
+    }
+  },
+  {
     "model": "foraliving.Question",
     "pk": 1,
     "fields": {
       "name": "What is your favorite book and why? (student practice question)",
-      "created_by": 1,
+      "created_by": 2,
       "creation_date": "2016-11-11"
     }
   },
@@ -185,7 +243,7 @@
     "pk": 2,
     "fields": {
       "name": "What is your job and how do you spend your time at work?",
-      "created_by": 1,
+      "created_by": 2,
       "creation_date": "2016-11-11"
     }
   },
@@ -194,7 +252,7 @@
     "pk": 3,
     "fields": {
       "name": "What would surprise most people about your job?",
-      "created_by": 1,
+      "created_by": 2,
       "creation_date": "2016-11-11"
     }
   },
@@ -203,7 +261,7 @@
     "pk": 4,
     "fields": {
       "name": "In what ways, if any, did your interests as a kid lead you on your career path?",
-      "created_by": 1,
+      "created_by": 2,
       "creation_date": "2016-11-11"
     }
   },
@@ -212,7 +270,7 @@
     "pk": 5,
     "fields": {
       "name": "How does your college major relate to your current job?",
-      "created_by": 1,
+      "created_by": 2,
       "creation_date": "2016-11-11"
     }
   },
@@ -221,7 +279,7 @@
     "pk": 6,
     "fields": {
       "name": "What personality trait has helped you most in doing a good job at work?",
-      "created_by": 1,
+      "created_by": 2,
       "creation_date": "2016-11-11"
     }
   },
@@ -230,7 +288,7 @@
     "pk": 7,
     "fields": {
       "name": "Did you know what you wanted to do for a living when you graduated from high school? Is it what you are doing now?",
-      "created_by": 1,
+      "created_by": 2,
       "creation_date": "2016-11-11"
     }
   },
@@ -239,7 +297,7 @@
     "pk": 8,
     "fields": {
       "name": "What advice do you wish you’d had when you graduated from high school?",
-      "created_by": 1,
+      "created_by": 2,
       "creation_date": "2016-11-11"
     }
   },
@@ -248,7 +306,7 @@
     "pk": 9,
     "fields": {
       "name": "If a student is interested in doing what you do, what are the most important things they should consider?",
-      "created_by": 1,
+      "created_by": 2,
       "creation_date": "2016-11-11"
     }
   },
@@ -257,7 +315,7 @@
     "pk": 10,
     "fields": {
       "name": "How have your perceptions about work changed since you graduated from high school?",
-      "created_by": 1,
+      "created_by": 2,
       "creation_date": "2016-11-11"
     }
   },
@@ -266,7 +324,7 @@
     "pk": 11,
     "fields": {
       "name": "How and why did you decide to do what you do?",
-      "created_by": 1,
+      "created_by": 2,
       "creation_date": "2016-11-11"
     }
   },
@@ -275,7 +333,7 @@
     "pk": 12,
     "fields": {
       "name": "What has been the most important lesson you have learned about yourself since graduating from college?",
-      "created_by": 1,
+      "created_by": 2,
       "creation_date": "2016-11-11"
     }
   },
@@ -284,7 +342,7 @@
     "pk": 13,
     "fields": {
       "name": "What do you enjoy most about your job?",
-      "created_by": 1,
+      "created_by": 2,
       "creation_date": "2016-11-11"
     }
   },
@@ -293,7 +351,7 @@
     "pk": 14,
     "fields": {
       "name": "In what ways has your job changed over the years and how have you dealt with it?",
-      "created_by": 1,
+      "created_by": 2,
       "creation_date": "2016-11-11"
     }
   },
@@ -302,7 +360,7 @@
     "pk": 15,
     "fields": {
       "name": "What was your most creative idea at work?",
-      "created_by": 1,
+      "created_by": 2,
       "creation_date": "2016-11-11"
     }
   },
@@ -311,7 +369,7 @@
     "pk": 16,
     "fields": {
       "name": "What did you learn from some of your first jobs?",
-      "created_by": 1,
+      "created_by": 2,
       "creation_date": "2016-11-11"
     }
   },
@@ -320,7 +378,7 @@
     "pk": 17,
     "fields": {
       "name": "What was your first job?",
-      "created_by": 1,
+      "created_by": 2,
       "creation_date": "2016-11-11"
     }
   },
@@ -329,7 +387,7 @@
     "pk": 18,
     "fields": {
       "name": "What career advice changed your life and how?",
-      "created_by": 1,
+      "created_by": 2,
       "creation_date": "2016-11-11"
     }
   },
@@ -338,7 +396,7 @@
     "pk": 19,
     "fields": {
       "name": "What dissimilar jobs have you had. What made you effective in these different jobs?",
-      "created_by": 1,
+      "created_by": 2,
       "creation_date": "2016-11-11"
     }
   },
@@ -347,7 +405,7 @@
     "pk": 20,
     "fields": {
       "name": "If you could do it over, would you pick the same college major?",
-      "created_by": 1,
+      "created_by": 2,
       "creation_date": "2016-11-11"
     }
   },
@@ -356,7 +414,7 @@
     "pk": 21,
     "fields": {
       "name": "What’s the hardest part of your job?",
-      "created_by": 1,
+      "created_by": 2,
       "creation_date": "2016-11-11"
     }
   },
@@ -365,7 +423,7 @@
     "pk": 22,
     "fields": {
       "name": "Describe a challenge at work that you learned from?",
-      "created_by": 1,
+      "created_by": 2,
       "creation_date": "2016-11-11"
     }
   },
@@ -374,7 +432,7 @@
     "pk": 23,
     "fields": {
       "name": "How would you rate your job on a scale 1 to 10 and why?",
-      "created_by": 1,
+      "created_by": 2,
       "creation_date": "2016-11-11"
     }
   },
@@ -382,7 +440,7 @@
     "model": "foraliving.interview",
     "pk": 1,
     "fields": {
-      "interviewer": 2,
+      "interviewer": 1,
       "interviewee": 1,
       "group": 1,
       "date": "2016-11-03T00:00:00Z",
@@ -393,8 +451,19 @@
     "model": "foraliving.interview",
     "pk": 2,
     "fields": {
-      "interviewer": 1,
-      "interviewee": 2,
+      "interviewer": 2,
+      "interviewee": 4,
+      "group": 1,
+      "date": "2016-11-03T00:00:00Z",
+      "assignment": 2
+    }
+  },
+  {
+    "model": "foraliving.interview",
+    "pk": 3,
+    "fields": {
+      "interviewer": 3,
+      "interviewee": 1,
       "group": 1,
       "date": "2016-11-03T00:00:00Z",
       "assignment": 2
@@ -407,7 +476,7 @@
       "name": "Carrer Educator",
       "url": "https://www.youtube.com/embed/48ZzVjAbA1s?rel=0",
       "tags": "homepage",
-      "created_by": 3,
+      "created_by": 2,
       "creation_date": "2016-05-05T00:00:00Z",
       "status": "pending"
     }
@@ -419,9 +488,28 @@
       "name": "Carrer Educator",
       "url": "https://www.youtube.com/embed/48ZzVjAbA1s?rel=0",
       "tags": "homepage",
-      "created_by": 3,
+      "created_by": 2,
       "creation_date": "2016-05-05T00:00:00Z",
       "status": "pending"
+    }
+  },
+  {
+    "model": "foraliving.volunteer_user_add_ons",
+    "pk": 2,
+    "fields": {
+      "user": 4,
+      "phone": "1801522-33",
+      "canGetText": true,
+      "workTitle": "Engineering",
+      "isBusinessOwner": true,
+      "workIndustry": "Education",
+      "yearsInIndustry": 8,
+      "linkedinProfile": "https://www.linkedin.com/in/avnikhatri",
+      "yearsSinceHSGraduation": 4,
+      "collegeLevel": 3,
+      "collegeMajor": "2",
+      "skills": 1,
+      "interests": 1
     }
   }
 ]

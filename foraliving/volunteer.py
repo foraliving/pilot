@@ -14,6 +14,6 @@ class VolunteerProfile(LoginRequiredMixin, generic.View):
     question_view = 'volunteer/profile.html'
 
 
-    def get(self, request, user_id):
+    def get(self, request, user_id, interview_id):
         volunteer = Volunteer_User_Add_Ons.objects.get(user=user_id)
-        return render(request, self.question_view, {'volunteer': volunteer})
+        return render(request, self.question_view, {'volunteer': volunteer, 'interview': interview_id})

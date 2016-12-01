@@ -1,13 +1,13 @@
 {% extends 'student/base.html' %}
 {% load staticfiles %}
 {% block list %}
-    <li ><a href="{% url 'assignment' %}">Assignment</a></li>
-    <li><a href="{% url 'complete_video' %}">Completed Videos</a></li>
+    <li ><a href="{% url 'assignment' interview_id=interview%}">Assignment</a></li>
+    <li><a href="{% url 'complete_video' interview_id=interview %}">Completed Videos</a></li>
 {% endblock %}
 {% block body %}
 <div class="panel panel-info">
     <div class="panel-heading">
-        <div class="inline-block" style="text-align: center;"><h3> {{volunteer.user.first_name}} Profile</div>
+        <div class="inline-block" style="text-align: center;"><h3> {{volunteer.user.first_name}} Profile </h3></div>
     </div>
     <div class="panel-body">
         <div class="panel panel-default">

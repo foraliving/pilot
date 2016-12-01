@@ -1,0 +1,34 @@
+{% extends 'general/base.html' %}
+{% load staticfiles %}
+{% block list %}
+<li><a href="">Student</a></li>
+<li><a href="">Volunteers</a></li>
+<li><a href="">Videos</a></li>
+{% endblock %}
+{% block styles %}
+<link rel="stylesheet" href="{% static 'UX/css/student/recording.css' %}">
+<link rel="stylesheet" href="{% static 'UX/css/simpleGridTemplate.css' %}">
+{% endblock %}
+{% block body %}
+<div class="container">
+    <div class="gallery">
+        {% if school %}
+        <h3 style="text-align: center;">  {{school.name}} videos </h3>
+        {% endif %}
+        {% for video in videos %}
+        <div class="col-xs-12 col-md-6 col-lg-3">
+            <div class="thumbnail">
+                <div class="embed-responsive embed-responsive-16by9">
+                    <video controls>
+                        <source src="/foraliving/media/{{video.video.url}}">
+                    </video>
+                </div>
+                <h4>{{video.interview_question.interview.interviewee.first_name}}</h4>
+                <p class="tag">{{video.interview_question.interview.interviewee.volunteer_user_add_ons.workTitle}}</p>
+                <p class="text_column">{{video.video.name}}</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

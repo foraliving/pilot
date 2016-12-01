@@ -176,7 +176,6 @@ class SendEmail(LoginRequiredMixin, generic.View):
             message = EmailMessage('student/send_email.html', {'assignment': assignment}, "noelia.pazos@viaro.net",
                                    to=[email_to])
             message.send()
-            print (message)
 
         video = Video.objects.get(pk=video_id)
         video.status = 'Under Review by teacher'
