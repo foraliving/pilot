@@ -176,12 +176,12 @@
       "isBusinessOwner": true,
       "workIndustry": "Education",
       "yearsInIndustry": 6,
-      "linkedinProfile": "wwww.linkedin.com",
+      "linkedinProfile": "www.linkedin.com/in/vivian-aguilar-05124250",
       "yearsSinceHSGraduation": 3,
       "collegeLevel": 1,
-      "collegeMajor": 2,
-      "skills": 1,
-      "interests": 1
+      "collegeMajor": "B.S. Social Science",
+      "skills": [1],
+      "interests": [1]
     }
   },
   {
@@ -507,9 +507,9 @@
       "linkedinProfile": "https://www.linkedin.com/in/avnikhatri",
       "yearsSinceHSGraduation": 4,
       "collegeLevel": 3,
-      "collegeMajor": "2",
-      "skills": 1,
-      "interests": 1
+      "collegeMajor": "B.S. Social Science",
+      "skills": [1],
+      "interests": [1]
     }
   }
 ]

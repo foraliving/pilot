@@ -7,7 +7,7 @@ body {
 	font-family: "Gill Sans", "Gill Sans MT", "Myriad Pro", "DejaVu Sans Condensed", Helvetica, Arial, sans-serif;
 	background-color: #FFFFFF;
 	margin: 0;
-	
+
 }
 /* Container */
 /*.container-fluid {*/
@@ -46,15 +46,16 @@ body {
 	text-align: left;
 	padding-left: 10px;
 	padding-right: 10px;
+	font-size: 16px;
 }
 
 .header a {
 	color: #6DC7D0;
 	font-size: 1.5rem;
 	margin-top: 0;
-	
+
 	}
-	
+
 .glyphicon {
 	color: #6DC7D0 !important;
 	font-size: 1.5rem;
@@ -65,7 +66,7 @@ body {
 	font-size: 2.5rem;
 	padding-right: 10px;
 }
-	
+
 
 #faqs ul {
 	font-size: 20px;
@@ -82,12 +83,12 @@ body {
 	padding: 10 20;
 	}
 
-	
+
 .question .row-fluid {
 	margin: 0;
 	padding: 0;
-	
-} 
+
+}
 
 .question .row-fluid:hover,
 .row-fluid:focus,
@@ -95,12 +96,12 @@ body {
   color: #000;
   text-decoration: none;
   background-color: rgba(178,233,241,1.00);
- 
+
 }
 .question h2 {
 	margin: 0;
 	padding: 15px;
-	
+
 	}
 
 
@@ -114,7 +115,7 @@ body {
 
 .column .bodylink a {
 	color: #6DC7D0;
-	
+
 }
 
 .thumbnail .text_column {
@@ -156,8 +157,8 @@ body {
 	padding-bottom: 0px;
 	margin-left: 1%;
 	margin-right: 1%;
- 
-	 
+
+
 }
 .thumbnail-camera {
 	width: 100%;
@@ -169,8 +170,8 @@ body {
 	padding-bottom: 0px;
 	margin-left: 1%;
 	margin-right: 1%;
- 
-	 
+
+
 }
 .gallery .thumbnail h4 {
 	margin-top: 5px;
@@ -183,7 +184,7 @@ body {
 	margin: 0;
 	color: #757575;
 	text-align: left;
-	
+
 }
 
 /* More info */
@@ -226,7 +227,7 @@ h2 {
 	text-align: left;
 	font-size: 2.2rem;
 	font-weight:300;
-	
+
 }
 .intro .column p {
 	color: #FFFFFF;
@@ -358,14 +359,14 @@ fieldset[disabled] a.btn {
 	padding-bottom: 4px;
 	padding-top: 4px;
 	text-align: left;
-	
+
 }
 
 /* Mobile Portrait */
 @media (max-width: 319px) {
 	.column {
 	width: 100%;}
-	
+
 .question h2 {
 	font-size: 2.6rem;
 
@@ -382,12 +383,12 @@ fieldset[disabled] a.btn {
 	width: 100%;
 	text-align: justify;
 	font-size: 1.6rem;
-	
+
 }
 .intro .column p {
 	width: 80%;
 	margin-left: 0px;
-	
+
 }
 
 .thumbnail {
@@ -428,7 +429,7 @@ fieldset[disabled] a.btn {
 .intro h2 {
 	font-size: 1.8rem;
 	font-weight: 400;
-	
+
 }
 
 .question h2 {
@@ -458,11 +459,11 @@ fieldset[disabled] a.btn {
 
 .intro .column .embed-responsive-item {
 	padding-right: 10px;
-	
+
 }
 .column .bodylink a {
 	font-size: 1.7rem;
-	
+
 }
 .logo {
 	width: 100%;
@@ -486,7 +487,7 @@ fieldset[disabled] a.btn {
 .thumbnail {
 	margin-left: 5px;
 	margin-right: 5px;
-	
+
 }
 .intro {
 	display:inline-block;
@@ -526,16 +527,16 @@ fieldset[disabled] a.btn {
 .col-xs-6{
 	width: 100%;
 	}
-	
+
 .intro h2 {
 	font-size: 2.2rem;
 	font-weight: 400;
-	
+
 }
 .intro .column h3 {
 	font-size: 1.6rem;
-	font-weight: 300;	
-	
+	font-weight: 300;
+
 }
 
 .intro h4 {
@@ -552,7 +553,7 @@ fieldset[disabled] a.btn {
 
 .column .bodylink a {
 	font-size: 1.6rem;
-	
+
 }
 .thumbnail .text_column {
 	font-size: 1.9rem;
@@ -574,7 +575,7 @@ fieldset[disabled] a.btn {
 .intro h3 {
 	font-size: 1.7rem;
 	font-weight: 300;
-	
+
 }
 .intro h2 {
 	font-size: 2.3rem;
@@ -598,7 +599,7 @@ fieldset[disabled] a.btn {
 }
 
 
-} 
+}
 
 
 /* Large Desktops */
@@ -608,10 +609,10 @@ fieldset[disabled] a.btn {
 
 .intro .column .embed-responsive-item {
 	padding-right: 25px;}
-	
+
 .intro h3 {
 	font-size: 3.0rem;
-	
+
 }
 
 .intro h2 {
@@ -625,14 +626,14 @@ fieldset[disabled] a.btn {
 .header a {
 	font-size: 1.9rem;
 	}
-	
+
 .glyphicon {
 	font-size: 1.7rem;
 }
 
 .column .bodylink a {
 	font-size: 2.0rem;
-	
+
 }
 .intro .column .embed-responsive-item {
 	padding-right: 15px;}
@@ -650,4 +651,4 @@ h2 {
 	font-weight: 300;
 }
 
-}	
+}

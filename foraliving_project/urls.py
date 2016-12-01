@@ -16,7 +16,6 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 from foraliving import views
-from foraliving.general import Videos
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),

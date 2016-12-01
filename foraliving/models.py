@@ -78,12 +78,12 @@ class Volunteer_User_Add_Ons(models.Model):
 		(3, "master's"),
 		(4, "doctoral"),
 		(5, "none"),)
-	collegeLevel = models.IntegerField(choices=hsGradChoices)
+	collegeLevel = models.IntegerField(choices=collegeLevelChoice)
 	collegeMajor = models.CharField(max_length=128, null=True, blank=True, )
 	# skills = TreeForeignKey('self', null=True, blank=True, related_name='children', db_index=True)
-	skills = models.ForeignKey(Skill, null=True, blank=True, )
+	skills = models.ManyToManyField(Skill, null=True, blank=True, )
 	# interests = TreeForeignKey('interest-self', null=True, blank=True, related_name='interest-children', db_index=True)
-	interests = models.ForeignKey(Interest, null=True, blank=True, )
+	interests = models.ManyToManyField(Interest, null=True, blank=True, )
 
 	# User_Skill_Map
 	# User_Interest_Map

@@ -1,9 +1,18 @@
 {% extends 'general/base.html' %}
 {% load staticfiles %}
 {% block list %}
+{% if user_type == "teacher" %}
 <li><a href="">Student</a></li>
 <li><a href="">Volunteers</a></li>
 <li><a href="">Videos</a></li>
+{% elif user_type == "volunteer" %}
+<li><a href="{% url 'volunteer_profile'  user_id=request.user.id interview_id=0%}">Profile</a></li>
+<li><a href="">Get Interviewed</a></li>
+{% else %}
+<li><a href="">Assignment </a></li>
+<li><a href="">Completed videos</a></li>
+{% endif %}
+
 {% endblock %}
 {% block styles %}
 <link rel="stylesheet" href="{% static 'UX/css/student/recording.css' %}">
@@ -13,7 +22,7 @@
 <div class="container">
     <div class="gallery">
         {% if school %}
-        <h3 style="text-align: center;">  {{school.name}} videos </h3>
+        <h3 style="text-align: center;"> {{school.name}} videos </h3>
         {% endif %}
         {% for video in videos %}
         <div class="col-xs-12 col-md-6 col-lg-3">

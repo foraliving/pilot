@@ -1,20 +1,99 @@
 {% extends 'student/base.html' %}
 {% load staticfiles %}
 {% block list %}
-    <li ><a href="{% url 'assignment' interview_id=interview%}">Assignment</a></li>
-    <li><a href="{% url 'complete_video' interview_id=interview %}">Completed Videos</a></li>
+
+{% if request.user.id != volunteer.user.id %}
+<li><a href="{% url 'assignment' interview_id=interview%}">Assignment</a></li>
+<li><a href="{% url 'complete_video' interview_id=interview %}">Completed Videos</a></li>
+{% else %}
+<li><a href="{% url 'volunteer_profile'  user_id=request.user.id interview_id=0%}">Profile</a></li>
+<li><a href="">Get Interviewed</a></li>
+{% endif %}
+{% endblock %}
+{% block styles %}
+<link rel="stylesheet" href="{% static 'UX/css/student/recording.css' %}">
+<link rel="stylesheet" href="{% static 'UX/css/simpleGridTemplate.css' %}">
 {% endblock %}
 {% block body %}
-<div class="panel panel-info">
-    <div class="panel-heading">
-        <div class="inline-block" style="text-align: center;"><h3> {{volunteer.user.first_name}} Profile </h3></div>
-    </div>
-    <div class="panel-body">
-        <div class="panel panel-default">
-            <div class="panel-body" style="font-size: 18px;">
-
+<div class="container">
+    <div class="" style="text-align: left; display:inline-block;">
+        <h2> Your interview videos <i
+            class="fa fa-chevron-down" aria-hidden="true"></i><i style="display: none;" class="fa fa-chevron-right"
+                                                                 aria-hidden="true"></i>
+        </h2>
+        <br>
+        <div class="container" id="videos">
+            <div class="gallery">
+                {% for video in videos %}
+                <div class="col-xs-12 col-md-6 col-lg-3">
+                    <div class="thumbnail">
+                        <div class="embed-responsive embed-responsive-16by9">
+                            <video controls>
+                                <source src="/foraliving/media/{{video.video.url}}">
+                            </video>
+                        </div>
+                        <h4>{{video.interview_question.interview.interviewee.first_name}}</h4>
+                        <p class="tag">
+                            {{video.interview_question.interview.interviewee.volunteer_user_add_ons.workTitle}}</p>
+                        <p class="text_column">{{video.video.name}}</p>
+                    </div>
+                </div>
+                {% endfor %}
             </div>
         </div>
     </div>
+    <hr id="line" style="display: none; border-top: 1px solid #abaaaa;">
+    <div class="inline-block" style="text-align: left;"><h2> About your career
+        {% if request.user.id == volunteer.user.id %}
+        <i class="fa fa-pencil" aria-hidden="true"></i>
+        {% endif %}
+    </h2>
+        <div class="volunteer-title">Title: <p class="volunteer-description"> {{volunteer.workTitle}}</p>
+        </div>
+        <div class="volunteer-title">Industry: <p class="volunteer-description">
+            {{volunteer.workIndustry}}</p></div>
+        <div class="volunteer-title">Linkedin profile: <p class="volunteer-description">
+            {{volunteer.linkedinProfile}}</p></div>
+        <div class="volunteer-title">Years since high school graduation: <p class="volunteer-description">
+            {{volunteer.get_yearsSinceHSGraduation_display}}</p></div>
+        <div class="volunteer-title">Highest college degree: <p class="volunteer-description">
+            {{volunteer.get_collegeLevel_display}}</p></div>
+        <div class="volunteer-title">College major(s): <p class="volunteer-description">
+            {{volunteer.collegeMajor}}</p></div>
+        <div class="volunteer-title">Skills related to your job, role and industry: <p class="volunteer-description">
+            {% for data in volunteer.skills.all %}
+            {{data.name}}
+            {% endfor %}
+        </p>
+        </div>
+        <div class="volunteer-title">Interests that lead you to your career choice: <p class="volunteer-description">
+            {% for data in volunteer.interests.all %}
+            {{data.name}}
+            {% endfor %}
+        </p>
+        </div>
+        <h4>Contact Info</h4>
+        <div>{{volunteer.user.first_name}}{{volunteer.user.last_name}} </div>
+        <div>{{volunteer.user.email}}</div>
+        <div>{{volunteer.phone}}</div>
+    </div>
 </div>
+{% endblock %}
+{% block scripts %}
+<script>
+    $(".fa-chevron-down").click(function () {
+        $("#videos").hide();
+        $(".fa-chevron-down").hide();
+        $(".fa-chevron-right").show();
+        $("#line").show();
+    });
+
+    $(".fa-chevron-right").click(function () {
+        $("#videos").show();
+        $(".fa-chevron-down").show();
+        $(".fa-chevron-right").hide();
+        $("#line").hide();
+
+    });
+</script>
 {% endblock %}
