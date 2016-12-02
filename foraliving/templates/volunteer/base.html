@@ -46,7 +46,11 @@
                     <ul class="nav navbar-nav navbar-right">
                         {% block list %}
                         {% endblock %}
+                        {% if request.user.is_authenticated %}
                         <li> <a id="account_logout" href="{% url 'account_logout' %}"><i class="fa fa-power-off"></i> Log out</a></li>
+                        {% else %}
+                        <li><a href="{% url 'account_login' %}">Log in </a></li>
+                        {% endif %}
                     </ul>
                     </li>
                     </ul>

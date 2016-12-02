@@ -9,6 +9,7 @@ from foraliving.student import CompleteVideo, StudentAssignment, ConductVideo, S
     SendEmail
 from foraliving.volunteer import VolunteerProfile
 from foraliving.general import Videos
+from foraliving.volunteer import Contact
 
 urlpatterns = [
     url(r"^admin/", include(admin.site.urls)),
@@ -42,7 +43,8 @@ urlpatterns = [
     url(r"^volunteer-signup/", views.volunteerSignup, name='vSignup'),
 
     # general
-    url(r"^$", Videos.as_view(), name='videos')
+    url(r"^$", Videos.as_view(), name='videos'),
+    url(r"^contact/", Contact.as_view(), name='contact')
 
 ]
 

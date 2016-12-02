@@ -1,0 +1,9 @@
+
+.form-group.required .control-label:after {
+  content:"*";
+  color:red;
+}
+
+.my-error-class {
+    color:#FF0000;  /* red */
+}

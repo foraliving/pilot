@@ -1,0 +1,38 @@
+{% extends "mail_templated/base.tpl" %}
+{% block subject %}
+Foraliving
+{% endblock %}
+{% block body %}
+New videos
+{% endblock %}
+{% block html %}
+{% load staticfiles %}
+<div class="container">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="panel panel-default">
+                    </div>
+                    <div class="panel-heading">
+                        <h3 style="text-align: left"> You are invited to join the For A Living volunteer network.
+                            By joining For A Living, you will have the opportunity to share your career journey
+                            experiences with youth. </h3>
+                        <h3>
+                            Please click here to create your account and provide us with a little information about
+                            yourself.
+                        </h3>
+                        <h3> {{url}}</h3>
+                        <div>
+                            <h3>Thank you </h3>
+                            <h3>The For A Living team </h3>
+                        </div>
+                    </div>
+                    <br>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+{% endblock %}
