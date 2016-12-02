@@ -40,7 +40,6 @@ urlpatterns = [
 
     # volunteer uls
     url(r'^volunteer/profile/(?P<user_id>\d+)/(?P<interview_id>\d+)$', VolunteerProfile.as_view(), name='volunteer_profile'),
-    url(r"^volunteer-signup/", views.volunteerSignup, name='vSignup'),
 
     # general
     url(r"^$", Videos.as_view(), name='videos'),
