@@ -4,6 +4,17 @@
   color:red;
 }
 
+
+.col-sm-6.required .form-group .control-label:after {
+  content:"*";
+  color:red;
+}
+
+.col-sm-6.required .form-group .checkbox:after {
+  content:"*";
+  color:red;
+}
+
 .my-error-class {
     color:#FF0000;  /* red */
 }

@@ -16,6 +16,7 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 from foraliving import views
+from foraliving.views import VolunteerForm
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -23,5 +24,7 @@ urlpatterns = [
     url(r"^account/", include("account.urls")),
     url(r"^$", views.index, name="home"),
     url(r"^theme/", views.sitetheme, name='theme'),
-    url(r"^volunteer/create/", views.volunteerSignup, name='vSignup'),
+    url(r"^volunteer/create/", VolunteerForm.as_view(), name='vSignup'),
+    url(r"^unique-email/", views.uniqueEmail, name='uniqueEmail'),
+    url(r"^unique-username/", views.uniqueUsername, name='uniqueUsername')
 ]

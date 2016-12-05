@@ -31,6 +31,7 @@ INSTALLED_APPS = [
     'metron',
     'sslserver',
     'mail_templated',
+    'bootstrap3'
     # 'mptt',
 ]
 

@@ -54,8 +54,22 @@ class User_Add_Ons(models.Model):
 class Skill(models.Model):
 	name = models.CharField(max_length=25)
 
+	class Meta:
+		verbose_name = 'Skill'
+		verbose_name_plural = 'Skills'
+
+	def __unicode__(self):
+		return str(self.name)
+
 class Interest(models.Model):
 	name = models.CharField(max_length=25)
+
+	class Meta:
+		verbose_name = 'Interest'
+		verbose_name_plural = 'Interests'
+
+	def __unicode__(self):
+		return str(self.name)
 
 class Volunteer_User_Add_Ons(models.Model):
 	user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -79,11 +93,11 @@ class Volunteer_User_Add_Ons(models.Model):
 		(4, "doctoral"),
 		(5, "none"),)
 	collegeLevel = models.IntegerField(choices=collegeLevelChoice)
-	collegeMajor = models.CharField(max_length=128, null=True, blank=True, )
+	collegeMajor = models.CharField(max_length=128, null=True, blank=True )
 	# skills = TreeForeignKey('self', null=True, blank=True, related_name='children', db_index=True)
 	skills = models.ManyToManyField(Skill, null=True, blank=True, )
 	# interests = TreeForeignKey('interest-self', null=True, blank=True, related_name='interest-children', db_index=True)
-	interests = models.ManyToManyField(Interest, null=True, blank=True, )
+	interests = models.CharField(max_length=128, null=True, blank=True )
 
 	# User_Skill_Map
 	# User_Interest_Map

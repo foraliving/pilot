@@ -1,32 +1,257 @@
-{% extends "site_base.html" %}
+{% extends 'volunteer/base.html' %}
 {% load i18n %}
 {% load bootstrap %}
+{% load bootstrap3 %}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery=1 %}
+{% bootstrap_messages %}
 {% load staticfiles %}
 {% load static %}
 
 {% block head_title %}
-    {% trans "Sign up as a volunteer" %}
+{% trans "Sign up as a volunteer" %}
 {% endblock %}
-
+{% block styles %}
+<link rel="stylesheet" href="{% static 'UX/css/volunteer/volunteer.css' %}">
+<link rel="stylesheet" href="{% static 'UX/css/student/recording.css' %}">
+{% endblock %}
 {% block body %}
-	<br><br><br><br><br><br>
-	<div class="page-header">
-		<h1>{% trans "Please complete the contact information and career survey below" %}<h1>
-	</div>
-
-	<div class="container-fluid ">
-		<div class="row">
-			<div class="col-md-6">
-		        <form method="POST" >
-		            {% csrf_token %}
-		            {{ userForm|bootstrap }}
-		            {{ infoForm|bootstrap }}
-					<button type="submit" class="save btn btn-primary">Save</button>
-		        </form>
-			</div>
-		</div>
+<header>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.15.0/jquery.validate.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.15.0/additional-methods.js"></script>
+</header>
+<div class="panel panel-info">
+    <div class="panel-heading">
+        <div class="inline-block" style="text-align: center;"><h3> Volunteer Form </h3></div>
     </div>
+</div>
+<div class="panel-body">
+    <div class="panel panel-default">
+        <div class="panel-body" style="font-size: 18px;">
+            <div class="container-fluid ">
+                <div class="row">
+                    <div class="col-md-12">
+                        <form method="POST" id="volunteer_form">
+                            <div>
+                                <p style="font-weight: bold;">Please complete the contact information for the person you
+                                    will be interviewing</p>
+                                <div style="display: inline-flex" ;>
+                                    <p>( </p>
+                                    <p style="color:red;">*</p>
+                                    <p> = required information)</p>
+                                </div>
+                            </div>
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col-md-6 col-sm-6 required">
+                                    {% bootstrap_field userForm.first_name layout="vertical" %}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 col-sm-6 required">
+                                    {% bootstrap_field userForm.last_name layout="vertical" %}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 col-sm-6 required">
+                                    {% bootstrap_field userForm.username layout="vertical" %}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 col-sm-6 required">
+                                    {% bootstrap_field userForm.email layout="vertical" %}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 col-sm-6 required">
+                                    {% bootstrap_field userForm.password layout="vertical" %}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 col-sm-6">
+                                    <div class="form-group required">
+                                        <label class='control-label'>Password Confirmation</label>
+                                        <input type="password" class="form-control" id="password_confirmation"
+                                               name="password_confirmation" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 col-sm-6 required">
+                                    {% bootstrap_field infoForm.phone layout="vertical" %}
+                                </div>
+                                <div class="col-md-6 col-sm-6 required" style="margin-top: 25px;">
+                                    {% bootstrap_field infoForm.canGetText layout="vertical" %}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 col-sm-6 required">
+                                    {% bootstrap_field infoForm.workTitle layout="vertical" %}
+                                </div>
+                                <div class="col-md-6 col-sm-6" style="margin-top: 25px;">
+                                    {% bootstrap_field infoForm.isBusinessOwner layout="vertical" %}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 col-sm-6 required">
+                                    {% bootstrap_field infoForm.workIndustry layout="vertical" %}
+                                </div>
+                                <div class="col-md-6 col-sm-6 required">
+                                    {% bootstrap_field infoForm.yearsInIndustry layout="vertical" %}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 col-sm-6">
+                                    {% bootstrap_field infoForm.linkedinProfile layout="vertical" %}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 col-sm-6 required">
+                                    {% bootstrap_field infoForm.yearsSinceHSGraduation layout="vertical" %}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 col-sm-6 required">
+                                    {% bootstrap_field infoForm.collegeLevel layout="vertical" %}
+                                </div>
+                            </div>
+                            <div class="row" id="collegeMajorDiv" style="display:none;">
+                                <div class="col-md-6 col-sm-6">
+                                    {% bootstrap_field infoForm.collegeMajor layout="vertical" %}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 col-sm-6">
+                                    {% bootstrap_field infoForm.skills layout="vertical" %}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 col-sm-6">
+                                    {% bootstrap_field infoForm.interests layout="vertical" %}
+                                </div>
+                            </div>
+                            <button type="submit" class="save btn btn-primary">Save</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 {% endblock %}
 {% block scripts %}
+<script>
+    $(document).ready(function () {
+
+        $.validator.addMethod('customphone', function (value, element) {
+            return this.optional(element) || /^(\([0-9]{3}\)|[0-9]{3})-?[0-9]{3}-?[0-9]{4}$/.test(value);
+        }, "Please enter a valid phone number such 123-555-5555");
+
+        $.validator.addMethod("uniqueEmail", function () {
+            var email = $("#id_email").val();
+            var valid = false
+            $.ajax({
+                type: "GET",
+                async: false,
+                url: "/unique-email/",
+                data: "email=" + email,
+                dataType: "json",
+                async: false,
+                success: function (response) {
+                    valid = !response;
+                }
+            });
+            return valid;
+        }, "This email is already taken! Try another.");
+
+
+        $.validator.addMethod("uniqueUsername", function () {
+            var username = $("#id_username").val();
+            var result = false
+            $.ajax({
+                type: "GET",
+                url: "/unique-username/",
+                async: false,
+                dataType: "json",
+                data: {'username': username},
+                success: function (response) {
+                    result = !response;
+                }
+            })
+            return result;
+        }, "This username is already taken! Try another.");
+
+        $("#volunteer_form").validate({
+            onkeyup: false,
+            focusout: true,
+            errorClass: "my-error-class",
+            errorPlacement: function (error, element) {
+                error.appendTo(element.closest(".form-group"))
+            },
+            rules: {
+                first_name: {
+                    required: true
+                },
+                last_name: {
+                    required: true
+                },
+                email: {
+                    required: true,
+                    email: true,
+                    uniqueEmail: true
+                },
+                username: {
+                    uniqueUsername: true
+                },
+                phone: {
+                    customphone: true
+                },
+                canGetText: {
+                    required: true
+                },
+                password_confirmation: {
+                    required: true,
+                    equalTo: "#id_password"
+                },
+                workTitle: {
+                    required: true
+                },
+                workIndustry: {
+                    required: true
+                },
+                yearsSinceHSGraduation: {
+                    required: function (element) {
+                        return $("#id_collegeLevel").val() == 0;
+                    }
+                },
+                collegeLevel: {
+                    required: function (element) {
+                        return $("#id_collegeLevel").val() == 0;
+                    }
+                }
+            },
+            messages: {
+                username: {
+                    uniqueUsername: "This username is already taken! Try another."
+                }
+            }
+        });
+        if ($("#id_collegeLevel").val() == 1 || $("#id_collegeLevel").val() == 2 || $("#id_collegeLevel").val() == 3 || $("#id_collegeLevel").val() == 4) {
+            $("#collegeMajorDiv").show();
+        } else {
+            $("#collegeMajorDiv").hide();
+        }
+
+        $("#id_collegeLevel").change(function (event) {
+            if ($(this).val() == 1 || $(this).val() == 2 || $(this).val() == 3 || $(this).val() == 4) {
+                $("#collegeMajorDiv").show();
+            } else {
+                $("#collegeMajorDiv").hide();
+                $("#id_collegeMajor").val("");
+            }
+        });
+    })
+    ;
+</script>
 {% endblock %}
