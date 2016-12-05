@@ -143,7 +143,9 @@
 {% block scripts %}
 <script>
     $(document).ready(function () {
-
+        {% if email %}
+        $("#id_email").val("{{email}}");
+        {% endif %}
         $.validator.addMethod('customphone', function (value, element) {
             return this.optional(element) || /^(\([0-9]{3}\)|[0-9]{3})-?[0-9]{3}-?[0-9]{4}$/.test(value);
         }, "Please enter a valid phone number such 123-555-5555");

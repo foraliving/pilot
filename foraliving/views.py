@@ -40,11 +40,12 @@ class VolunteerForm(generic.View):
     login_view = login_url = settings.LOGIN_URL
 
     def get(self, request):
+        email = request.GET.get('email')
         userForm = volunteerUserSignupForm()
         infoForm = volunteerSignupForm()
 
         return render(request, self.volunteer_view,
-                      {'userForm': userForm, 'infoForm': infoForm})
+                      {'userForm': userForm, 'infoForm': infoForm, 'email': email})
 
     def post(self, request):
         if request.method == 'POST':

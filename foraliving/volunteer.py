@@ -39,7 +39,7 @@ class Contact(LoginRequiredMixin, generic.View):
             last_name = request.POST.get("lst_name")
             email_to = email
             domain = request.build_absolute_uri('/')[:-1]
-            url = domain + "/volunteer/create/?email="+ email + "/"
+            url = domain + "/volunteer/create/?email="+ email
             message = EmailMessage('volunteer/invitation.html', {'url': url}, "noelia.pazos@viaro.net",
                                    to=[email_to])
             message.send()
