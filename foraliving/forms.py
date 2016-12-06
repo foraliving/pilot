@@ -27,7 +27,7 @@ class volunteerSignupForm(forms.ModelForm):
 		(3, "master's"),
 		(4, "doctoral"),
 		(5, "none"),)
-	canGetText = forms.BooleanField(label="Can we text you on thi number?", initial=True, required=True)
+	canGetText = forms.BooleanField(label="Can we text you on thi number?", initial=True, required=False)
 	isBusinessOwner = forms.BooleanField(label="I am a business owner", initial=True, required=False)
 	yearsInIndustry = forms.CharField(label="Number of years in this industry", required=True)
 	workTitle = forms.CharField(label="Work title", required=False)

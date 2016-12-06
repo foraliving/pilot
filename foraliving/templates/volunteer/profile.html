@@ -18,8 +18,8 @@
 <div class="container">
     <div class="" style="text-align: left; display:inline-block;">
         <h2> Your interview videos <i
-            class="fa fa-chevron-down" aria-hidden="true"></i><i style="display: none;" class="fa fa-chevron-right"
-                                                                 aria-hidden="true"></i>
+                class="fa fa-chevron-down" aria-hidden="true"></i><i style="display: none;" class="fa fa-chevron-right"
+                                                                     aria-hidden="true"></i>
         </h2>
         <br>
         <div class="container" id="videos">
@@ -45,7 +45,9 @@
     <hr id="line" style="display: none; border-top: 1px solid #abaaaa;">
     <div class="inline-block" style="text-align: left;"><h2> About your career
         {% if request.user.id == volunteer.user.id %}
-        <i class="fa fa-pencil" aria-hidden="true"></i>
+        <a style="color:dimgrey;" href="{% url 'volunteer_profile_edit'  user_id=request.user.id%}">
+            <i class="fa fa-pencil" aria-hidden="true"></i>
+        </a>
         {% endif %}
     </h2>
         <div class="volunteer-title">Title: <p class="volunteer-description"> {{volunteer.workTitle}}</p>
@@ -73,7 +75,7 @@
         </p>
         </div>
         <h4>Contact Info</h4>
-        <div>{{volunteer.user.first_name}}{{volunteer.user.last_name}} </div>
+        <div>{{volunteer.user.first_name}} {{volunteer.user.last_name}}</div>
         <div>{{volunteer.user.email}}</div>
         <div>{{volunteer.phone}}</div>
     </div>

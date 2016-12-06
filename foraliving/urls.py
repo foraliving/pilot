@@ -7,7 +7,7 @@ from foraliving.recording import RecordingType, RecordingSetupMicrophone, Record
     QuestionInterview, Recording, Orientation, SaveRecording, protected_serve
 from foraliving.student import CompleteVideo, StudentAssignment, ConductVideo, SelectQuestion, SelectQuestionEdit, \
     SendEmail
-from foraliving.volunteer import VolunteerProfile
+from foraliving.volunteer import VolunteerProfile, VolunteerEdit
 from foraliving.general import Videos
 from foraliving.volunteer import Contact
 
@@ -39,7 +39,9 @@ urlpatterns = [
     url(r'^video/save/$', SaveRecording.as_view(), name='save_recording'),
 
     # volunteer uls
-    url(r'^volunteer/profile/(?P<user_id>\d+)/(?P<interview_id>\d+)$', VolunteerProfile.as_view(), name='volunteer_profile'),
+    url(r'^volunteer/profile/(?P<user_id>\d+)/(?P<interview_id>\d+)$', VolunteerProfile.as_view(),
+        name='volunteer_profile'),
+    url(r'^volunteer/profile/edit/(?P<user_id>\d+)/$', VolunteerEdit.as_view(), name='volunteer_profile_edit'),
 
     # general
     url(r"^$", Videos.as_view(), name='videos'),
