@@ -17,8 +17,8 @@
 {% block body %}
 <div class="container">
     <div class="" style="text-align: left; display:inline-block;">
-        <h2> Your interview videos <i
-                class="fa fa-chevron-down" aria-hidden="true"></i><i style="display: none;" class="fa fa-chevron-right"
+        <h2 style="color:black;"> Your interview videos <i
+                class="fa fa-chevron-down" aria-hidden="true"></i><i style="display: none; color: black;" class="fa fa-chevron-right"
                                                                      aria-hidden="true"></i>
         </h2>
         <br>
@@ -43,10 +43,10 @@
         </div>
     </div>
     <hr id="line" style="display: none; border-top: 1px solid #abaaaa;">
-    <div class="inline-block" style="text-align: left;"><h2> About your career
+    <div class="inline-block" style="text-align: left; color:black;"><h2 style="color:black;"> About your career
         {% if request.user.id == volunteer.user.id %}
-        <a style="color:dimgrey;" href="{% url 'volunteer_profile_edit'  user_id=request.user.id%}">
-            <i class="fa fa-pencil" aria-hidden="true"></i>
+        <a style="color:black;" href="{% url 'volunteer_profile_edit'  user_id=request.user.id%}">
+            <i class="fa fa-pencil" aria-hidden="true" title='Edit'></i>
         </a>
         {% endif %}
     </h2>
@@ -62,22 +62,34 @@
             {{volunteer.get_collegeLevel_display}}</p></div>
         <div class="volunteer-title">College major(s): <p class="volunteer-description">
             {{volunteer.collegeMajor}}</p></div>
-        <div class="volunteer-title">Skills related to your job, role and industry: <p class="volunteer-description">
-            {% for data in volunteer.skills.all %}
-            {{data.name}}
-            {% endfor %}
-        </p>
+        <div class="volunteer-title" style="display: block;">Skills related to your job, role and industry:
+            <br>
+            <p class="volunteer-description">
+                {% for data in volunteer.skills.all %}
+                {% if forloop.last %}
+                {{ data.name }}
+                {% else %}
+                {{ data.name }},
+                {% endif %}
+                {% endfor %}
+            </p>
         </div>
-        <div class="volunteer-title">Interests that lead you to your career choice: <p class="volunteer-description">
-            {% for data in volunteer.interests.all %}
-            {{data.name}}
-            {% endfor %}
-        </p>
+        <div class="volunteer-title" style="display: block;">Interests that lead you to your career choice:
+            <p class="volunteer-description">
+                {% for data in volunteer.interests.all %}
+                {% if forloop.last %}
+                {{ data.name }}
+                {% else %}
+                {{ data.name }},
+                {% endif %}
+                {% endfor %}
+            </p>
         </div>
-        <h4>Contact Info</h4>
-        <div>{{volunteer.user.first_name}} {{volunteer.user.last_name}}</div>
-        <div>{{volunteer.user.email}}</div>
-        <div>{{volunteer.phone}}</div>
+        <br>
+        <h4 style="color:black;">Contact Info</h4>
+        <div class="volunteer-description">{{volunteer.user.first_name}} {{volunteer.user.last_name}}</div>
+        <div class="volunteer-description">{{volunteer.user.email}}</div>
+        <div class="volunteer-description">{{volunteer.phone}}</div>
     </div>
 </div>
 {% endblock %}

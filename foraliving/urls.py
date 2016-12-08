@@ -9,7 +9,7 @@ from foraliving.student import CompleteVideo, StudentAssignment, ConductVideo, S
     SendEmail
 from foraliving.volunteer import VolunteerProfile, VolunteerEdit
 from foraliving.general import Videos
-from foraliving.volunteer import Contact
+from foraliving.volunteer import Contact, editSkill
 
 urlpatterns = [
     url(r"^admin/", include(admin.site.urls)),
@@ -42,6 +42,7 @@ urlpatterns = [
     url(r'^volunteer/profile/(?P<user_id>\d+)/(?P<interview_id>\d+)$', VolunteerProfile.as_view(),
         name='volunteer_profile'),
     url(r'^volunteer/profile/edit/(?P<user_id>\d+)/$', VolunteerEdit.as_view(), name='volunteer_profile_edit'),
+    url(r'^edit-skills/(?P<volunteer_id>\d+)/$', editSkill, name='editSkill'),
 
     # general
     url(r"^$", Videos.as_view(), name='videos'),

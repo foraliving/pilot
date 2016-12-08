@@ -25,6 +25,9 @@ urlpatterns = [
     url(r"^$", views.index, name="home"),
     url(r"^theme/", views.sitetheme, name='theme'),
     url(r"^volunteer/create/", VolunteerForm.as_view(), name='vSignup'),
+    url(r"^create-skills/(?P<volunteer_id>\d+)/$", views.createSkill, name='createSkill'),
     url(r"^unique-email/", views.uniqueEmail, name='uniqueEmail'),
-    url(r"^unique-username/", views.uniqueUsername, name='uniqueUsername')
+    url(r"^unique-username/", views.uniqueUsername, name='uniqueUsername'),
+    url(r"^categories/", views.categories, name='Categories'),
+
 ]

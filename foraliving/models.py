@@ -1,9 +1,23 @@
 # Add documentation link
 from __future__ import unicode_literals
 from django.contrib.auth.models import User, Group
+from categories.models import Category
+from categories.models import CategoryBase
 from django.db import models
 from datetime import datetime    
 # from mptt.models import MPTTModel, TreeForeignKey
+
+
+class Skill(CategoryBase):
+	type = models.CharField(max_length=128, default="contact")
+
+	class Meta:
+		verbose_name = 'Skill'
+		verbose_name_plural = 'Skills'
+
+	def __unicode__(self):
+		return str(self.name)
+
 
 class LMS(models.Model):
 	name = models.CharField(max_length=128)
@@ -51,15 +65,6 @@ class User_Add_Ons(models.Model):
 	def __unicode__(self):
 		return str(self.user)
 
-class Skill(models.Model):
-	name = models.CharField(max_length=25)
-
-	class Meta:
-		verbose_name = 'Skill'
-		verbose_name_plural = 'Skills'
-
-	def __unicode__(self):
-		return str(self.name)
 
 class Interest(models.Model):
 	name = models.CharField(max_length=25)
@@ -95,7 +100,7 @@ class Volunteer_User_Add_Ons(models.Model):
 	collegeLevel = models.IntegerField(choices=collegeLevelChoice)
 	collegeMajor = models.CharField(max_length=128, null=True, blank=True )
 	# skills = TreeForeignKey('self', null=True, blank=True, related_name='children', db_index=True)
-	skills = models.ManyToManyField(Skill, null=True, blank=True, )
+	skills = models.ManyToManyField(Skill, null=True, blank=True)
 	# interests = TreeForeignKey('interest-self', null=True, blank=True, related_name='interest-children', db_index=True)
 	interests = models.CharField(max_length=128, null=True, blank=True )
 

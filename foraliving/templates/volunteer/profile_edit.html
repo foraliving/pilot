@@ -17,6 +17,11 @@
 <link rel="stylesheet" href="{% static 'UX/css/bootstrap-tokenfield.css' %}">
 <link rel="stylesheet" href="{% static 'UX/css/tokenfield-typeahead.css' %}">
 <link rel="stylesheet" href="{% static 'UX/css/jquery.css' %}">
+<link rel="stylesheet" href="{% static 'UX/css/jquery.css' %}">
+{% endblock %}
+{% block list %}
+<li><a href="{% url 'volunteer_profile'  user_id=request.user.id interview_id=0%}">Profile</a></li>
+<li><a href="">Get Interviewed</a></li>
 {% endblock %}
 {% block body %}
 <header>
@@ -37,7 +42,7 @@
             <div class="container-fluid ">
                 <div class="row">
                     <div class="col-md-12">
-                        <form method="POST" id="volunteer_form">
+                        <form method="POST" id="volunteer_form" class="form">
                             <div>
                                 <p style="font-weight: bold;">Please complete the contact information for the person you
                                     will be interviewing</p>
@@ -48,40 +53,6 @@
                                 </div>
                             </div>
                             {% csrf_token %}
-                            <div class="row">
-                                <div class="col-md-6 col-sm-6 required">
-                                    {% bootstrap_field userForm.first_name layout="vertical" %}
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6 col-sm-6 required">
-                                    {% bootstrap_field userForm.last_name layout="vertical" %}
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6 col-sm-6 required">
-                                    {% bootstrap_field userForm.username layout="vertical" %}
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6 col-sm-6 required">
-                                    {% bootstrap_field userForm.email layout="vertical" %}
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6 col-sm-6 required">
-                                    {% bootstrap_field userForm.password layout="vertical" %}
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6 col-sm-6">
-                                    <div class="form-group required">
-                                        <label class='control-label'>Password Confirmation</label>
-                                        <input type="password" class="form-control" id="password_confirmation"
-                                               name="password_confirmation" required>
-                                    </div>
-                                </div>
-                            </div>
                             <div class="row">
                                 <div class="col-md-6 col-sm-6 required">
                                     {% bootstrap_field infoForm.phone layout="vertical" %}
@@ -130,12 +101,14 @@
                                 <div class="col-md-6 col-sm-6">
                                     <label class="control-label">Please enter skills related to your job,
                                         role and industry </label>
-                                    <input type="text" class="form-control" id="tokenfield" value=""/>
+                                    <input type="text" class="form-control" id="tokenfield" value="{% for data in volunteer.skills.all %}
+                                    {{ data.name }},
+                                    {% endfor %}"
+                                    />
                                 </div>
                             </div>
                             <br>
-                            <br>
-                            <button type="button" class="save btn btn-primary" id="createVolunteer">Save</button>
+                            <button type="button" id="editVolunteer" class="save btn btn-primary">Save</button>
                         </form>
                     </div>
                 </div>
@@ -147,68 +120,37 @@
 {% endblock %}
 {% block scripts %}
 <script>
-
-    $.getJSON('/categories/', function (responseData) {
-        var data = responseData;
-        $('#tokenfield').tokenfield({
-            autocomplete: {
-                source: data,
-                delay: 100
-            },
-            showAutocompleteOnFocus: true
-        })
-    });
-
-    $('#tokenfield').on('tokenfield:createtoken', function (event) {
-        var existingTokens = $(this).tokenfield('getTokens');
-        $.each(existingTokens, function (index, token) {
-            if (token.value.toLowerCase() === event.attrs.value.toLowerCase().trim())
-                event.preventDefault();
-        });
-    });
-
-
     $(document).ready(function () {
-        {% if email %}
-        $("#id_email").val("{{email}}");
-        {% endif %}
+        $.getJSON('/categories/', function (responseData) {
+            var data = responseData;
+            $('#tokenfield').tokenfield({
+                autocomplete: {
+                    source: data,
+                    delay: 100
+                },
+                showAutocompleteOnFocus: true
+            })
+        });
+
+        $('#tokenfield').on('tokenfield:createtoken', function (event) {
+            var existingTokens = $(this).tokenfield('getTokens');
+            $.each(existingTokens, function (index, token) {
+                if (token.value.toLowerCase() === event.attrs.value.toLowerCase().trim())
+                    event.preventDefault();
+            });
+        });
         $.validator.addMethod('customphone', function (value, element) {
             return this.optional(element) || /^(\([0-9]{3}\)|[0-9]{3})-?[0-9]{3}-?[0-9]{4}$/.test(value);
         }, "Please enter a valid phone number such 123-555-5555");
 
-        $.validator.addMethod("uniqueEmail", function () {
-            var email = $("#id_email").val();
-            var valid = false
-            $.ajax({
-                type: "GET",
-                async: false,
-                url: "/unique-email/",
-                data: "email=" + email,
-                dataType: "json",
-                async: false,
-                success: function (response) {
-                    valid = !response;
-                }
-            });
-            return valid;
-        }, "This email is already taken! Try another.");
 
-
-        $.validator.addMethod("uniqueUsername", function () {
-            var username = $("#id_username").val();
-            var result = false
-            $.ajax({
-                type: "GET",
-                url: "/unique-username/",
-                async: false,
-                dataType: "json",
-                data: {'username': username},
-                success: function (response) {
-                    result = !response;
-                }
-            })
-            return result;
-        }, "This username is already taken! Try another.");
+        $("#editVolunteer").click(function (event) {
+            if ($('#volunteer_form').valid()) {
+                saveVolunteer();
+            } else {
+                validator.focusInvalid();
+            }
+        });
 
         var validator = $("#volunteer_form").validate({
             onkeyup: false,
@@ -219,25 +161,8 @@
                 error.appendTo(element.closest(".form-group"))
             },
             rules: {
-                first_name: {
-                    required: true
-                },
-                last_name: {
-                    required: true
-                },
-                email: {
-                    required: true,
-                    email: true,
-                    uniqueEmail: true
-                },
-                username: {
-                    uniqueUsername: true
-                },
                 phone: {
                     customphone: true
-                },
-                canGetText: {
-                    required: true
                 },
                 password_confirmation: {
                     required: true,
@@ -259,11 +184,6 @@
                         return $("#id_collegeLevel").val() == 0;
                     }
                 }
-            },
-            messages: {
-                username: {
-                    uniqueUsername: "This username is already taken! Try another."
-                }
             }
         });
         if ($("#id_collegeLevel").val() == 1 || $("#id_collegeLevel").val() == 2 || $("#id_collegeLevel").val() == 3 || $("#id_collegeLevel").val() == 4) {
@@ -281,20 +201,12 @@
             }
         });
 
-        $("#createVolunteer").click(function (event) {
-            if ($('#volunteer_form').valid()) {
-                saveVolunteer();
-            } else {
-                validator.focusInvalid();
-            }
-        });
-
         function saveVolunteer(button) {
-            $("#createVolunteer").attr('disabled', 'disabled');
+            $("#editVolunteer").attr('disabled', 'disabled');
             var formData = $("#volunteer_form").serialize();
             $.ajax({
                 type: "POST",
-                url: "/volunteer/create/",
+                url: "/foraliving/volunteer/profile/edit/" +{{user_id}} + "/",
                 data: formData,
                 dataType: "json",
                 success: function (data) {
@@ -303,14 +215,14 @@
                     formSkill.append("skills", JSON.stringify(skills));
                     var volunteer = data;
                     $.ajax({
-                        url: "/create-skills/" + volunteer + "/",
+                        url: "/foraliving/edit-skills/" + volunteer + "/",
                         type: "POST",
                         data: formSkill,
                         contentType: false,
                         processData: false,
                         success: function (skillResponse) {
                             if (skillResponse == "ok") {
-                                window.location = "/account/login/"
+                                window.location = "/foraliving/volunteer/profile/" + {{user_id}} + "/0"
 
                             }
                         }

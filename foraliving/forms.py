@@ -29,7 +29,7 @@ class volunteerSignupForm(forms.ModelForm):
 		(5, "none"),)
 	canGetText = forms.BooleanField(label="Can we text you on thi number?", initial=True, required=False)
 	isBusinessOwner = forms.BooleanField(label="I am a business owner", initial=True, required=False)
-	yearsInIndustry = forms.CharField(label="Number of years in this industry", required=True)
+	yearsInIndustry = forms.CharField(label="Number of years in this industry", required=True, widget=forms.NumberInput(attrs={'size':'10', 'placeholder': ''}))
 	workTitle = forms.CharField(label="Work title", required=False)
 	workIndustry = forms.CharField(label="Work industry", required=False)
 	linkedinProfile = forms.CharField(label="Your Linkedin profile", required=False)
@@ -42,6 +42,11 @@ class volunteerSignupForm(forms.ModelForm):
 									 required=False)
 	interests = forms.CharField(label="Please provide some interests that lead you to your career choice",
 							 required=False)
+
+	def __init__(self, *args, **kwargs):
+		super(volunteerSignupForm, self).__init__(*args, **kwargs)
+		self.fields['yearsInIndustry'].widget.attrs['style'] = "width:20%"
+
 
 	class Meta:
 		model = Volunteer_User_Add_Ons

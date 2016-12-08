@@ -1,7 +1,7 @@
+import json
 from django.conf import settings
 from django.http import HttpResponse
 from django.shortcuts import render_to_response, get_object_or_404, render, redirect
-from django.template import loader
 from django.views import generic
 from .forms import *
 from .models import *
@@ -60,7 +60,7 @@ class VolunteerForm(generic.View):
                     newVolunteer.user = User.objects.get(username=newUser.username)
                     newVolunteer.save()
 
-            return redirect(self.login_view)
+                    return HttpResponse(newVolunteer.id)
 
 
 def uniqueEmail(request):
@@ -81,3 +81,35 @@ def uniqueUsername(request):
             return HttpResponse('true')
         else:
             return HttpResponse('false')
+
+
+def categories(request):
+    if request.method == 'GET':
+        skill = Skill.objects.all()
+        new_skill = []
+        for data in skill:
+            new_skill.append(data.name)
+
+        return HttpResponse(json.dumps(new_skill))
+
+
+from django.utils import six
+
+def createSkill(request, volunteer_id):
+    if request.method == 'POST':
+        volunteer = Volunteer_User_Add_Ons.objects.get(pk=volunteer_id)
+        tasks = request.POST.getlist('skills')
+        for data in tasks:
+            data = json.loads(data)
+            for field in data:
+                for i, a in field.items():
+                    if i == "value":
+                        try:
+                            skill = Skill.objects.get(name__iexact=a)
+                            volunteer_skill = volunteer.skills.add(skill)
+                        except:
+                            skill = Skill(name=a)
+                            skill.save()
+                            volunteer_skill = volunteer.skills.add(skill)
+
+        return HttpResponse('ok')
