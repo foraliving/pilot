@@ -5,6 +5,7 @@ from django.shortcuts import render, redirect, get_object_or_404, reverse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 from django.views import generic
+from foraliving.views import createInputToken
 from .forms import *
 from foraliving.models import Volunteer_User_Add_Ons, Interview, Interview_Question_Video_Map, Interview_Question_Map
 from mail_templated import EmailMessage
@@ -112,31 +113,12 @@ def editSkill(request, volunteer_id):
         for data in volunteer.interests.all():
             volunteer.interests.remove(data)
 
-        tasks = request.POST.getlist('skills')
+        skills = request.POST.getlist('skills')
         interests = request.POST.getlist('interests')
 
-        for data in tasks:
-            data = json.loads(data)
-            for field in data:
-                for i, a in field.items():
-                    if i == "value":
-                        try:
-                            skill = Skill.objects.get(name__iexact=a)
-                        except:
-                            skill = Skill(name=a)
-                            skill.save()
-                        volunteer_skill = volunteer.skills.add(skill)
-
-        for data in interests:
-            data = json.loads(data)
-            for field in data:
-                for i, a in field.items():
-                    if i == "value":
-                        try:
-                            interest = Interest.objects.get(name__iexact=a)
-                        except:
-                            interest = Interest(name=a)
-                            interest.save()
-                        volunteer_interest = volunteer.interests.add(interest)
+        # call to save the skills
+        createInputToken(request, skills, 'Skill', volunteer_id)
+        # call to save the interests
+        createInputToken(request, interests, 'Interest', volunteer_id)
 
         return HttpResponse('ok')

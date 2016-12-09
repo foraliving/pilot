@@ -52,13 +52,3 @@ class volunteerSignupForm(forms.ModelForm):
 		model = Volunteer_User_Add_Ons
 		# fields = '__all__'
 		exclude = ['user']
-
-class newSkillForm(forms.ModelForm):
-	class Meta:
-		model = Skill
-		fields = '__all__'
-
-class newInterestForm(forms.ModelForm):
-	class Meta:
-		model = Skill
-		fields = '__all__'

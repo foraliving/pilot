@@ -25,6 +25,8 @@ You should note that most (if not all) the dependencies will be installed from p
   * `pip install metron`
   * `pip install BeautifulSoup`
   * `pip install django-mail-templated`
+  * `pip install django-categories`
+
 
 
 ##### If everything worked well, you should now be ready to run the project on your local machine.

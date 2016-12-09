@@ -38,5 +38,4 @@ class Videos(LoginRequiredMixin, generic.View):
             user_type = "volunteer"
             videos = Interview_Question_Video_Map.objects.all().order_by('-video')
 
-        teacher = Class.objects.filter(teacher=user_add_ons)
         return render(request, self.conduct_view, {'videos': videos, 'school': school, 'user_type': user_type})

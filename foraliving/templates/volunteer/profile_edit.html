@@ -129,6 +129,8 @@
 {% endblock %}
 {% block scripts %}
 <script>
+
+    /*method to get the skills*/
     $(document).ready(function () {
         $.getJSON('/categories/', function (responseData) {
             var data = responseData;
@@ -141,6 +143,7 @@
             })
         });
 
+        /*method to get the interests*/
         $.getJSON('/interests/', function (responseData) {
             var data = responseData;
             $('#tokenfieldinterest').tokenfield({
@@ -152,6 +155,7 @@
             })
         });
 
+        /*method to manage that the user cannot repeat skills on the skills input */
         $('#tokenfieldinterest').on('tokenfield:createtoken', function (event) {
             var existingTokens = $(this).tokenfield('getTokens');
             $.each(existingTokens, function (index, token) {
@@ -160,6 +164,7 @@
             });
         });
 
+        /*method to manage that the user cannot repeat interests on the interests input */
         $('#tokenfield').on('tokenfield:createtoken', function (event) {
             var existingTokens = $(this).tokenfield('getTokens');
             $.each(existingTokens, function (index, token) {
@@ -168,12 +173,13 @@
             });
         });
 
-
+        /*method to validate the phone */
         $.validator.addMethod('customphone', function (value, element) {
             return this.optional(element) || /^(\([0-9]{3}\)|[0-9]{3})-?[0-9]{3}-?[0-9]{4}$/.test(value);
         }, "Please enter a valid phone number such 123-555-5555");
 
 
+        /*event to start the volunteer save */
         $("#editVolunteer").click(function (event) {
             if ($('#volunteer_form').valid()) {
                 saveVolunteer();
@@ -182,6 +188,7 @@
             }
         });
 
+        /*method to validate the form */
         var validator = $("#volunteer_form").validate({
             onkeyup: false,
             focusout: true,
@@ -214,14 +221,37 @@
                         return $("#id_collegeLevel").val() == 0;
                     }
                 }
+            },
+            messages: {
+                phone : {
+                    required: "Phone number is required."
+                },
+                workTitle: {
+                    required: "Work title is required."
+                },
+                workIndustry: {
+                    required: "Work industry is required."
+                },
+                yearsSinceHSGraduation: {
+                    required: "Year since high school graduation is required."
+                },
+                collegeLevel: {
+                    required: "Highlest college degree is required."
+                },
+                yearsInIndustry: {
+                    required: "Number of years in this industry is required."
+                }
             }
         });
+
+
         if ($("#id_collegeLevel").val() == 1 || $("#id_collegeLevel").val() == 2 || $("#id_collegeLevel").val() == 3 || $("#id_collegeLevel").val() == 4) {
             $("#collegeMajorDiv").show();
         } else {
             $("#collegeMajorDiv").hide();
         }
 
+        /*method to manage the college major */
         $("#id_collegeLevel").change(function (event) {
             if ($(this).val() == 1 || $(this).val() == 2 || $(this).val() == 3 || $(this).val() == 4) {
                 $("#collegeMajorDiv").show();
@@ -231,6 +261,7 @@
             }
         });
 
+        /*function to save the volunteer */
         function saveVolunteer(button) {
             $("#editVolunteer").attr('disabled', 'disabled');
             var formData = $("#volunteer_form").serialize();

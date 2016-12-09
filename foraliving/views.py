@@ -68,6 +68,7 @@ class VolunteerForm(generic.View):
                 newUser = userForm.save(commit=False)
                 if infoForm.is_valid():
                     newVolunteer = infoForm.save(commit=False)
+                    #encrypted password
                     newUser.set_password(newUser.password)
                     newUser.save()
                     newVolunteer.user = User.objects.get(username=newUser.username)
@@ -119,6 +120,7 @@ def categories(request):
             new_skill.append(data.name)
         return HttpResponse(json.dumps(new_skill))
 
+
 def interests(request):
     """
     Method to get the interests saved on the system
@@ -142,29 +144,53 @@ def createSkill(request, volunteer_id):
     """
     if request.method == 'POST':
         volunteer = Volunteer_User_Add_Ons.objects.get(pk=volunteer_id)
-        tasks = request.POST.getlist('skills')
-        interests = request.POST.getlist('interests')
-        for data in tasks:
-            data = json.loads(data)
-            for field in data:
-                for i, a in field.items():
-                    if i == "value":
-                        try:
-                            skill = Skill.objects.get(name__iexact=a)
-                        except:
-                            skill = Skill(name=a)
-                            skill.save()
-                        volunteer_skill = volunteer.skills.add(skill)
 
-        for data in interests:
-            data = json.loads(data)
-            for field in data:
-                for i, a in field.items():
-                    if i == "value":
-                        try:
-                            interest = Interest.objects.get(name__iexact=a)
-                        except:
-                            interest = Interest(name=a)
-                            interest.save()
-                        volunteer_interest = volunteer.interests.add(interest)
+        skills = request.POST.getlist('skills')
+        interests = request.POST.getlist('interests')
+
+        # call to create the skills
+        createInputToken(request, skills, 'Skill', volunteer_id)
+
+        # call to create the interests
+        createInputToken(request, interests, 'Interest', volunteer_id)
+
         return HttpResponse('ok')
+
+
+def createInputToken(request, dataInput, model, volunteer_id):
+    """
+    Method to create the skills or interests
+    :param request:
+    :param data:
+    :param model:
+    :param relation:
+    :return:
+    """
+    volunteer = Volunteer_User_Add_Ons.objects.get(pk=volunteer_id)
+
+    # for loop to list of the Skills
+    for data in dataInput:
+        data = json.loads(data)
+        # for loop to the array objects of the Skill input
+        for field in data:
+            # for loop to objects with the values of the skills
+            for key, value in field.items():
+                if key == "value":
+                    try:
+                        # try get the skill or interest with the name saved in the variable "value"
+                        if model == "Skill":
+                            variable = Skill.objects.get(name__iexact=value)
+                        else:
+                            variable = Interest.objects.get(name__iexact=value)
+                    except:
+                        # if the object doesn't exist, the Skill or interest object is saved
+                        if model == "Skill":
+                            variable = Skill(name=value)
+                        else:
+                            variable = Interest(name=value)
+                        variable.save()
+                    # Add the skill or interest object to the skills or interests relation
+                    if model == "Skill":
+                        volunteer.skills.add(variable)
+                    else:
+                        volunteer.interests.add(variable)
