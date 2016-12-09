@@ -17,6 +17,13 @@ class VolunteerProfile(LoginRequiredMixin, generic.View):
     question_view = 'volunteer/profile.html'
 
     def get(self, request, user_id, interview_id):
+        """
+        Method to render the template with the videos and information of the volunteer
+        :param request:
+        :param user_id:
+        :param interview_id:
+        :return:
+        """
         volunteer = Volunteer_User_Add_Ons.objects.get(user=user_id)
         interview = Interview.objects.filter(interviewee=user_id)
         interview_question = Interview_Question_Map.objects.filter(interview__in=interview)
@@ -51,6 +58,9 @@ class Contact(LoginRequiredMixin, generic.View):
 
 
 class VolunteerEdit(LoginRequiredMixin, generic.View):
+    """
+    Class to edit the volunteer information
+    """
     url_volunteer_edit = 'volunteer/profile_edit.html'
     url_volunteer_list = 'volunteer_profile'
 
@@ -93,11 +103,18 @@ class VolunteerEdit(LoginRequiredMixin, generic.View):
         return HttpResponse(volunteer.id)
 
 def editSkill(request, volunteer_id):
+    """Method to edit skills and interests"""
     if request.method == 'POST':
         volunteer = Volunteer_User_Add_Ons.objects.get(pk=volunteer_id)
         for data in volunteer.skills.all():
             volunteer.skills.remove(data)
+
+        for data in volunteer.interests.all():
+            volunteer.interests.remove(data)
+
         tasks = request.POST.getlist('skills')
+        interests = request.POST.getlist('interests')
+
         for data in tasks:
             data = json.loads(data)
             for field in data:
@@ -105,10 +122,21 @@ def editSkill(request, volunteer_id):
                     if i == "value":
                         try:
                             skill = Skill.objects.get(name__iexact=a)
-                            volunteer_skill = volunteer.skills.add(skill)
                         except:
                             skill = Skill(name=a)
                             skill.save()
-                            volunteer_skill = volunteer.skills.add(skill)
+                        volunteer_skill = volunteer.skills.add(skill)
+
+        for data in interests:
+            data = json.loads(data)
+            for field in data:
+                for i, a in field.items():
+                    if i == "value":
+                        try:
+                            interest = Interest.objects.get(name__iexact=a)
+                        except:
+                            interest = Interest(name=a)
+                            interest.save()
+                        volunteer_interest = volunteer.interests.add(interest)
 
         return HttpResponse('ok')

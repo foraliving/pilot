@@ -29,5 +29,6 @@ urlpatterns = [
     url(r"^unique-email/", views.uniqueEmail, name='uniqueEmail'),
     url(r"^unique-username/", views.uniqueUsername, name='uniqueUsername'),
     url(r"^categories/", views.categories, name='Categories'),
+    url(r"^interests/", views.interests, name='Interests'),
 
 ]

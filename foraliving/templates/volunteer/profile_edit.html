@@ -107,6 +107,15 @@
                                     />
                                 </div>
                             </div>
+                            <div class="row">
+                                <div class="col-md-6 col-sm-6">
+                                    <label class="control-label">Please provide some interests that lead you to your
+                                        career choice</label>
+                                    <input type="text" class="form-control" id="tokenfieldinterest" value="{% for data in volunteer.interests.all %}
+                                    {{ data.name }},
+                                    {% endfor %}"/>
+                                </div>
+                            </div>
                             <br>
                             <button type="button" id="editVolunteer" class="save btn btn-primary">Save</button>
                         </form>
@@ -132,6 +141,25 @@
             })
         });
 
+        $.getJSON('/interests/', function (responseData) {
+            var data = responseData;
+            $('#tokenfieldinterest').tokenfield({
+                autocomplete: {
+                    source: data,
+                    delay: 100
+                },
+                showAutocompleteOnFocus: true
+            })
+        });
+
+        $('#tokenfieldinterest').on('tokenfield:createtoken', function (event) {
+            var existingTokens = $(this).tokenfield('getTokens');
+            $.each(existingTokens, function (index, token) {
+                if (token.value.toLowerCase() === event.attrs.value.toLowerCase().trim())
+                    event.preventDefault();
+            });
+        });
+
         $('#tokenfield').on('tokenfield:createtoken', function (event) {
             var existingTokens = $(this).tokenfield('getTokens');
             $.each(existingTokens, function (index, token) {
@@ -139,6 +167,8 @@
                     event.preventDefault();
             });
         });
+
+
         $.validator.addMethod('customphone', function (value, element) {
             return this.optional(element) || /^(\([0-9]{3}\)|[0-9]{3})-?[0-9]{3}-?[0-9]{4}$/.test(value);
         }, "Please enter a valid phone number such 123-555-5555");
@@ -211,8 +241,10 @@
                 dataType: "json",
                 success: function (data) {
                     var skills = $('#tokenfield').tokenfield('getTokens');
+                    var interests = $('#tokenfieldinterest').tokenfield('getTokens');
                     formSkill = new FormData($('#submit_form')[0]);
                     formSkill.append("skills", JSON.stringify(skills));
+                    formSkill.append("interests", JSON.stringify(interests));
                     var volunteer = data;
                     $.ajax({
                         url: "/foraliving/edit-skills/" + volunteer + "/",

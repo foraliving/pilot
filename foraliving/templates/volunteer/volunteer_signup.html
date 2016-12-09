@@ -133,7 +133,13 @@
                                     <input type="text" class="form-control" id="tokenfield" value=""/>
                                 </div>
                             </div>
-                            <br>
+                            <div class="row">
+                                <div class="col-md-6 col-sm-6">
+                                    <label class="control-label">Please provide some interests that lead you to your
+                                        career choice</label>
+                                    <input type="text" class="form-control" id="tokenfieldinterest" value=""/>
+                                </div>
+                            </div>
                             <br>
                             <button type="button" class="save btn btn-primary" id="createVolunteer">Save</button>
                         </form>
@@ -159,7 +165,26 @@
         })
     });
 
+    $.getJSON('/interests/', function (responseData) {
+        var data = responseData;
+        $('#tokenfieldinterest').tokenfield({
+            autocomplete: {
+                source: data,
+                delay: 100
+            },
+            showAutocompleteOnFocus: true
+        })
+    });
+
     $('#tokenfield').on('tokenfield:createtoken', function (event) {
+        var existingTokens = $(this).tokenfield('getTokens');
+        $.each(existingTokens, function (index, token) {
+            if (token.value.toLowerCase() === event.attrs.value.toLowerCase().trim())
+                event.preventDefault();
+        });
+    });
+
+    $('#tokenfieldinterest').on('tokenfield:createtoken', function (event) {
         var existingTokens = $(this).tokenfield('getTokens');
         $.each(existingTokens, function (index, token) {
             if (token.value.toLowerCase() === event.attrs.value.toLowerCase().trim())
@@ -299,8 +324,10 @@
                 dataType: "json",
                 success: function (data) {
                     var skills = $('#tokenfield').tokenfield('getTokens');
+                    var interests = $('#tokenfieldinterest').tokenfield('getTokens');
                     formSkill = new FormData($('#submit_form')[0]);
                     formSkill.append("skills", JSON.stringify(skills));
+                    formSkill.append("interests", JSON.stringify(interests));
                     var volunteer = data;
                     $.ajax({
                         url: "/create-skills/" + volunteer + "/",
