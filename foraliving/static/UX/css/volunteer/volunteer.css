@@ -18,3 +18,15 @@
 .my-error-class {
     color:#FF0000;  /* red */
 }
+.checkbox, .radio {
+    position: relative;
+    display: block;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    display: inline;
+}
+
+.checkbox+.checkbox, .radio+.radio {
+    margin-top: -5px;
+    margin-left: 10%;
+}

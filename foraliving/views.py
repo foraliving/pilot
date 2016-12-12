@@ -64,6 +64,7 @@ class VolunteerForm(generic.View):
         if request.method == 'POST':
             userForm = volunteerUserSignupForm(request.POST)
             infoForm = volunteerSignupForm(request.POST)
+            print (infoForm)
             if userForm.is_valid():
                 newUser = userForm.save(commit=False)
                 if infoForm.is_valid():
@@ -73,6 +74,7 @@ class VolunteerForm(generic.View):
                     newUser.save()
                     newVolunteer.user = User.objects.get(username=newUser.username)
                     newVolunteer.save()
+                    print (newVolunteer.id)
 
                     return HttpResponse(newVolunteer.id)
 

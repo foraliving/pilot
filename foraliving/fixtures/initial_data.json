@@ -152,20 +152,6 @@
     }
   },
   {
-    "model": "foraliving.Skill",
-    "pk": 1,
-    "fields": {
-      "name": "numerical"
-    }
-  },
-  {
-    "model": "foraliving.Interest",
-    "pk": 1,
-    "fields": {
-      "name": "education"
-    }
-  },
-  {
     "model": "foraliving.Volunteer_User_Add_Ons",
     "pk": 1,
     "fields": {
@@ -180,8 +166,8 @@
       "yearsSinceHSGraduation": 3,
       "collegeLevel": 1,
       "collegeMajor": "B.S. Social Science",
-      "skills": [1],
-      "interests": [1]
+      "skills": [],
+      "interests": []
     }
   },
   {
@@ -508,8 +494,8 @@
       "yearsSinceHSGraduation": 4,
       "collegeLevel": 3,
       "collegeMajor": "B.S. Social Science",
-      "skills": [1],
-      "interests": [1]
+      "skills": [],
+      "interests": []
     }
   }
 ]

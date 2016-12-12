@@ -47,13 +47,16 @@ class Contact(LoginRequiredMixin, generic.View):
         if request.method == 'POST':
             email = request.POST.get("email")
             first_name = request.POST.get("first_name")
-            last_name = request.POST.get("lst_name")
+            last_name = request.POST.get("last_name")
             email_to = email
             domain = request.build_absolute_uri('/')[:-1]
             url = domain + "/volunteer/create/?email=" + email_to
-            message = EmailMessage('volunteer/invitation.html', {'url': url}, "noelia.pazos@viaro.net",
+            message = EmailMessage('volunteer/invitation.html',
+                                   {'url': url, 'first_name': first_name, 'last_name': last_name},
+                                   "noelia.pazos@viaro.net", cc=["noelia3pazos@gmail.com"],
                                    to=[email_to])
             message.send()
+            print (message)
         messages.success(request, "Invitation Sent Successfully")
         return redirect(self.contact_view)
 
