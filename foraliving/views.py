@@ -49,11 +49,15 @@ class VolunteerForm(generic.View):
         :return:
         """
         email = request.GET.get('email')
+        phone = request.GET.get('phone')
+        last_name = request.GET.get('last_name')
+        first_name = request.GET.get('first_name')
+        workTitle = request.GET.get('workTitle')
         userForm = volunteerUserSignupForm()
         infoForm = volunteerSignupForm()
 
         return render(request, self.volunteer_view,
-                      {'userForm': userForm, 'infoForm': infoForm, 'email': email})
+                      {'userForm': userForm, 'infoForm': infoForm, 'email': email, 'phone': phone, 'first_name': first_name, 'last_name': last_name, 'workTitle': workTitle})
 
     def post(self, request):
         """

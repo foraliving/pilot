@@ -201,6 +201,18 @@
         {% if email %}
         $("#id_email").val("{{email}}");
         {% endif %}
+        {% if phone %}
+        $("#id_phone").val("{{phone}}");
+        {% endif %}
+        {% if first_name %}
+        $("#id_first_name").val("{{first_name}}");
+        {% endif %}
+        {% if last_name %}
+        $("#id_last_name").val("{{last_name}}");
+        {% endif %}
+        {% if workTitle %}
+        $("#id_workTitle").val("{{workTitle}}");
+        {% endif %}
 
 
         /*method to validate the phone */
@@ -336,6 +348,9 @@
                 },
                 yearsInIndustry: {
                     required: "Number of years in this industry is required."
+                },
+                canGetText: {
+                    required: "Can we text on this number is required."
                 }
             }
         });

@@ -48,6 +48,8 @@ class Contact(LoginRequiredMixin, generic.View):
             email = request.POST.get("email")
             first_name = request.POST.get("first_name")
             last_name = request.POST.get("last_name")
+            phone = request.POST.get("phone")
+            workTitle = request.POST.get("work_title")
             if email == "":
                 messages.error(request, "Email is required.")
             elif first_name == "":
@@ -57,9 +59,10 @@ class Contact(LoginRequiredMixin, generic.View):
             else:
                 email_to = email
                 domain = request.build_absolute_uri('/')[:-1]
-                url = domain + "/volunteer/create/?email=" + email_to
+                url = domain + "/volunteer/create/?email=" + email_to + "&phone=" + phone \
+                      + "&workTitle=" + workTitle + "&first_name=" + first_name + "&last_name=" + last_name;
                 message = EmailMessage('volunteer/invitation.html',
-                                       {'url': url, 'first_name': first_name, 'last_name': last_name},
+                                       {'url': url, 'first_name': first_name, 'last_name': last_name, 'phone': phone, 'workTitle': workTitle},
                                        "noelia.pazos@viaro.net", cc=["jacquie@foraliving.org"],
                                        to=[email_to])
                 message.send()

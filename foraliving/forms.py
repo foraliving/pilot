@@ -29,7 +29,7 @@ class volunteerSignupForm(forms.ModelForm):
         (4, "doctoral"),
         (5, "none"),)
     canGetText = forms.TypedChoiceField(coerce=lambda x: x == 'True', choices=((True, 'Yes'), (False, 'No')),
-                                        widget=forms.RadioSelect, label="Can we text you on thi number?", required=True)
+                                        widget=forms.RadioSelect, label="Can we text you on this number?", required=True)
     isBusinessOwner = forms.BooleanField(label="I am a business owner", initial=True, required=False)
     yearsInIndustry = forms.CharField(label="Number of years in this industry", required=True,
                                       widget=forms.NumberInput(attrs={'size': '10', 'placeholder': ''}))
