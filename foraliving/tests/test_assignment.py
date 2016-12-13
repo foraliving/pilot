@@ -28,7 +28,7 @@ class AssignmentPage(TestCase):
         response = self.client.get(
             reverse('assignment', kwargs={'interview_id': interview.id}))
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, ' Conduct interview with <a href="/foraliving/volunteer/profile/1/">Vivian')
+        self.assertContains(response, ' Conduct interview with <a href="/foraliving/volunteer/profile/1/1">Vivian')
 
     def test_group_name(self):
         """
@@ -120,28 +120,6 @@ class AssignmentPage(TestCase):
 
         count = Interview_Question_Map.objects.filter(interview=interview).count()
         self.assertEquals(count, 5)
-
-
-    def test_disable_edit_question(self):
-        """
-        Test for disable the edit question when the interview has videos recorded
-        :return:
-        """
-        interview = Interview.objects.get(pk=1)
-        question = Question.objects.get(pk=1)
-        self.user = User.objects.get(pk=2)
-        user = User_Add_Ons.objects.get(user=self.user)
-        interview_question = Interview_Question_Map(interview=interview, question=question)
-        interview_question.save()
-        video = Video(name="Test", url="www.foraliving.org", tags="student", created_by=user,
-                      creation_date="2016-11-11", status="Approved by teacher")
-        video.save()
-        interview_question_video = Interview_Question_Video_Map(interview_question=interview_question, video=video)
-        interview_question_video.save()
-        response = self.client.get(
-            reverse('assignment', kwargs={'interview_id': interview.id}))
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(response, '"location.href=\'/foraliving/select_question_edit/1/\'" disabled')
 
 
 

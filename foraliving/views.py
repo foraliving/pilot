@@ -64,7 +64,11 @@ class VolunteerForm(generic.View):
         if request.method == 'POST':
             userForm = volunteerUserSignupForm(request.POST)
             infoForm = volunteerSignupForm(request.POST)
-            print (infoForm)
+
+            if not userForm.is_valid() or not infoForm.is_valid():
+                return render(request, self.volunteer_view,
+                      {'userForm': userForm, 'infoForm': infoForm})
+
             if userForm.is_valid():
                 newUser = userForm.save(commit=False)
                 if infoForm.is_valid():
@@ -74,8 +78,6 @@ class VolunteerForm(generic.View):
                     newUser.save()
                     newVolunteer.user = User.objects.get(username=newUser.username)
                     newVolunteer.save()
-                    print (newVolunteer.id)
-
                     return HttpResponse(newVolunteer.id)
 
 

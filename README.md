@@ -26,6 +26,7 @@ You should note that most (if not all) the dependencies will be installed from p
   * `pip install BeautifulSoup`
   * `pip install django-mail-templated`
   * `pip install django-categories`
+  * `pip install django-bootstrap3`
 
 
 
