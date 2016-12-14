@@ -2,8 +2,8 @@
 {% load staticfiles %}
 {% block list %}
 {% if user_type == "teacher" %}
-<li><a href="">Student</a></li>
-<li><a href="">Volunteers</a></li>
+<li><a href="{% url 'teacher_class' %}">Student</a></li>
+<li><a href="{%url 'teacher_volunteer'%}">Volunteers</a></li>
 <li><a href="">Videos</a></li>
 {% elif user_type == "volunteer" %}
 <li><a href="{% url 'volunteer_profile'  user_id=request.user.id interview_id=0%}">Profile</a></li>

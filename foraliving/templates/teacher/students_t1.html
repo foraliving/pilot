@@ -1,0 +1,39 @@
+{% extends 'teacher/base.html' %}
+{% load bootstrap3 %}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery=1 %}
+{% block list %}
+<li><a class="active" href="{% url 'teacher_class' %}">Student</a></li>
+<li><a href="{%url 'teacher_volunteer'%}">Volunteers</a></li>
+<li><a href="{%url 'teacher_videos'%}">Videos</a></li>
+{% endblock %}
+{% bootstrap_messages %}
+{% load staticfiles %}
+{% block styles %}
+<link rel="stylesheet" href="{% static 'UX/css/student/recording.css' %}">
+<link rel="stylesheet" href="{% static 'UX/css/simpleGridTemplate.css' %}">
+{% endblock %}
+{% block body %}
+<div class="container">
+    <div class="form-group">
+        <div class="col-sm-4">
+            <select class="form-control" id="class" name="class">
+                {%for data in class_info%}
+                <option value="{{data.id}}">{{data.name}}</option>
+                {%endfor%}</select>
+        </div>
+        <div class="col-sm-4">
+            <select class="form-control" id="options" name="options">
+                <option value="0">Classroom info</option>
+                <option value="1">Assignment</option>
+                <option value="2">Add Assignment</option>
+            </select>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+
+</script>
+{% endblock %}

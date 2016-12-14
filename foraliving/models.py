@@ -79,7 +79,7 @@ class Volunteer_User_Add_Ons(models.Model):
     The name of the model is incorrect, but for the moment doesn't change because it's implies to update many interfaces.
     """
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    phone = models.CharField(max_length=12, )
+    phone = models.CharField(max_length=13,)
     canGetText = models.BooleanField(default=True)
     workTitle = models.CharField(max_length=25)
     isBusinessOwner = models.BooleanField(default=True)

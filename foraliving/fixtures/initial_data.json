@@ -183,6 +183,18 @@
     }
   },
   {
+    "model": "foraliving.Class",
+    "pk": 2,
+    "fields": {
+      "school": 1,
+      "lms": 1,
+      "teacher": 2,
+      "name": "Math",
+      "academic_year": 2,
+      "semester": 1
+    }
+  },
+  {
     "model": "foraliving.Assignment",
     "pk": 1,
     "fields": {

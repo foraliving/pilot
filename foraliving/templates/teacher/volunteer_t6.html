@@ -1,0 +1,25 @@
+{% extends 'teacher/base.html' %}
+{% load bootstrap3 %}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery=1 %}
+{% bootstrap_messages %}
+{% block list %}
+<li><a  href="{% url 'teacher_class' %}">Student</a></li>
+<li><a class="active" href="{%url 'teacher_volunteer'%}">Volunteers</a></li>
+<li><a href="{%url 'teacher_videos'%}">Videos</a></li>
+{% endblock %}
+{% load staticfiles %}
+{% block styles %}
+<link rel="stylesheet" href="{% static 'UX/css/student/recording.css' %}">
+<link rel="stylesheet" href="{% static 'UX/css/simpleGridTemplate.css' %}">
+{% endblock %}
+{% block body %}
+<div class="container">
+    <h2 style="text-align: center;"> Assign a volunteer to be interviewed </h2>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+
+</script>
+{% endblock %}

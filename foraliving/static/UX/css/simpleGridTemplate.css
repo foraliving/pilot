@@ -104,7 +104,11 @@ body {
 
 	}
 
-
+.active {
+    color: #555;
+    background-color: transparent;
+    border-bottom: 3px solid #74bf43;
+}
 
 /* Section */
 
