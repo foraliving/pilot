@@ -81,11 +81,11 @@ class QuestionInterview(LoginRequiredMixin, generic.View):
             new_data = Interview_Question_Map(interview_id=interview_id, question_id=practice_question.id)
             new_data.save()
         conn = psycopg2.connect(
-            database="fal_dev",
-            host="localhost",
-            port=int(5433),
-            user="noelia",
-            password="v1@r0.n3t",
+            database=settings.DATABASE,
+            host=settings.HOST,
+            port=settings.PORT,
+            user=settings.USER,
+            password=settings.PASSWORD,
             connect_timeout=3
         )
 
