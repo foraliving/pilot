@@ -457,17 +457,6 @@
     }
   },
   {
-    "model": "foraliving.interview",
-    "pk": 3,
-    "fields": {
-      "interviewer": 3,
-      "interviewee": 1,
-      "group": 1,
-      "date": "2016-11-03T00:00:00Z",
-      "assignment": 2
-    }
-  },
-  {
     "model": "foraliving.video",
     "pk": 1,
     "fields": {

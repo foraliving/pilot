@@ -4,8 +4,9 @@ from django.conf import settings
 from django.shortcuts import render, redirect, get_object_or_404, reverse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import generic
+from django.contrib.auth.models import User
 from .forms import *
-from foraliving.models import Class, User_Add_Ons
+from foraliving.models import Class, User_Add_Ons, Volunteer_User_Add_Ons
 
 
 class TeacherStudentT1(LoginRequiredMixin, generic.View):
@@ -34,7 +35,8 @@ class TeacherVolunteerT6(LoginRequiredMixin, generic.View):
         :param request:
         :return:
         """
-        volunteers = Volunteer_User_Add_Ons.objects.all()
+        volunteer_initial = Volunteer_User_Add_Ons.objects.values('user')
+        volunteers = User.objects.filter(pk__in=volunteer_initial)
         return render(request, self.question_view, {'volunteers': volunteers})
 
 class TeacherVideosT8(LoginRequiredMixin, generic.View):
