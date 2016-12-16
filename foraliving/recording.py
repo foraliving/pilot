@@ -3,6 +3,7 @@ import psycopg2
 from django.db import connection
 from django.http import JsonResponse
 cursor = connection.cursor()
+from django.db import connection
 from datetime import datetime
 from django.conf import settings
 from django.shortcuts import render_to_response, get_object_or_404, render, redirect
@@ -81,11 +82,11 @@ class QuestionInterview(LoginRequiredMixin, generic.View):
             new_data = Interview_Question_Map(interview_id=interview_id, question_id=practice_question.id)
             new_data.save()
         conn = psycopg2.connect(
-            database=settings.DATABASE,
-            host=settings.HOST,
-            port=settings.PORT,
-            user=settings.USER,
-            password=settings.PASSWORD,
+            database=connection.settings_dict['NAME'],
+            host=connection.settings_dict['HOST'],
+            port=connection.settings_dict['PORT'],
+            user=connection.settings_dict['USER'],
+            password=connection.settings_dict['PASSWORD'],
             connect_timeout=3
         )
 
@@ -111,6 +112,7 @@ class QuestionInterview(LoginRequiredMixin, generic.View):
                     question_video = Interview_Question_Video_Map.objects.filter(interview_question=interview.id).first()
                     all[3] = question_video.video.url
             general_videos.append(all)
+
         return render(request, self.question_view,
                       {'questions': questions, 'interview': interview_id, 'results': general_videos})
 

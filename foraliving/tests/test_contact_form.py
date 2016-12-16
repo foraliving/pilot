@@ -15,7 +15,7 @@ class ContactForm(TestCase):
         :return:
         """
         self.client = Client()
-        self.client.login(username='student_admin', password='admin123')
+        self.client.login(username='teacher_admin', password='admin123')
 
 
     def test_first_name_required(self):
@@ -60,7 +60,7 @@ class ContactForm(TestCase):
         """
         response = self.client.post(
             reverse('contact'),
-            data={'first_name': 'Narcy', 'last_name': 'Pazos', 'email': 'noelia.pazos@viaro.net'},
+            data={'first_name': 'Narcy', 'last_name': 'Pazos', 'email': 'noelia.pazos@viaro.net', 'phone': '181-1587478', 'work_title': 'Teacher'},
             follow=True)
         self.assertRedirects(response, 'volunteer/contact.html',
                              msg_prefix='Invitation Sent Successfully')

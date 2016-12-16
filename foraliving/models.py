@@ -1,7 +1,6 @@
 # Add documentation link
 from __future__ import unicode_literals
 from django.contrib.auth.models import User, Group
-from categories.models import Category
 from categories.models import CategoryBase
 from django.db import models
 from datetime import datetime
@@ -167,7 +166,6 @@ class Interview(models.Model):
 
     def __unicode__(self):
         return 'Interview of ' + str(interviewee) + ' by ' + str(interviewer)
-
 
 class Question(models.Model):
     name = models.CharField(max_length=128)

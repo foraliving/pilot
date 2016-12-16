@@ -22,20 +22,22 @@ class Videos(LoginRequiredMixin, generic.View):
     def get(self, request):
         videos = ""
         school = None
-        user_add_ons = User_Add_Ons.objects.filter(user=request.user.id)
-        if user_add_ons:
+        user  = User.objects.get(id=request.user.id)
+        group = user.groups.filter(name="Volunteer").exists()
+        if group:
+            user_type = "volunteer"
+            videos = Interview_Question_Video_Map.objects.all().order_by('-video')
+
+        else:
             user_add_ons = User_Add_Ons.objects.get(user=request.user.id)
-            classname = Class.objects.filter(teacher=user_add_ons)
-            if classname:
-                user_type="teacher"
+            teacher = user.groups.filter(name="Teacher").exists()
+            if teacher:
+                user_type = "teacher"
             else:
                 user_type = "student"
             school = School.objects.get(pk=user_add_ons.school.id)
             user_school = User_Add_Ons.objects.filter(school=school)
             videos = Video.objects.filter(created_by__in=user_school)
             videos = Interview_Question_Video_Map.objects.filter(video__in=videos).order_by('-video')
-        else:
-            user_type = "volunteer"
-            videos = Interview_Question_Video_Map.objects.all().order_by('-video')
 
         return render(request, self.conduct_view, {'videos': videos, 'school': school, 'user_type': user_type})

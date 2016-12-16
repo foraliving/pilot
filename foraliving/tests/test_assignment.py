@@ -35,13 +35,13 @@ class AssignmentPage(TestCase):
         Test to verify that the group name is displayed on the assignment page
         :return:
         """
-        group = Group.objects.get(name='Student')
+        group = Group.objects.get(name='Science')
         group.user_set.add(2)
         interview = Interview.objects.get(pk=1)
         response = self.client.get(
             reverse('assignment', kwargs={'interview_id': interview.id}))
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, 'Student Assignment')
+        self.assertContains(response, 'Science Assignment')
 
     def test_verify_user_without_group(self):
         """

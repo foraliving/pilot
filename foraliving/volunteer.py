@@ -41,7 +41,10 @@ class Contact(LoginRequiredMixin, generic.View):
     login_url = settings.LOGIN_URL
 
     def get(self, request):
-        return render(request, self.contact_view)
+        if request.user.is_superuser:
+            return render(request, self.contact_view)
+        else:
+            return redirect(self.login_url)
 
     def post(self, request):
         if request.method == 'POST':
@@ -59,8 +62,7 @@ class Contact(LoginRequiredMixin, generic.View):
             else:
                 email_to = email
                 domain = request.build_absolute_uri('/')[:-1]
-                url = domain + "/volunteer/create/?email=" + email_to + "&phone=" + phone \
-                      + "&workTitle=" + workTitle + "&first_name=" + first_name + "&last_name=" + last_name;
+                url = domain + "/volunteer/create/?email=" + email_to + "&phone=" + phone + "&workTitle=" + workTitle + "&first_name=" + first_name + "&last_name=" + last_name;
                 message = EmailMessage('volunteer/invitation.html',
                                        {'url': url, 'first_name': first_name, 'last_name': last_name, 'phone': phone, 'workTitle': workTitle},
                                        "noelia.pazos@viaro.net", cc=["jacquie@foraliving.org"],
@@ -76,23 +78,30 @@ class VolunteerEdit(LoginRequiredMixin, generic.View):
     """
     url_volunteer_edit = 'volunteer/profile_edit.html'
     url_volunteer_list = 'volunteer_profile'
+    login_url = settings.LOGIN_URL
 
     def get(self, request, user_id):
         """
             Return the volunteer information to edit the profile.
         """
-        volunteer = get_object_or_404(Volunteer_User_Add_Ons, user=user_id)
-        infoForm = volunteerSignupForm(instance=volunteer)
+        user = User.objects.get(pk=request.user.id)
+        volunteer_user = User.objects.get(pk=user_id)
+        if user.id == volunteer_user.id:
+            volunteer = get_object_or_404(Volunteer_User_Add_Ons, user=user_id)
+            infoForm = volunteerSignupForm(instance=volunteer)
 
-        return render(
-            request,
-            self.url_volunteer_edit,
-            {
-                'infoForm': infoForm,
-                'user_id': volunteer.user.id,
-                'volunteer': volunteer
-            }
-        )
+            return render(
+                request,
+                self.url_volunteer_edit,
+                {
+                    'infoForm': infoForm,
+                    'user_id': volunteer.user.id,
+                    'volunteer': volunteer
+                }
+            )
+        else:
+            return redirect(self.login_url)
+
 
     def post(self, request, user_id):
         """

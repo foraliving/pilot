@@ -10,6 +10,36 @@
     }
   },
   {
+    "model": "auth.group",
+    "pk": 2,
+    "fields": {
+      "name": "Teacher",
+      "permissions": [
+        40
+      ]
+    }
+  },
+  {
+    "model": "auth.group",
+    "pk": 3,
+    "fields": {
+      "name": "Volunteer",
+      "permissions": [
+        40
+      ]
+    }
+  },
+  {
+    "model": "auth.group",
+    "pk": 4,
+    "fields": {
+      "name": "Science",
+      "permissions": [
+        40
+      ]
+    }
+  },
+  {
     "pk": 1,
     "model": "auth.user",
     "fields": {
@@ -17,10 +47,12 @@
       "first_name": "Vivian",
       "last_name": "Aguilar",
       "is_active": true,
-      "is_superuser": true,
+      "is_superuser": false,
       "is_staff": true,
       "last_login": "2008-09-05 12:40:34",
-      "groups": [],
+      "groups": [
+        3
+      ],
       "user_permissions": [],
       "password": "pbkdf2_sha256$30000$pOAjkIh9uSt3$W3ZN4v4dui8TDQhhvWU5ucDu/G1wqljjwfsGKgN5rbQ=",
       "email": "admin@foraliving.org"
@@ -34,11 +66,11 @@
       "first_name": "Noelia",
       "last_name": "Pazos",
       "is_active": true,
-      "is_superuser": true,
+      "is_superuser": false,
       "is_staff": true,
       "last_login": "2008-09-05 12:40:34",
       "groups": [
-        1
+        1,4
       ],
       "user_permissions": [],
       "password": "pbkdf2_sha256$30000$pOAjkIh9uSt3$W3ZN4v4dui8TDQhhvWU5ucDu/G1wqljjwfsGKgN5rbQ=",
@@ -56,7 +88,9 @@
       "is_superuser": true,
       "is_staff": true,
       "last_login": "2008-09-05 12:40:34",
-      "groups": [],
+      "groups": [
+        2
+      ],
       "user_permissions": [],
       "password": "pbkdf2_sha256$30000$pOAjkIh9uSt3$W3ZN4v4dui8TDQhhvWU5ucDu/G1wqljjwfsGKgN5rbQ=",
       "email": "jacquieued@gmail.com"
@@ -73,7 +107,9 @@
       "is_superuser": true,
       "is_staff": true,
       "last_login": "2008-09-05 12:40:34",
-      "groups": [],
+      "groups": [
+        3
+      ],
       "user_permissions": [],
       "password": "pbkdf2_sha256$30000$pOAjkIh9uSt3$W3ZN4v4dui8TDQhhvWU5ucDu/G1wqljjwfsGKgN5rbQ=",
       "email": "avni321@gmail.com"

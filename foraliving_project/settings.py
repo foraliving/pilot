@@ -145,9 +145,3 @@ STATIC_URL = '/static/'
 PROJECT_PATH = os.path.realpath(os.path.dirname(__file__))
 MEDIA_ROOT = PROJECT_PATH + '/media'
 MEDIA_URL = '/media/'
-
-DATABASE = "fal_dev"
-HOST = "localhost"
-PORT = int(5433)
-USER = "noelia"
-PASSWORD = "v1@r0.n3t"

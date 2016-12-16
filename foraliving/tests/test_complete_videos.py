@@ -35,13 +35,13 @@ class CompleteVideos(TestCase):
             If the user has group, the complete videos interface should contain the group name
         :return:
         """
-        group = Group.objects.get(name='Student')
+        group = Group.objects.get(name='Science')
         group.user_set.add(2)
         interview = Interview.objects.get(pk=1)
         response = self.client.get(
             reverse('complete_video', kwargs={'interview_id': interview.id}))
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, 'Student Assignment')
+        self.assertContains(response, 'Science Assignment')
 
     def test_verify_user_without_group(self):
         """
@@ -49,8 +49,8 @@ class CompleteVideos(TestCase):
         :return:
         """
         self.client.logout()
-        self.client.login(username="volunteer_admin", password="admin123")
-        self.user = User.objects.get(pk=1)
+        self.client.login(username="student_admin2", password="admin123")
+        self.user = User.objects.get(pk=2)
         interview = Interview.objects.get(pk=1)
         response = self.client.get(
             reverse('complete_video', kwargs={'interview_id': interview.id}))
