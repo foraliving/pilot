@@ -44,13 +44,11 @@
                 </div>
                 <div id="navbar" class="navbar-collapse collapse" aria-expanded="false" style="height: 1px;">
                     <ul class="nav navbar-nav navbar-right">
-                        <li class="navbar-text" style="margin-left: 15px;">
-                            <i class="fa fa-user"></i> {% user_display request.user %}
-                        </li>
                         {% block list %}
                         {% endblock %}
-                        <li><a id="account_logout" href="{% url 'account_logout' %}"><i class="fa fa-power-off"></i> Log
-                            out</a></li>
+                        <li><a id="account_logout" href="{% url 'account_logout' %}">{% user_display request.user %}
+                            <br> Logout <i class="fa fa-power-off"></i>
+                        </a></li>
                     </ul>
                     </li>
                     </ul>
@@ -61,7 +59,7 @@
 </header>
 
 {% block body_base %}
-<section id="content_body">
+<section id="content_body" style="padding: 45px 0px;">
     <div class="container">
         {% include "_messages.html" %}
         {% block body %}

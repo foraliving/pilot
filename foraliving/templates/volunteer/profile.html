@@ -6,7 +6,7 @@
 <li><a href="{% url 'assignment' interview_id=interview%}">Assignment</a></li>
 <li><a href="{% url 'complete_video' interview_id=interview %}">Completed Videos</a></li>
 {% else %}
-<li><a href="{% url 'volunteer_profile'  user_id=request.user.id interview_id=0%}">Profile</a></li>
+<li class="active"><a href="{% url 'volunteer_profile'  user_id=request.user.id interview_id=0%}">Profile</a></li>
 <li><a href="">Get Interviewed</a></li>
 {% endif %}
 {% endblock %}
@@ -50,19 +50,19 @@
         </a>
         {% endif %}
     </h2>
-        <div class="volunteer-title">Title: <p class="volunteer-description"> {{volunteer.workTitle}}</p>
+        <div class="volunteer-title">Title:<p class="volunteer-description"> &nbsp;{{volunteer.workTitle}}</p>
         </div>
-        <div class="volunteer-title">Industry: <p class="volunteer-description">
+        <div class="volunteer-title">Industry:&nbsp; <p class="volunteer-description">
             {{volunteer.workIndustry}}</p></div>
-        <div class="volunteer-title">Linkedin profile: <p class="volunteer-description">
+        <div class="volunteer-title">Linkedin profile: &nbsp;<p class="volunteer-description">
             {{volunteer.linkedinProfile}}</p></div>
-        <div class="volunteer-title">Years since high school graduation: <p class="volunteer-description">
+        <div class="volunteer-title">Years since high school graduation: &nbsp;<p class="volunteer-description">
             {{volunteer.get_yearsSinceHSGraduation_display}}</p></div>
-        <div class="volunteer-title">Highest college degree: <p class="volunteer-description">
+        <div class="volunteer-title">Highest college degree: &nbsp;<p class="volunteer-description">
             {{volunteer.get_collegeLevel_display}}</p></div>
-        <div class="volunteer-title">College major(s): <p class="volunteer-description">
+        <div class="volunteer-title">College major(s): &nbsp;<p class="volunteer-description">
             {{volunteer.collegeMajor}}</p></div>
-        <div class="volunteer-title" style="display: block;">Skills related to your job, role and industry:
+        <div class="volunteer-title" style="display: block;">Skills related to your job, role and industry:&nbsp;
             <br>
             <p class="volunteer-description">
                 {% for data in volunteer.skills.all %}
@@ -74,7 +74,7 @@
                 {% endfor %}
             </p>
         </div>
-        <div class="volunteer-title" style="display: block;">Interests that lead you to your career choice:
+        <div class="volunteer-title" style="display: block;">Interests that lead you to your career choice:&nbsp;
             <p class="volunteer-description">
                 {% for data in volunteer.interests.all %}
                 {% if forloop.last %}

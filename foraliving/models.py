@@ -92,11 +92,11 @@ class Volunteer_User_Add_Ons(models.Model):
         (4, 'Have not graduated'),)
     yearsSinceHSGraduation = models.IntegerField(choices=hsGradChoices)
     collegeLevelChoice = (
-        (1, "associate"),
-        (2, "bachelor's"),
-        (3, "master's"),
-        (4, "doctoral"),
-        (5, "none"),)
+        (1, "Associate"),
+        (2, "Bachelor's"),
+        (3, "Master's"),
+        (4, "Doctoral"),
+        (5, "None"),)
     collegeLevel = models.IntegerField(choices=collegeLevelChoice)
     collegeMajor = models.CharField(max_length=128, null=True, blank=True)
     skills = models.ManyToManyField(Skill, null=True, blank=True)

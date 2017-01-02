@@ -37,12 +37,12 @@
                     </div>
                     <div style="text-align: center;" class="col-md-12 col-sm-12 col-xs-12">
                         <button class="btn btn-success" id="yes"
-                                onclick="location.href='{% url 'question_interview' interview_id=1 %}'"
+                                onclick="location.href='{% url 'question_interview' interview_id=interview %}'"
                                 style="display:none;">
                             Next
                         </button>
                         <button class="btn btn-not" id="no"
-                                onclick="location.href='{% url 'question_interview' interview_id=1 %}'"
+                                onclick="location.href='{% url 'question_interview' interview_id=interview %}'"
                                 style="display:none;">I want to
                             continue anyway
                         </button>
@@ -50,7 +50,7 @@
                     <div style="text-align: center; display:none;" class="col-md-12 col-sm-12 col-xs-12"
                          id="other_navigator">
                         <button class="btn btn-success" id="yes"
-                                onclick="location.href='{% url 'question_interview'  interview_id=1 %}'">
+                                onclick="location.href='{% url 'question_interview'  interview_id=interview %}'">
                             Yes
                         </button>
                         <button class="btn btn-not" id="no">No</button>
@@ -58,7 +58,7 @@
 
                     <div class="skip col-md-12 col-sm-12 col-xs-12" style="margin-top: 5%;">
                         <a class="skip" style=text-decoration:none;
-                           href="{% url 'question_interview' interview_id=1 %}">Skip setup
+                           href="{% url 'question_interview' interview_id=interview %}">Skip setup
                             check
                         </a>
                     </div>
