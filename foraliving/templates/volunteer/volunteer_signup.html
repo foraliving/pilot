@@ -136,7 +136,8 @@
                             <div class="row">
                                 <div class="col-md-6 col-sm-6">
                                     <label class="control-label">Please provide some interests that lead you to your
-                                        career choice</label>
+                                        career choice <i style="font-size:18px;" data-toggle="tooltip" class="fa fa-question-circle-o" aria-hidden="true"
+                                                         title="What interests led you to this career? Interests include things like: problem solving, writing and team work."> </i></label>
                                     <input type="text" class="form-control" id="tokenfieldinterest" value=""/>
                                 </div>
                             </div>
@@ -198,6 +199,7 @@
 
 
     $(document).ready(function () {
+         $('[data-toggle="tooltip"]').tooltip();
         {% if email %}
         $("#id_email").val("{{email}}");
         {% endif %}

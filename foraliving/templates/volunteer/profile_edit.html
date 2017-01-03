@@ -110,7 +110,9 @@
                             <div class="row">
                                 <div class="col-md-6 col-sm-6">
                                     <label class="control-label">Please provide some interests that lead you to your
-                                        career choice</label>
+                                        career choice <i style="font-size:18px;" data-toggle="tooltip"
+                                                         class="fa fa-question-circle-o" aria-hidden="true"
+                                                         title="What interests led you to this career? Interests include things like: problem solving, writing and team work."> </i></label>
                                     <input type="text" class="form-control" id="tokenfieldinterest" value="{% for data in volunteer.interests.all %}
                                     {{ data.name }},
                                     {% endfor %}"/>
@@ -132,6 +134,9 @@
 
     /*method to get the skills*/
     $(document).ready(function () {
+
+        $('[data-toggle="tooltip"]').tooltip();
+
         $.getJSON('/categories/', function (responseData) {
             var data = responseData;
             $('#tokenfield').tokenfield({

@@ -30,3 +30,8 @@
     margin-top: -5px;
     margin-left: 10%;
 }
+
+.large.tooltip-inner {
+    max-width: 350px;
+    width: 350px;
+}
