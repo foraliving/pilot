@@ -15,6 +15,12 @@
             arms on the
             back of a chair.</p>
     </div>
+    <div style="text-align: center;">
+        <button class="btn btn-success" style="    width: 70%; height: 50px !important; font-size: 24px; max-height:50px;"
+                onclick="location.href='{% url 'recording_setup_microphone'  interview_id=interview %}'">
+            Got it
+        </button>
+    </div>
     <input type="hidden" value="{{interview}}" id="interview_id">
 
 </container>
