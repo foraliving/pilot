@@ -8,6 +8,25 @@ body {
 
 }
 
+.page-title {
+    font-family: 'Open Sans', sans-serif;
+    color: #99c64c;
+    font-size: 30px;
+    font-weight:600;
+}
+
+.button-general {
+    background-color: #99c64c;
+    color:white;
+    font-size: 14px;
+}
+
+
+.btn.focus, .btn:focus, .btn:hover {
+    background-color: #f9d236;
+    border-color: #e8e8e8;
+}
+
 td.details-control2 {
     background: url('http://www.datatables.net/examples/resources/details_open.png') no-repeat center center;
     cursor: pointer;

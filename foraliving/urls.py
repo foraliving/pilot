@@ -10,7 +10,7 @@ from foraliving.student import CompleteVideo, StudentAssignment, ConductVideo, S
 from foraliving.volunteer import VolunteerProfile, VolunteerEdit
 from foraliving.general import Videos
 from foraliving.volunteer import Contact, editSkill
-from foraliving.teacher import TeacherStudentT1, TeacherVolunteerT6, TeacherVideosT8
+from foraliving.teacher import TeacherStudentT1, TeacherVolunteerT6, TeacherVideosT8, asignment_list, get_student
 
 urlpatterns = [
     url(r"^admin/", include(admin.site.urls)),
@@ -52,7 +52,9 @@ urlpatterns = [
     # teacher
     url(r"^teacher/class/$", TeacherStudentT1.as_view(), name='teacher_class'),
     url(r"^teacher/volunteer/list/$", TeacherVolunteerT6.as_view(), name='teacher_volunteer'),
-    url(r"^teacher/videos/$", TeacherVideosT8.as_view(), name='teacher_videos')
+    url(r"^teacher/videos/$", TeacherVideosT8.as_view(), name='teacher_videos'),
+    url(r"^get-assignment/(?P<class_id>\d+)/$", asignment_list, name='assignment_list'),
+    url(r"^get-student/(?P<assignment_id>\d+)/$", get_student, name='student_list')
 
 ]
 
