@@ -146,6 +146,14 @@ class Class(models.Model):
         return str(self.school) + ':' + str(self.teacher)
 
 
+class Student_Class(models.Model):
+    student = models.ForeignKey(User_Add_Ons, on_delete=models.CASCADE, related_name='User_Add_Ons',)
+    falClass = models.ForeignKey(Class, on_delete=models.CASCADE)
+
+    def __unicode__(self):
+        return str(self.student) + ':' + str(self.falClass)
+
+
 class Assignment(models.Model):
     title = models.CharField(max_length=128)
     falClass = models.ForeignKey(Class, on_delete=models.CASCADE)
@@ -154,7 +162,7 @@ class Assignment(models.Model):
     creation_date = models.DateTimeField()
 
     def __unicode__(self):
-        return str(self.title) + ' (' + str(falClass) + ')'
+        return str(self.title) + ' (' + str(self.falClass) + ')'
 
 
 class Interview(models.Model):
