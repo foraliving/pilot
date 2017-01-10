@@ -80,8 +80,9 @@ class VolunteerForm(generic.View):
                     #encrypted password
                     newUser.set_password(newUser.password)
                     newUser.save()
-                    group = Group.objects.get(name='Volunteer')
-                    group.user_set.add(newUser)
+                    type = Type.objects.get(name='Volunteer')
+                    user_type = User_Type.objects.create(type=type, user=newUser)
+                    user_type.save()
                     newVolunteer.user = User.objects.get(username=newUser.username)
                     newVolunteer.save()
                     return HttpResponse(newVolunteer.id)

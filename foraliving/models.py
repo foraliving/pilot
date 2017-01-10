@@ -78,7 +78,7 @@ class Volunteer_User_Add_Ons(models.Model):
     The name of the model is incorrect, but for the moment doesn't change because it's implies to update many interfaces.
     """
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    phone = models.CharField(max_length=13,)
+    phone = models.CharField(max_length=13, )
     canGetText = models.BooleanField(default=True)
     workTitle = models.CharField(max_length=25)
     isBusinessOwner = models.BooleanField(default=True)
@@ -143,11 +143,11 @@ class Class(models.Model):
         verbose_name_plural = 'FAL Classes'
 
     def __unicode__(self):
-        return str(self.school) + ':' + str(self.teacher)
+        return str(self.name) + ':' + str(self.teacher)
 
 
 class Student_Class(models.Model):
-    student = models.ForeignKey(User_Add_Ons, on_delete=models.CASCADE, related_name='User_Add_Ons',)
+    student = models.ForeignKey(User, on_delete=models.CASCADE, related_name='User_Add_Ons', )
     falClass = models.ForeignKey(Class, on_delete=models.CASCADE)
 
     def __unicode__(self):
@@ -175,6 +175,7 @@ class Interview(models.Model):
     def __unicode__(self):
         return 'Interview of ' + str(interviewee) + ' by ' + str(interviewer)
 
+
 class Question(models.Model):
     name = models.CharField(max_length=128)
     created_by = models.ForeignKey(User_Add_Ons, on_delete=models.CASCADE, )
@@ -193,7 +194,7 @@ class Interview_Question_Map(models.Model):
         verbose_name_plural = 'Interview Questions'
 
     def __unicode__(self):
-        return str(self.question) + ' (' + str(interview) + ')'
+        return str(self.question) + ' (' + str(self.interview) + ')'
 
 
 class Answer(models.Model):
@@ -267,6 +268,21 @@ class Assignment_Submission(models.Model):
 
     def __unicode__(self):
         return str(self.group) + ':' + str(self.name)
+
+
+class Type(models.Model):
+    name = models.CharField(max_length=128)
+
+    def __unicode__(self):
+        return str(self.name)
+
+
+class User_Type(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    type = models.ForeignKey(Type)
+
+    def __unicode__(self):
+        return str(self.user) + ':' + str(self.type)
 
 
 class Submission_Interview_Map(models.Model):

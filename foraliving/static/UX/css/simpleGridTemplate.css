@@ -21,6 +21,9 @@ body {
     font-size: 14px;
 }
 
+.my-error-class {
+    color:#FF0000;  /* red */
+}
 
 .btn.focus, .btn:focus, .btn:hover {
     background-color: #f9d236;

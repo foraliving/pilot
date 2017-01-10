@@ -10,7 +10,8 @@ from foraliving.student import CompleteVideo, StudentAssignment, ConductVideo, S
 from foraliving.volunteer import VolunteerProfile, VolunteerEdit
 from foraliving.general import Videos
 from foraliving.volunteer import Contact, editSkill
-from foraliving.teacher import TeacherStudentT1, TeacherVolunteerT6, TeacherVideosT8, asignment_list, get_student
+from foraliving.teacher import TeacherStudentT1, TeacherVolunteerT6, TeacherVideosT8, asignment_list, get_student,\
+    student_list, list_student_group, AssignGroup, uniqueGroup
 
 urlpatterns = [
     url(r"^admin/", include(admin.site.urls)),
@@ -54,7 +55,11 @@ urlpatterns = [
     url(r"^teacher/volunteer/list/$", TeacherVolunteerT6.as_view(), name='teacher_volunteer'),
     url(r"^teacher/videos/$", TeacherVideosT8.as_view(), name='teacher_videos'),
     url(r"^get-assignment/(?P<class_id>\d+)/$", asignment_list, name='assignment_list'),
-    url(r"^get-student/(?P<assignment_id>\d+)/$", get_student, name='student_list')
+    url(r"^get-student/(?P<assignment_id>\d+)/$", get_student, name='student_list'),
+    url(r"^student-list/(?P<class_id>\d+)/$", student_list, name='class_student_list'),
+    url(r"list-student-group", list_student_group, name='list-student_group'),
+    url(r"assign_group", AssignGroup.as_view(), name='assign_group'),
+    url(r"^unique-group/", uniqueGroup, name='uniqueGroup'),
 
 ]
 

@@ -24,7 +24,8 @@ class TeacherStudentT1(LoginRequiredMixin, generic.View):
         """
         user_add_ons = User_Add_Ons.objects.get(user=request.user)
         class_info = Class.objects.filter(teacher=user_add_ons)
-        return render(request, self.question_view, {'class_info': class_info})
+        group_list = Group.objects.all()
+        return render(request, self.question_view, {'class_info': class_info, 'group_list': group_list})
 
     def post(self, request, class_id, option):
         """
@@ -93,21 +94,100 @@ def get_student(request, assignment_id):
     :param class_id:
     :return:
     """
-    conn = psycopg2.connect(
-        database=connection.settings_dict['NAME'],
-        host=connection.settings_dict['HOST'],
-        port=connection.settings_dict['PORT'],
-        user=connection.settings_dict['USER'],
-        password=connection.settings_dict['PASSWORD'],
-        connect_timeout=3
-    )
 
-    cursor_v = conn.cursor()
+    cursor_v = connection.cursor()
     cursor_v.execute(
-        """select auth_user.id, username, first_name, last_name, auth_group.name,
- (Select (first_name || ' ' || last_name) from auth_user inner join foraliving_interview on auth_user.id=foraliving_interview.interviewee_id where assignment_id=%s)
-  as info from auth_user inner join auth_user_groups on auth_user.id=auth_user_groups.user_id inner join auth_group on auth_group.id=auth_user_groups.group_id
-  inner join foraliving_interview
-on auth_group.id=foraliving_interview.group_id where assignment_id = %s group by auth_user.id, username, first_name, last_name, auth_group.name""", [assignment_id, assignment_id])
+        """SELECT au.id, au.username, au.first_name, au.last_name, ag.name, fi.interviewee_id, au2.first_name, au2.last_name
+            FROM auth_user au
+            INNER JOIN auth_user_groups aug ON au.id=aug.user_id
+            INNER JOIN auth_group ag ON ag.id=aug.group_id
+            INNER JOIN foraliving_interview fi ON ag.id=fi.group_id
+            INNER JOIN foraliving_assignment fa ON fi.assignment_id=fa.id
+            INNER JOIN auth_user au2 ON fi.interviewee_id=au2.id
+            WHERE fi.assignment_id =%s
+            GROUP BY au.id, au.username, au.first_name, au.last_name, ag.name, fi.interviewee_id, au2.first_name, au2.last_name""",
+        [assignment_id])
     results = cursor_v.fetchall()
     return JsonResponse({'results': list(results)})
+
+
+def student_list(request, class_id):
+    """
+
+    :param request:
+    :param class_id:
+    :return:
+    """
+
+    cursor_v = connection.cursor()
+    cursor_v.execute(
+        """select au.id, au.username, au.first_name, au.last_name, fi.interviewee_id, au2.first_name, au2.last_name, au2.id,  ag.name
+from auth_user au
+inner join foraliving_student_class fsc on au.id=fsc.student_id
+left join auth_user_groups aug on au.id=aug.user_id
+left join auth_group ag on ag.id=aug.group_id
+left join foraliving_interview fi on ag.id=fi.group_id
+left join auth_user au2 on fi.interviewee_id=au2.id
+where fsc."falClass_id"=%s
+group by au.id, au.username, au.first_name, au.last_name, fi.interviewee_id, au2.first_name, au2.last_name, au2.id, ag.name""",
+        [class_id])
+
+    results = cursor_v.fetchall()
+    return JsonResponse({'results': list(results)})
+
+
+def list_student_group(request):
+    """
+    :param request:
+    :return:
+    """
+    students = request.POST.getlist("selected[]")
+    student = User.objects.filter(pk__in=students)
+
+    leads_as_json = serializers.serialize('json', student)
+    return HttpResponse(leads_as_json, content_type='json')
+
+
+class AssignGroup(LoginRequiredMixin, generic.View):
+    """Generic view to display the teacher student class interface,
+    this will be shown after login success"""
+    login_url = settings.LOGIN_URL
+
+    def post(self, request):
+        """
+        :param request:
+        :return:
+        """
+        students = request.POST.getlist("selected[]")
+        student = User.objects.filter(pk__in=students)
+
+        group_name = request.POST.get("group_name")
+        group = request.POST.get('group')
+        if group_name:
+            print ("hhh")
+            groupObject = Group.objects.create(name=group_name)
+            groupObject.save()
+        else:
+            print ("aaaaa")
+            groupObject = Group.objects.get(pk=group)
+
+        for data in students:
+            print (groupObject)
+            groupObject.user_set.add(data)
+
+        return JsonResponse({'results': list(students)})
+
+
+def uniqueGroup(request):
+    """
+    Method to validate if the username exist on the system
+    :param request:
+    :return:
+    """
+    if request.is_ajax():
+        group = request.GET.get('group')
+        count_group = (Group.objects.filter(name=group).count())
+        if count_group >= 1:
+            return HttpResponse('true')
+        else:
+            return HttpResponse('false')

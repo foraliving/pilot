@@ -4,7 +4,7 @@ from categories.models import CategoryBase
 
 # This should do for the time being. We'll add customization as needed 
 modList = [LMS, LMS_Web_Service, School, User_Add_Ons, Class,
-           Assignment, Question, Answer, Video, Video_Comment, Interview, Volunteer_User_Add_Ons]
+           Assignment, Question, Answer, Video, Video_Comment, Interview, Volunteer_User_Add_Ons, Student_Class, Type, User_Type]
 
 
 #

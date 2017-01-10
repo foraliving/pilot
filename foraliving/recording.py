@@ -81,23 +81,15 @@ class QuestionInterview(LoginRequiredMixin, generic.View):
         if not questions:
             new_data = Interview_Question_Map(interview_id=interview_id, question_id=practice_question.id)
             new_data.save()
-        conn = psycopg2.connect(
-            database=connection.settings_dict['NAME'],
-            host=connection.settings_dict['HOST'],
-            port=connection.settings_dict['PORT'],
-            user=connection.settings_dict['USER'],
-            password=connection.settings_dict['PASSWORD'],
-            connect_timeout=3
-        )
 
         interview_question_map = Interview_Question_Map.objects.filter(interview=interview_id)
 
-        cursor_q = conn.cursor()
+        cursor_q = connection.cursor()
         cursor_q.execute("""SELECT * FROM foraliving_interview_question_map as IQ inner join foraliving_question as Q on IQ.question_id=Q.id WHERE interview_id=%s AND IQ.id NOT IN ( SELECT interview_question_id FROM    foraliving_interview_question_video_map)""", interview_id)
         questions = cursor_q.fetchall()
         cursor_q.close()
 
-        cursor_v = conn.cursor()
+        cursor_v = connection.cursor()
         cursor_v.execute(
             """SELECT Q.name, IQ.id, count(*) from foraliving_interview_question_map as IQ  inner join foraliving_interview_question_video_map as IQV  on IQV.interview_question_id =IQ.id  inner join foraliving_question as Q on Q.id=IQ.question_id where IQ.interview_id=%s group by Q.name, IQ.id""", interview_id)
         results = cursor_v.fetchall()

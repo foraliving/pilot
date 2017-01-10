@@ -30,8 +30,12 @@ class VolunteerProfile(LoginRequiredMixin, generic.View):
         interview_question = Interview_Question_Map.objects.filter(interview__in=interview)
         interview_question_video = Interview_Question_Video_Map.objects.filter(
             interview_question__in=interview_question).order_by('-video')
+
+        user = User.objects.get(id=request.user.id)
+        user_type = User_Type.objects.get(user=user)
+
         return render(request, self.question_view,
-                      {'volunteer': volunteer, 'interview': interview_id, 'videos': interview_question_video})
+                      {'volunteer': volunteer, 'interview': interview_id, 'videos': interview_question_video, 'user_type': user_type.type.name})
 
 
 class Contact(LoginRequiredMixin, generic.View):

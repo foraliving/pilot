@@ -1,13 +1,16 @@
 {% extends 'volunteer/base.html' %}
 {% load staticfiles %}
 {% block list %}
-
-{% if request.user.id != volunteer.user.id %}
-<li><a href="{% url 'assignment' interview_id=interview%}">Assignment</a></li>
-<li><a href="{% url 'complete_video' interview_id=interview %}">Completed Videos</a></li>
-{% else %}
-<li class="active"><a href="{% url 'volunteer_profile'  user_id=request.user.id interview_id=0%}">Profile</a></li>
+{% if user_type == "Teacher" %}
+<li><a href="{% url 'teacher_class' %}">Student</a></li>
+<li><a href="{%url 'teacher_volunteer'%}">Volunteers</a></li>
+<li><a href="{%url 'teacher_videos'%}">Videos</a></li>
+{% elif user_type == "Volunteer" %}
+<li><a href="{% url 'volunteer_profile'  user_id=request.user.id interview_id=0%}">Profile</a></li>
 <li><a href="">Get Interviewed</a></li>
+{% else %}
+<li><a href="">Assignment </a></li>
+<li><a href="">Completed videos</a></li>
 {% endif %}
 {% endblock %}
 {% block styles %}
