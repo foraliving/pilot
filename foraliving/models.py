@@ -160,6 +160,7 @@ class Assignment(models.Model):
     document = models.CharField(max_length=128)
     due_date = models.DateTimeField()
     creation_date = models.DateTimeField()
+    description = models. CharField(max_length=256)
 
     def __unicode__(self):
         return str(self.title) + ' (' + str(self.falClass) + ')'

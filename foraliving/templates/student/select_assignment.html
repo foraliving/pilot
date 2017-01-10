@@ -1,0 +1,50 @@
+{% extends 'student/base.html' %}
+{% load staticfiles %}
+{% block head %}
+<html lang="{{ LANGUAGE_CODE }}">
+<head>
+    <meta charset="utf-8"/>
+    <title></title>
+    {% block viewport %}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% endblock %}
+    {% block styles %}
+    <link rel="stylesheet" href="{% static 'UX/css/student/recording.css' %}">
+    <link rel="stylesheet" href="{% static 'UX/css/simpleGridTemplate.css' %}">
+    {% endblock %}
+    {% block html5shim %}
+    <!-- HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <![endif]-->
+    {% endblock %}
+    {% endblock %}
+</head>
+{% block list %}
+<li class="active"><a href="{% url 'interview_assignment'}">Assignments</a></li>
+{% endblock %}
+{% block body %}
+<div class="panel panel-info">
+    <div class="panel-heading">
+        <div class="row">
+            <div class="col-sm-12 text-center">
+                <h4 class="inline-title">Select one of your assignments below:</h4>
+            </div>
+        </div>
+    </div>
+    <div class="panel-body">
+        <div class="panel-default">
+            <div class="panel-body">
+                {% for result in interview %}
+                <div style="font-size:20px; color: #31708f;"> <a href="{% url 'assignment' interview_id=result.id%}"> {{ result.assignment.title}}</a>
+                    </br>
+                    <p class="paragraph">{{ result.assignment.description}}</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}{% endblock %}
+

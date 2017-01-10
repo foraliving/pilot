@@ -21,7 +21,7 @@
     {% endblock %}
 </head>
 {% block list %}
-<li class="active"><a href="{% url 'assignment' interview_id=interview.id %}">Assignment</a></li>
+<li class="active"><a href="{% url 'assignment_list'%}">Assignments</a></li>
 <li><a href="{% url 'complete_video' interview_id=interview.id%}">Completed Videos</a></li>
 {% endblock %}
 {% block body %}

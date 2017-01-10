@@ -30,6 +30,12 @@ body {
     border-color: #e8e8e8;
 }
 
+.paragraph {
+    text-align: justify;
+    font-size:16px;
+    color:black;
+}
+
 td.details-control2 {
     background: url('http://www.datatables.net/examples/resources/details_open.png') no-repeat center center;
     cursor: pointer;

@@ -6,11 +6,11 @@ from . import views
 from foraliving.recording import RecordingType, RecordingSetupMicrophone, RecordingSetupFace, RecordingSetupBattery, \
     QuestionInterview, Recording, Orientation, SaveRecording, protected_serve
 from foraliving.student import CompleteVideo, StudentAssignment, ConductVideo, SelectQuestion, SelectQuestionEdit, \
-    SendEmail
+    SendEmail, AssignmentList
 from foraliving.volunteer import VolunteerProfile, VolunteerEdit
 from foraliving.general import Videos
 from foraliving.volunteer import Contact, editSkill
-from foraliving.teacher import TeacherStudentT1, TeacherVolunteerT6, TeacherVideosT8, asignment_list, get_student,\
+from foraliving.teacher import TeacherStudentT1, TeacherVolunteerT6, TeacherVideosT8, asignment_list, get_student, \
     student_list, list_student_group, AssignGroup, uniqueGroup
 
 urlpatterns = [
@@ -39,6 +39,7 @@ urlpatterns = [
     url(r'^select_question_edit/(?P<interview_id>\d+)/$', SelectQuestionEdit.as_view(), name='select_question_edit'),
     url(r'^send_video/(?P<video_id>\d+)/$', SendEmail.as_view(), name='send_email'),
     url(r'^video/save/$', SaveRecording.as_view(), name='save_recording'),
+    url(r'^assignment-list/$', AssignmentList.as_view(), name='assignment_list'),
 
     # volunteer uls
     url(r'^volunteer/profile/(?P<user_id>\d+)/(?P<interview_id>\d+)$', VolunteerProfile.as_view(),

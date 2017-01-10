@@ -9,8 +9,8 @@
 <li><a href="{% url 'volunteer_profile'  user_id=request.user.id interview_id=0%}">Profile</a></li>
 <li><a href="">Get Interviewed</a></li>
 {% else %}
-<li><a href="">Assignment </a></li>
-<li><a href="">Completed videos</a></li>
+<li><a href="{% url 'assignment' interview_id=interview %}">Assignments </a></li>
+<li><a href="{% url 'complete_video' interview_id=interview %}">Completed Videos</a></li>
 {% endif %}
 {% endblock %}
 {% block styles %}

@@ -1,7 +1,7 @@
 {% extends 'student/base.html' %}
 {% load staticfiles %}
 {% block list %}
-<li class="active"><a href="{% url 'assignment' interview_id=interview_id %}">Assignment</a></li>
+<li class="active"><a href="{% url 'assignment' interview_id=interview_id %}">Assignments</a></li>
 <li><a href="{% url 'complete_video' interview_id=interview_id%}">Completed Videos</a></li>
 {% endblock %}
 {% block body %}

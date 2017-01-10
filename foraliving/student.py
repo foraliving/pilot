@@ -36,7 +36,7 @@ class CompleteVideo(LoginRequiredMixin, generic.View):
         videos = Interview_Question_Video_Map.objects.filter(interview_question__in=interview_question)
 
         if videos:
-            volunteer = Volunteer_User_Add_Ons.objects.get(pk=videos[0].interview_question.interview.interviewee.id)
+            volunteer = Volunteer_User_Add_Ons.objects.get(user=videos[0].interview_question.interview.interviewee.id)
             for data in videos:
                 if data.video.status == "Under Review by teacher":
                     count = count + 1
@@ -75,9 +75,15 @@ class StudentAssignment(LoginRequiredMixin, generic.View):
             interview_question_video = Interview_Question_Video_Map.objects.filter(interview_question=question.id)
             if interview_question_video:
                 exist_video = True
-        return render(request, self.question_view, {
-            'questions': questions, 'question_number': question_number, 'group': group, 'interview': interview,
-            'exist_video': exist_video})
+
+        group_name = Group.objects.filter(user=request.user.id)
+        count_interview = (Interview.objects.filter(group__in=group_name).count())
+        if count_interview >= 1 and interview_id is not None:
+            return render(request, self.question_view, {
+                'questions': questions, 'question_number': question_number, 'group': group, 'interview': interview,
+                'exist_video': exist_video})
+        else:
+            return redirect('assignment_list')
 
 
 class ConductVideo(LoginRequiredMixin, generic.View):
@@ -181,3 +187,23 @@ class SendEmail(LoginRequiredMixin, generic.View):
         video.status = 'Under Review by teacher'
         video.save()
         return redirect('complete_video', interview_id=interview_question_video.interview_question.interview.id)
+
+
+class AssignmentList(LoginRequiredMixin, generic.View):
+    """Generic View to display the assignment list """
+    login_url = settings.LOGIN_URL
+    conduct_view = 'student/select_assignment.html'
+
+    def get(self, request):
+        try:
+            group = Group.objects.filter(user=request.user.id)
+        except ObjectDoesNotExist:
+            group = None
+        interview = Interview.objects.filter(group__in=group)
+        count_interview = (Interview.objects.filter(group__in=group).count())
+
+        if count_interview ==1:
+            return redirect('assignment', interview_id=interview[0].id)
+        else:
+            return render(request, self.conduct_view, {'interview': interview})
+
