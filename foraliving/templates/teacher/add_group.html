@@ -7,6 +7,7 @@
                 <h4 class="modal-title" id="myModalLabel">Add to group</h4>
             </div>
             <form id="addGroup" class="form" method="post">
+                {% csrf_token %}
                 <div class="modal-body" style="margin: 4px; font-size: 16px;">
                     <div class="form-group">
                         <label>Group name </label>
@@ -32,8 +33,10 @@
                             </thead>
 
                         </table>
-                        <input name="data" value="" type="text" class="form-control"
-                               style="color: white; border: none;">
+                        <div style="color: white; border: none; background: transparent;">
+                            <input name="data" value="" type="text" class="form-control"
+                                   style="color: white; border: none; background: transparent;" readonly="readonly">
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer" style="text-align:center;">

@@ -21,13 +21,17 @@ $(document).ready(function () {
                 opt.text("Select an option");
                 $('#options').append(opt);
                 var opt = $('<option />');
-                opt.val("A1");
-                opt.text("New Assignment");
-                $('#options').append(opt);
-                var opt = $('<option />');
                 opt.val("B2");
                 opt.text("Delete Class");
                 $('#options').append(opt);
+
+                if (data.results == "") {
+                    $('#options').append(opt);
+                    var opt = $('<option />');
+                    opt.val("A1");
+                    opt.text("New Assignment");
+                    $('#options').append(opt);
+                }
 
                 $.each(data.results, function (id, data) {
                     var opt = $('<option />');
@@ -37,8 +41,6 @@ $(document).ready(function () {
                 });
 
                 $("#options").selectpicker('refresh');
-
-                getClass();
             });
 
             return false;
@@ -72,8 +74,28 @@ $(document).ready(function () {
             $.each(data, function (id, data) {
                 $('#students_name').append('<tr><td>' + data.fields.first_name + ' ' + data.fields.last_name + '</td></tr>')
             });
+
+            $.ajax({
+                type: "GET",
+                url: "/foraliving/groups/",
+            }).done(function (data) {
+                $("#group").html("");
+                $("#group").selectpicker('refresh');
+
+                $.each(data, function (id, data) {
+                    var opt = $('<option />');
+                    opt.val(data.pk);
+                    opt.text(data.fields.name);
+                    $('#group').append(opt);
+                });
+                $("#group").selectpicker('refresh');
+            });
         });
         e.preventDefault();
+        $("#group_name").hide();
+        $("#use_group").prop("checked", true);
+        $('input[name=group_name]').val("");
+        $('#group').selectpicker('show');
         $('#add_group').modal();
         $('input[name=data]').val(selected);
     });
@@ -107,12 +129,12 @@ $(document).ready(function () {
         return valid;
 
 
-    }, "This email is already taken! Try another.");
+    }, "This group name is already taken! Try another.");
     $(document).on('click', '#save_group', function (e) {
         var modal = $("#addGroup").validate({
             onkeyup: false,
-            focusout: true,
-            focusInvalid: true,
+            focusout: false,
+            focusInvalid: false,
             submitHandler: function (form) {
                 sendGroup();
             },
@@ -175,54 +197,7 @@ $(document).ready(function () {
 
             }
             else {
-                var assignment_id = $("#options").val();
-
-                $.ajax({
-                    method: "GET",
-                    url: "/foraliving/get-student/" + assignment_id + "/",
-                    contentType: "application/json"
-                }).done(function (data) {
-                    var data_s = data.results;
-
-                    $('#data-table').dataTable().fnClearTable();
-                    var user_table = $("#data-table").DataTable({
-                        'destroy': true,
-                        "paging": false,
-                        'data': data_s,
-                        "columnDefs": [{
-                            "targets": 0,
-                            "render": function (data, type, full, meta) {
-                                return '<div> </div>';
-                            }
-                        }, {
-                            "targets": 1,
-                            "render": function (data, type, full, meta) {
-                                if (full[4] != null) {
-                                    return "<div>" + full[1] + "<a href=''> (" + full[4] + ")</a></div>";
-                                }
-                                else {
-                                    return "<div><a href=''> (" + full[1] + ")</a></div>";
-                                }
-                            }
-                        }, {
-                            "targets": 3,
-                            "render": function (data, type, full, meta) {
-                                return full[2];
-                            }
-                        }, {
-                            "targets": 4,
-                            "render": function (data, type, full, meta) {
-                                return full[3];
-                            }
-                        }, {
-                            "targets": 2,
-                            "render": function (data, type, full, meta) {
-                                return "<div> <a href='/foraliving/volunteer/profile/" + full[5] + "/0'>" + full[6] + " " + full[7] + "</a> <i class='fa fa-btn fa-close' style='margin-left: 10px;' title='Delete'></i>" + "</a>" + "</div>";
-                            }
-                        }
-                        ]
-                    });
-                });
+                getClass();
 
             }
         }
@@ -232,7 +207,60 @@ $(document).ready(function () {
     });
 
 
+    function getAssignment() {
+        var assignment_id = $("#options").val();
+
+        $.ajax({
+            method: "GET",
+            url: "/foraliving/get-student/" + assignment_id + "/",
+            contentType: "application/json"
+        }).done(function (data) {
+            var data_s = data.results;
+
+            $('#data-table').dataTable().fnClearTable();
+            var user_table = $("#data-table").DataTable({
+                'destroy': true,
+                "paging": false,
+                'data': data_s,
+                "columnDefs": [{
+                    "targets": 0,
+                    "render": function (data, type, full, meta) {
+                        return '<div> </div>';
+                    }
+                }, {
+                    "targets": 1,
+                    "render": function (data, type, full, meta) {
+                        if (full[4] != null) {
+                            return "<div>" + full[1] + "<a href=''> (" + full[4] + ")</a></div>";
+                        }
+                        else {
+                            return "<div><a href=''> (" + full[1] + ")</a></div>";
+                        }
+                    }
+                }, {
+                    "targets": 3,
+                    "render": function (data, type, full, meta) {
+                        return full[2];
+                    }
+                }, {
+                    "targets": 4,
+                    "render": function (data, type, full, meta) {
+                        return full[3];
+                    }
+                }, {
+                    "targets": 2,
+                    "render": function (data, type, full, meta) {
+                        return "<div> <a href='/foraliving/volunteer/profile/" + full[5] + "/0'>" + full[6] + " " + full[7] + "</a> <i class='fa fa-btn fa-close' style='margin-left: 10px;' title='Delete'></i>" + "</a>" + "</div>";
+                    }
+                }
+                ]
+            });
+        });
+    }
+
+
     function getClass() {
+        var assignment_id = $("#options").val();
         var class_id = $("#classname").val();
         var url = "/foraliving/student-list/" + class_id + "/";
         $.ajax({
@@ -253,7 +281,7 @@ $(document).ready(function () {
                     "orderable": false,
                     "className": 'dt-body-center',
                     "render": function (data, type, full, meta) {
-                        if (full[8] === null) {
+                        if (full[8] == null || (full[8] == full[2] && full[4] == "Add")) {
                             return '<div class="checkboxes"><input type="checkbox" name="student" value="' + full[0] + '"></div>';
                         }
                         else {
@@ -263,7 +291,7 @@ $(document).ready(function () {
                 }, {
                     "targets": 1,
                     "render": function (data, type, full, meta) {
-                        if (full[8] != null) {
+                        if (full[8] != null && full[8] != full[2]) {
                             return "<div>" + full[1] + "<a href=''> (" + full[8] + ")</a></div>";
                         }
                         else {
@@ -287,7 +315,7 @@ $(document).ready(function () {
                             return "<div> <a href='/foraliving/volunteer/profile/" + full[4] + "/0'>" + full[5] + " " + full[6] + "</a> <i class='fa fa-btn fa-close' style='margin-left: 10px;' title='Delete'></i></div>";
                         }
                         else {
-                            return "<a href=''>Add </a>";
+                            return "<a href='/foraliving/teacher/volunteer/assign/" + full[0] + "/" + assignment_id + "/'> Add </a>";
                         }
 
                     }

@@ -1,0 +1,130 @@
+{% extends 'teacher/base.html' %}
+{% load bootstrap3 %}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery=1 %}
+{% bootstrap_messages %}
+{% block list %}
+<li><a href="{% url 'teacher_class' %}">Student</a></li>
+<li class="active"><a href="{%url 'teacher_volunteer'%}">Volunteers</a></li>
+<li><a href="{%url 'teacher_videos'%}">Videos</a></li>
+{% endblock %}
+{% load staticfiles %}
+{% block styles %}
+<link rel="stylesheet" href="{% static 'UX/css/student/recording.css' %}">
+<link rel="stylesheet" href="{% static 'UX/css/simpleGridTemplate.css' %}">
+<link rel="stylesheet"
+      href='{% static "jquery-datatables/css/dataTables.bootstrap.min.css" %}'>
+<link rel="stylesheet"
+      href='{% static "jquery-datatables/css/responsive.bootstrap.min.css" %}'>
+<script type="text/javascript"
+        src='{% static "jquery-datatables/js/jquery.dataTables.min.js" %}'></script>
+<script type="text/javascript"
+        src='{% static "jquery-datatables/js/dataTables.bootstrap.min.js" %}'></script>
+<script type="text/javascript"
+        src='{% static "jquery-datatables/js/dataTables.responsive.min.js" %}'></script>
+<script type="text/javascript"
+        src='{% static "jquery-datatables/js/responsive.bootstrap.min.js" %}'></script>
+{% endblock %}
+{% block body %}
+<div class="container">
+    {% if group %}
+    <h2 style="text-align: center;"> Assig a volunteer to be interviewed by {{group.name}} </h2>
+    {% else %}
+    <h2 style="text-align: center;"> Assig a volunteer to be interviewed by {{userInfo.first_name}} {{userInfo.last_name}} </h2>
+    {% endif %}
+    <div class="panel-body">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <table class="datatable table table-striped table-bordered no-margin-bottom dt-responsive"
+                       cellspacing="0" style="width: 100% !important;"
+                       id="volunteer_table">
+                    <thead>
+                    <tr>
+                        <th class="no-sort sorting_disabled"></th>
+                        <th class="no-sort sorting_disabled"></th>
+                        <th>Name</th>
+                        <th>Title</th>
+                        <th>Assigned to</th>
+                        <th>Skills</th>
+                        <th>Interests</th>
+                    </tr>
+                    </thead>
+                    <tbody style="vertical-align: inherit;">
+                    {% if volunteers %}
+                    {% for data in volunteers %}
+
+                    <tr data-link="" style="vertical-align: middle;">
+                        <td></td>
+                        <td style="font-size:14px; text-align: center; vertical-align: middle;">
+                            <a  class="btn" href="/foraliving/assign/volunteer/{{data.id}}/{{assignment_id}}/{{user_id}}/"
+                                    style="margin-top: 0px; margin-bottom: 0px;
+                                    font-size: 14px; max-height: 30px; background-color:#8CCA8B; border-color: #8CCA8B; border-style: hidden; color:white">
+                                Assign
+                            </a>
+                        </td>
+                        <td>{{data.first_name}}
+                            {{data.last_name}}
+                        </td>
+                        <td>
+                            {{data.volunteer_user_add_ons.workTitle}}
+                        </td>
+                        <td style="text-align: center; vertical-align: middle;">
+                            {% for data in data.interviewee.all %}
+                            {% if forloop.last %}
+                            {{data.assignment.title}}
+                            {% else %}
+                            {{data.assignment.title}},
+                            {% endif %}
+                            {% endfor %}
+                        </td>
+                        <td>
+                            {%for interest in data.volunteer_user_add_ons.interests.all %}
+                            {% if forloop.last %}
+                            {{ interest.name }}
+                            {% else %}
+                            {{ interest.name }},
+                            {% endif %}
+                            {% endfor %}
+                        </td>
+                        <td>
+                            {%for skill in data.volunteer_user_add_ons.skills.all %}
+                            {% if forloop.last %}
+                            {{ skill.name }}
+                            {% else %}
+                            {{ skill.name }},
+                            {% endif %}
+                            {% endfor %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    {% else %}
+                    <tr>
+                        <td colspan="3">No Volunteers are available.</td>
+                    </tr>
+                    {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+    $(document).ready(function () {
+        var table = $('.datatable').DataTable(
+                {
+                    "order": [[2, 'desc']],
+                    "responsive": true,
+                    "showNEntries": true,
+                    "paging": true,
+                    "columnDefs": [{
+                        "targets": [0, 1],
+                        "orderable": false,
+                        "order": [],
+                        "bSortable": false
+                    }]
+                });
+    });
+</script>
+{% endblock %}

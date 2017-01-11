@@ -1,0 +1,42 @@
+{% extends 'teacher/base.html' %}
+{% load bootstrap3 %}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery=1 %}
+{% bootstrap_messages %}
+{% block list %}
+<li><a href="{% url 'teacher_class' %}">Student</a></li>
+<li class="active"><a href="{%url 'teacher_volunteer'%}">Volunteers</a></li>
+<li><a href="{%url 'teacher_videos'%}">Videos</a></li>
+{% endblock %}
+{% load staticfiles %}
+{% block styles %}
+<link rel="stylesheet" href="{% static 'UX/css/student/recording.css' %}">
+<link rel="stylesheet" href="{% static 'UX/css/simpleGridTemplate.css' %}">
+<link rel="stylesheet"
+      href='{% static "jquery-datatables/css/dataTables.bootstrap.min.css" %}'>
+<link rel="stylesheet"
+      href='{% static "jquery-datatables/css/responsive.bootstrap.min.css" %}'>
+<script type="text/javascript"
+        src='{% static "jquery-datatables/js/jquery.dataTables.min.js" %}'></script>
+<script type="text/javascript"
+        src='{% static "jquery-datatables/js/dataTables.bootstrap.min.js" %}'></script>
+<script type="text/javascript"
+        src='{% static "jquery-datatables/js/dataTables.responsive.min.js" %}'></script>
+<script type="text/javascript"
+        src='{% static "jquery-datatables/js/responsive.bootstrap.min.js" %}'></script>
+{% endblock %}
+{% block body %}
+<div class="container">
+    <h2 style="text-align: center;"> Assign a volunteer to be interviewed </h2>
+    <div class="panel-body">
+        <div class="panel panel-default">
+            <div class="panel-body">
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+</script>
+{% endblock %}

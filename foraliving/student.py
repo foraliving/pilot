@@ -1,5 +1,3 @@
-from datetime import date
-from django.conf import settings
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render, redirect
@@ -68,7 +66,7 @@ class StudentAssignment(LoginRequiredMixin, generic.View):
         questions = Interview_Question_Map.objects.filter(interview_id=interview_id)
         question_number = Interview_Question_Map.objects.filter(interview_id=interview.id).count()
         try:
-            group = Group.objects.exclude(name="Student").get(user=request.user.id)
+            group = Group.objects.get(user=request.user.id)
         except ObjectDoesNotExist:
             group = ""
         for question in questions:

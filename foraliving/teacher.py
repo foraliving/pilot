@@ -1,9 +1,10 @@
 import json
-import psycopg2
+from django.shortcuts import redirect
+from django.core.exceptions import ObjectDoesNotExist
 from django.db import connection
-from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse
 from django.conf import settings
-from django.shortcuts import render, redirect, get_object_or_404, reverse
+from django.shortcuts import render
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import generic
 from django.contrib.auth.models import User
@@ -50,6 +51,31 @@ class TeacherVolunteerT6(LoginRequiredMixin, generic.View):
         volunteer_initial = Volunteer_User_Add_Ons.objects.values('user')
         volunteers = User.objects.filter(pk__in=volunteer_initial)
         return render(request, self.question_view, {'volunteers': volunteers})
+
+
+class TeacherVolunteerT6a(LoginRequiredMixin, generic.View):
+    """Generic view to display the volunteer list,
+    this will be shown after login success"""
+    login_url = settings.LOGIN_URL
+    question_view = 'teacher/volunteer_t6a.html'
+
+    def get(self, request, user_id, assignment_id):
+        """
+        :param request:
+        :return:
+        """
+        volunteer_initial = Volunteer_User_Add_Ons.objects.values('user')
+        volunteers = User.objects.filter(pk__in=volunteer_initial)
+        try:
+            group = Group.objects.get(user=user_id)
+        except ObjectDoesNotExist:
+            group = None
+
+        user = User.objects.get(pk=user_id)
+
+        return render(request, self.question_view,
+                      {'volunteers': volunteers, 'group': group, 'userInfo': user, 'assignment_id': assignment_id,
+                       'user_id': user_id})
 
 
 class TeacherVideosT8(LoginRequiredMixin, generic.View):
@@ -113,7 +139,7 @@ def get_student(request, assignment_id):
 
 def student_list(request, class_id):
     """
-
+    Return the student list in relation
     :param request:
     :param class_id:
     :return:
@@ -138,6 +164,7 @@ group by au.id, au.username, au.first_name, au.last_name, fi.interviewee_id, au2
 
 def list_student_group(request):
     """
+    Return the student list in relation with id lists
     :param request:
     :return:
     """
@@ -145,12 +172,22 @@ def list_student_group(request):
     student = User.objects.filter(pk__in=students)
 
     leads_as_json = serializers.serialize('json', student)
-    return HttpResponse(leads_as_json, content_type='json')
+
+    return HttpResponse(leads_as_json, content_type='application/json')
+
+
+def list_groups(request):
+    users = User.objects.values('first_name')
+    groups = Group.objects.exclude(name__in=users)
+    groups_json = serializers.serialize('json', groups)
+    leads_as_json = serializers.serialize('json', groups)
+
+    return HttpResponse(leads_as_json, content_type='application/json')
+
 
 
 class AssignGroup(LoginRequiredMixin, generic.View):
-    """Generic view to display the teacher student class interface,
-    this will be shown after login success"""
+    """Generic view to assign a student list to group"""
     login_url = settings.LOGIN_URL
 
     def post(self, request):
@@ -163,16 +200,14 @@ class AssignGroup(LoginRequiredMixin, generic.View):
 
         group_name = request.POST.get("group_name")
         group = request.POST.get('group')
+
         if group_name:
-            print ("hhh")
             groupObject = Group.objects.create(name=group_name)
             groupObject.save()
         else:
-            print ("aaaaa")
             groupObject = Group.objects.get(pk=group)
 
         for data in students:
-            print (groupObject)
             groupObject.user_set.add(data)
 
         return JsonResponse({'results': list(students)})
@@ -180,7 +215,7 @@ class AssignGroup(LoginRequiredMixin, generic.View):
 
 def uniqueGroup(request):
     """
-    Method to validate if the username exist on the system
+    Method to validate if the group name exist on the system
     :param request:
     :return:
     """
@@ -191,3 +226,27 @@ def uniqueGroup(request):
             return HttpResponse('true')
         else:
             return HttpResponse('false')
+
+
+class AssignVolunteer(LoginRequiredMixin, generic.View):
+    """Generic view to assign a volunteer to an interview"""
+    login_url = settings.LOGIN_URL
+
+    def get(self, request, volunteer_id, assignment_id, user_id):
+        """
+        :param request:
+        :return:
+        """
+        assignment = Assignment.objects.get(pk=assignment_id)
+        volunteer = User.objects.get(pk=volunteer_id)
+        try:
+            group = Group.objects.get(user=user_id)
+        except ObjectDoesNotExist:
+            user = User.objects.get(pk=user_id)
+            group = Group.objects.create(name=user.first_name)
+            group.save()
+            group.user_set.add(user)
+
+        interview = Interview.objects.create(group=group, assignment=assignment, interviewee=volunteer)
+
+        return redirect('teacher_class')

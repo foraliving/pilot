@@ -167,14 +167,14 @@ class Assignment(models.Model):
 
 
 class Interview(models.Model):
-    interviewer = models.ForeignKey(User_Add_Ons, on_delete=models.CASCADE, related_name='interviewer', )
+    interviewer = models.CharField(max_length=256)
     interviewee = models.ForeignKey(User, on_delete=models.CASCADE, related_name='interviewee', )
     group = models.ForeignKey(Group)
-    date = models.DateTimeField()
+    date = models.DateTimeField(default=datetime.now, blank=True)
     assignment = models.ForeignKey(Assignment, on_delete=models.CASCADE, related_name='assignment')
 
     def __unicode__(self):
-        return 'Interview of ' + str(interviewee) + ' by ' + str(interviewer)
+        return 'Interview of ' + str(self.interviewee) + ' by ' + str(self.assignment)
 
 
 class Question(models.Model):
