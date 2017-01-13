@@ -281,7 +281,7 @@ $(document).ready(function () {
                     "orderable": false,
                     "className": 'dt-body-center',
                     "render": function (data, type, full, meta) {
-                        if (full[8] == null || (full[8] == full[2] && full[4] == "Add")) {
+                        if (full[8] == null || (full[8] == full[1] && full[4] == "Add")) {
                             return '<div class="checkboxes"><input type="checkbox" name="student" value="' + full[0] + '"></div>';
                         }
                         else {
@@ -291,7 +291,7 @@ $(document).ready(function () {
                 }, {
                     "targets": 1,
                     "render": function (data, type, full, meta) {
-                        if (full[8] != null && full[8] != full[2]) {
+                        if (full[8] != null && full[8] != full[1]) {
                             return "<div>" + full[1] + "<a href=''> (" + full[8] + ")</a></div>";
                         }
                         else {

@@ -147,7 +147,7 @@ class Class(models.Model):
 
 
 class Student_Class(models.Model):
-    student = models.ForeignKey(User, on_delete=models.CASCADE, related_name='User_Add_Ons', )
+    student = models.ForeignKey(User, on_delete=models.CASCADE, related_name='User')
     falClass = models.ForeignKey(Class, on_delete=models.CASCADE)
 
     def __unicode__(self):

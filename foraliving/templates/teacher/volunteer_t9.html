@@ -22,15 +22,57 @@
         src='{% static "jquery-datatables/js/dataTables.bootstrap.min.js" %}'></script>
 <script type="text/javascript"
         src='{% static "jquery-datatables/js/dataTables.responsive.min.js" %}'></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.15.0/jquery.validate.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.15.0/additional-methods.js"></script>
 <script type="text/javascript"
         src='{% static "jquery-datatables/js/responsive.bootstrap.min.js" %}'></script>
+<link rel="stylesheet" href="{% static 'UX/css/bootstrap-select/bootstrap-select.min.css' %}">
+<script src="{% static 'js/select/bootstrap-select.min.js' %}"></script>
+<script src="{% static 'js/teacher/assign_volunteer.js' %}"></script>
 {% endblock %}
 {% block body %}
 <div class="container">
-    <h2 style="text-align: center;"> Assign a volunteer to be interviewed </h2>
+    <h2 style="text-align: center;"> Assign students to {{volunteer.first_name}} {{volunteer.last_name}} </h2>
     <div class="panel-body">
         <div class="panel panel-default">
             <div class="panel-body">
+                <form id="createInterview" class="form">
+                    <div class="form-group" style="text-align: center;">
+                        <select class="selectpicker" id="classname" name="classname" data-live-search="true" style="color: white; background-color: #565656; border-color: #565656;
+     border-style: solid;">
+                            <option value="0">Select an option</option>
+                            {%for data in classes%}
+                            <option value="{{data.id}}">{{data.name}}</option>
+                            {%endfor%}</select>
+                    </div>
+                    <div class="form=group" style="text-align: center;">
+                        <select class="selectpicker" id="assignment" name="assignment" data-live-search="true" style="color: white; background-color: #565656; border-color: #565656;
+     border-style: solid;">
+                        </select>
+                        <label class="checkbox">
+                            <input type="checkbox" value="" name="options" style="opacity:0; position:absolute; left:9999px;"></label>
+
+                    </div>
+                    <br>
+                    <div>
+                        <h4 style="text-align: center" ;> Select the interviewer</h4>
+                        <br>
+                    </div>
+                    <div class="form=group" id="result" style="text-align: center;">
+
+                    </div>
+                    <div class="form=group" id="groups" style="text-align: center;"></div>
+                    <br>
+                    <div id="errors" style="text-align: center; font-size: 16px;"></div>
+                    <div style="text-align: center;">
+                        <button class="btn" id="assign-volunteer-id"
+                                style="margin-top: 0px; margin-bottom: 0px;
+                                    font-size: 18px; background-color:#8CCA8B; border-color: #8CCA8B; border-style: hidden; color:white">
+                            Assign
+                        </button>
+                    </div>
+                    <input type="hidden" value="{{volunteer.id}}" id="volunteer_id">
+                </form>
             </div>
         </div>
     </div>
