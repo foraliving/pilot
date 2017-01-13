@@ -3,7 +3,7 @@
     "model": "auth.group",
     "pk": 1,
     "fields": {
-      "name": "Student",
+      "name": "Science",
       "permissions": [
         40
       ]
@@ -13,30 +13,31 @@
     "model": "auth.group",
     "pk": 2,
     "fields": {
-      "name": "Teacher",
+      "name": "Cuisine",
       "permissions": [
         40
       ]
     }
   },
   {
-    "model": "auth.group",
+    "model": "foraliving.Type",
+    "pk": 1,
+    "fields": {
+      "name": "Student"
+    }
+  },
+  {
+    "model": "foraliving.Type",
+    "pk": 2,
+    "fields": {
+      "name": "Teacher"
+    }
+  },
+  {
+    "model": "foraliving.Type",
     "pk": 3,
     "fields": {
-      "name": "Volunteer",
-      "permissions": [
-        40
-      ]
-    }
-  },
-  {
-    "model": "auth.group",
-    "pk": 4,
-    "fields": {
-      "name": "Science",
-      "permissions": [
-        40
-      ]
+      "name": "Volunteer"
     }
   },
   {
@@ -51,7 +52,6 @@
       "is_staff": true,
       "last_login": "2008-09-05 12:40:34",
       "groups": [
-        3
       ],
       "user_permissions": [],
       "password": "pbkdf2_sha256$30000$pOAjkIh9uSt3$W3ZN4v4dui8TDQhhvWU5ucDu/G1wqljjwfsGKgN5rbQ=",
@@ -70,7 +70,7 @@
       "is_staff": true,
       "last_login": "2008-09-05 12:40:34",
       "groups": [
-        1,4
+        1
       ],
       "user_permissions": [],
       "password": "pbkdf2_sha256$30000$pOAjkIh9uSt3$W3ZN4v4dui8TDQhhvWU5ucDu/G1wqljjwfsGKgN5rbQ=",
@@ -89,7 +89,6 @@
       "is_staff": true,
       "last_login": "2008-09-05 12:40:34",
       "groups": [
-        2
       ],
       "user_permissions": [],
       "password": "pbkdf2_sha256$30000$pOAjkIh9uSt3$W3ZN4v4dui8TDQhhvWU5ucDu/G1wqljjwfsGKgN5rbQ=",
@@ -100,7 +99,7 @@
     "pk": 4,
     "model": "auth.user",
     "fields": {
-      "username": "volunteer2",
+      "username": "volunteer_admin2",
       "first_name": "Avni",
       "last_name": "B",
       "is_active": true,
@@ -108,7 +107,6 @@
       "is_staff": true,
       "last_login": "2008-09-05 12:40:34",
       "groups": [
-        3
       ],
       "user_permissions": [],
       "password": "pbkdf2_sha256$30000$pOAjkIh9uSt3$W3ZN4v4dui8TDQhhvWU5ucDu/G1wqljjwfsGKgN5rbQ=",
@@ -127,11 +125,105 @@
       "is_staff": true,
       "last_login": "2008-09-05 12:40:34",
       "groups": [
+        2
+      ],
+      "user_permissions": [],
+      "password": "pbkdf2_sha256$30000$pOAjkIh9uSt3$W3ZN4v4dui8TDQhhvWU5ucDu/G1wqljjwfsGKgN5rbQ=",
+      "email": "admin@foraliving.org"
+    }
+  },
+  {
+    "pk": 6,
+    "model": "auth.user",
+    "fields": {
+      "username": "student_admin3",
+      "first_name": "Mich",
+      "last_name": "Taylor",
+      "is_active": true,
+      "is_superuser": true,
+      "is_staff": true,
+      "last_login": "2008-09-05 12:40:34",
+      "groups": [
         1
       ],
       "user_permissions": [],
       "password": "pbkdf2_sha256$30000$pOAjkIh9uSt3$W3ZN4v4dui8TDQhhvWU5ucDu/G1wqljjwfsGKgN5rbQ=",
       "email": "admin@foraliving.org"
+    }
+  },
+  {
+    "pk": 7,
+    "model": "auth.user",
+    "fields": {
+      "username": "student_admin4",
+      "first_name": "Noelia",
+      "last_name": "Pazos",
+      "is_active": true,
+      "is_superuser": true,
+      "is_staff": true,
+      "last_login": "2008-09-05 12:40:34",
+      "groups": [
+        2
+      ],
+      "user_permissions": [],
+      "password": "pbkdf2_sha256$30000$pOAjkIh9uSt3$W3ZN4v4dui8TDQhhvWU5ucDu/G1wqljjwfsGKgN5rbQ=",
+      "email": "admin@foraliving.org"
+    }
+  },
+  {
+    "model": "foraliving.User_Type",
+    "pk": 1,
+    "fields": {
+      "user": 1,
+      "type": 3
+    }
+  },
+  {
+    "model": "foraliving.User_Type",
+    "pk": 2,
+    "fields": {
+      "user": 2,
+      "type": 1
+    }
+  },
+  {
+    "model": "foraliving.User_Type",
+    "pk": 3,
+    "fields": {
+      "user": 3,
+      "type": 2
+    }
+  },
+  {
+    "model": "foraliving.User_Type",
+    "pk": 4,
+    "fields": {
+      "user": 4,
+      "type": 3
+    }
+  },
+  {
+    "model": "foraliving.User_Type",
+    "pk": 5,
+    "fields": {
+      "user": 5,
+      "type": 1
+    }
+  },
+  {
+    "model": "foraliving.User_Type",
+    "pk": 6,
+    "fields": {
+      "user": 6,
+      "type": 1
+    }
+  },
+  {
+    "model": "foraliving.User_Type",
+    "pk": 7,
+    "fields": {
+      "user": 7,
+      "type": 1
     }
   },
   {
@@ -148,15 +240,6 @@
     "fields": {
       "lms": 1,
       "name": "Default School",
-      "url": "www.foraliving.org"
-    }
-  },
-  {
-    "model": "foraliving.School",
-    "pk": 2,
-    "fields": {
-      "lms": 1,
-      "name": "Default School 2",
       "url": "www.foraliving.org"
     }
   },
@@ -183,7 +266,25 @@
     "pk": 3,
     "fields": {
       "user": 5,
-      "school": 2,
+      "school": 1,
+      "lms": 1
+    }
+  },
+  {
+    "model": "foraliving.User_Add_Ons",
+    "pk": 4,
+    "fields": {
+      "user": 6,
+      "school": 1,
+      "lms": 1
+    }
+  },
+  {
+    "model": "foraliving.User_Add_Ons",
+    "pk": 5,
+    "fields": {
+      "user": 7,
+      "school": 1,
       "lms": 1
     }
   },
@@ -207,13 +308,32 @@
     }
   },
   {
+    "model": "foraliving.Volunteer_User_Add_Ons",
+    "pk": 2,
+    "fields": {
+      "user": 4,
+      "phone": "1801-22343",
+      "canGetText": true,
+      "workTitle": "Educator",
+      "isBusinessOwner": true,
+      "workIndustry": "Education",
+      "yearsInIndustry": 6,
+      "linkedinProfile": "www.linkedin.com/in/vivian-aguilar-05124250",
+      "yearsSinceHSGraduation": 3,
+      "collegeLevel": 1,
+      "collegeMajor": "B.S. Social Science",
+      "skills": [],
+      "interests": []
+    }
+  },
+  {
     "model": "foraliving.Class",
     "pk": 1,
     "fields": {
       "school": 1,
       "lms": 1,
       "teacher": 2,
-      "name": "History",
+      "name": "7h grade",
       "academic_year": 2,
       "semester": 1
     }
@@ -225,9 +345,41 @@
       "school": 1,
       "lms": 1,
       "teacher": 2,
-      "name": "Math",
+      "name": "2nd grade",
       "academic_year": 2,
       "semester": 1
+    }
+  },
+  {
+    "model": "foraliving.Student_Class",
+    "pk": 1,
+    "fields": {
+      "student": 2,
+      "falClass": 1
+    }
+  },
+  {
+    "model": "foraliving.Student_Class",
+    "pk": 2,
+    "fields": {
+      "student": 5,
+      "falClass": 1
+    }
+  },
+  {
+    "model": "foraliving.Student_Class",
+    "pk": 3,
+    "fields": {
+      "student": 6,
+      "falClass": 2
+    }
+  },
+  {
+    "model": "foraliving.Student_Class",
+    "pk": 4,
+    "fields": {
+      "student": 7,
+      "falClass": 2
     }
   },
   {
@@ -246,18 +398,7 @@
     "pk": 2,
     "fields": {
       "title": "Designer Interview",
-      "falClass": 1,
-      "document": "wwww.foraliving.org",
-      "due_date": "2016-12-10",
-      "creation_date": "2016-05-10"
-    }
-  },
-  {
-    "model": "foraliving.Assignment",
-    "pk": 3,
-    "fields": {
-      "title": "Programming Interview",
-      "falClass": 1,
+      "falClass": 2,
       "document": "wwww.foraliving.org",
       "due_date": "2016-12-10",
       "creation_date": "2016-05-10"
@@ -474,9 +615,9 @@
     "model": "foraliving.interview",
     "pk": 1,
     "fields": {
-      "interviewer": 1,
+      "interviewer": "",
       "interviewee": 1,
-      "group": 4,
+      "group": 1,
       "date": "2016-11-03T00:00:00Z",
       "assignment": 1
     }
@@ -485,11 +626,11 @@
     "model": "foraliving.interview",
     "pk": 2,
     "fields": {
-      "interviewer": 2,
+      "interviewer": "",
       "interviewee": 4,
-      "group": 4,
+      "group": 2,
       "date": "2016-11-03T00:00:00Z",
-      "assignment": 2
+      "assignment": 1
     }
   },
   {
@@ -514,25 +655,6 @@
       "created_by": 2,
       "creation_date": "2016-05-05T00:00:00Z",
       "status": "pending"
-    }
-  },
-  {
-    "model": "foraliving.volunteer_user_add_ons",
-    "pk": 2,
-    "fields": {
-      "user": 4,
-      "phone": "1801522-33",
-      "canGetText": true,
-      "workTitle": "Engineering",
-      "isBusinessOwner": true,
-      "workIndustry": "Education",
-      "yearsInIndustry": 8,
-      "linkedinProfile": "https://www.linkedin.com/in/avnikhatri",
-      "yearsSinceHSGraduation": 4,
-      "collegeLevel": 3,
-      "collegeMajor": "B.S. Social Science",
-      "skills": [],
-      "interests": []
     }
   }
 ]
