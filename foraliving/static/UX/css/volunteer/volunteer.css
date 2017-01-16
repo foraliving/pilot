@@ -37,16 +37,51 @@
 }
 
 .interview {
-  background-color: #D9DEDA;
+  background-color: #e8e5df;
   border-radius: 5px;
-  border: 2px solid #D9DEDA;
+  border: 2px solid #e8e5df;
   margin-bottom: 5px;
   margin-left: 5px;
   padding-bottom: 5px;
   text-align: center;
-  width: 25%;
 }
 
 .center {
   text-align: center;
+}
+
+.hr-middle {
+    display: block;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+    margin-left: auto;
+    margin-right: auto;
+    border-width: 3px;
+    border-color: #c1b49a;
+}
+
+.main-title {
+  color: #99c64c;
+}
+
+.panel {
+    border: 0;
+}
+
+.video {
+  width: 400;
+  height: 275;
+  margin: 5px 5px 5px 0;
+}
+
+.row-centered {
+    text-align:center;
+}
+.col-centered {
+    display:inline-block;
+    float:none;
+    /* reset the text-align */
+    text-align:left;
+    /* inline-block space fix */
+    margin-right:-4px;
 }

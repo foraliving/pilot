@@ -170,23 +170,30 @@ class GetInterviewed(LoginRequiredMixin, generic.View):
 
             # We want to return the username-firstname of each student
             user_names = ''
+            group_name = interview.group
 
+            for s in students:
+                print(s.student)
+            print(students)
+            print(users)
+            print(students_class_group)
             # This is the general case (more than one student)
             if (len(students_class_group) > 1):
                 cont = 0
                 for user in students_class_group:
-                    user_names += user.username + ' - ' + user.first_name
+                    user_names += user.first_name
                     if not(cont == (len(users) - 1)):
                         user_names += ', '
                     cont += 1
             # This is the base case (Just one student)
             else:
-                user_names = students_class_group[0].username + ' - ' + students_class_group[0].first_name
+                user_names = students_class_group[0].first_name
 
             return_data.append(
                 {
                     'interview': interview,
-                    'group_users': user_names
+                    'group_users': user_names,
+                    'group_name': group_name
                 }
             )
 
