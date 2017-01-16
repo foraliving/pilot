@@ -28,14 +28,6 @@ class TeacherStudentT1(LoginRequiredMixin, generic.View):
         group_list = Group.objects.all()
         return render(request, self.question_view, {'class_info': class_info, 'group_list': group_list})
 
-    def post(self, request, class_id, option):
-        """
-        :param request:
-        :param class_id:
-        :param option:
-        :return:
-        """
-
 
 class TeacherVolunteerT6(LoginRequiredMixin, generic.View):
     """Generic view to display the volunteer list,
@@ -177,7 +169,7 @@ def list_student_group(request):
 
 
 def list_groups(request):
-    users = User.objects.values('first_name')
+    users = User.objects.values('username')
     groups = Group.objects.exclude(name__in=users)
     groups_json = serializers.serialize('json', groups)
     leads_as_json = serializers.serialize('json', groups)
@@ -243,10 +235,94 @@ class AssignVolunteer(LoginRequiredMixin, generic.View):
             group = Group.objects.get(user=user_id)
         except ObjectDoesNotExist:
             user = User.objects.get(pk=user_id)
-            group = Group.objects.create(name=user.first_name)
+            group = Group.objects.create(name=user.username)
             group.save()
             group.user_set.add(user)
 
         interview = Interview.objects.create(group=group, assignment=assignment, interviewee=volunteer)
 
         return redirect('teacher_class')
+
+
+class TeacherVolunteerT9(LoginRequiredMixin, generic.View):
+    """Generic view to display the volunteer list,
+    this will be shown after login success"""
+    login_url = settings.LOGIN_URL
+    question_view = 'teacher/volunteer_t9.html'
+
+    def get(self, request, user_id):
+        """
+        :param request:
+        :return:
+        """
+        user = User.objects.get(pk=user_id)
+        user_add_ons = User_Add_Ons.objects.get(user=request.user)
+        classes = Class.objects.filter(teacher=user_add_ons)
+        return render(request, self.question_view, {'volunteer': user, 'classes': classes})
+
+
+def studentList(request, assignment_id):
+    """
+    Method to get the student groups
+    :param request:
+    :return:
+    """
+    assignment = Assignment.objects.get(pk=assignment_id)
+    group = Interview.objects.filter(assignment=assignment).values('group')
+    groups = Group.objects.exclude(pk__in =group).values('pk')
+
+    student_class = Student_Class.objects.filter(falClass=assignment.falClass).values('student_id')
+
+    students = User.objects.filter(pk__in=student_class, groups__isnull=True)
+    leads_as_json = serializers.serialize('json', students)
+    return HttpResponse(leads_as_json, content_type='application/json')
+
+
+def groupList(request, assignment_id):
+    """
+    Method to get the student groups
+    :param request:
+    :return:
+    """
+    assignment = Assignment.objects.get(pk=assignment_id)
+    group = Interview.objects.filter(assignment=assignment).values('group')
+    groups = Group.objects.exclude(pk__in =group).values('pk')
+
+    student_class = Student_Class.objects.filter(falClass=assignment.falClass).values('student_id')
+
+    students = User.objects.filter(pk__in=student_class, groups__in=groups).values('groups')
+
+    group = Group.objects.filter(pk__in=students)
+
+    leads_as_json = serializers.serialize('json', group)
+    return HttpResponse(leads_as_json, content_type='application/json')
+
+
+class CreateInterview(LoginRequiredMixin, generic.View):
+    """Generic view to create a new interview"""
+    login_url = settings.LOGIN_URL
+
+    def post(self, request):
+        """
+        :param request:
+        :return:
+        """
+        assignment_id = request.POST.get("assignment")
+        result = request.POST.get("result")
+        option = request.POST.get("new_option")
+        volunteer_id = request.POST.get("volunteer_id")
+
+        volunteer = User.objects.get(pk=volunteer_id)
+        assignment = Assignment.objects.get(pk=assignment_id)
+
+        if result == "a":
+            student = User.objects.get(pk=option)
+            group = Group.objects.create(name=student.username)
+            group.save()
+            group.user_set.add(student)
+        else:
+            group = Group.objects.get(pk=option)
+
+        interview = Interview.objects.create(group=group, assignment=assignment, interviewee=volunteer)
+
+        return HttpResponse('true')

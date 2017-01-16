@@ -8,6 +8,7 @@ from django.views import generic
 from foraliving.views import createInputToken
 from .forms import *
 from foraliving.models import Volunteer_User_Add_Ons, Interview, Interview_Question_Video_Map, Interview_Question_Map
+from foraliving.models import Student_Class
 from mail_templated import EmailMessage
 
 
@@ -128,6 +129,7 @@ class VolunteerEdit(LoginRequiredMixin, generic.View):
 
         return HttpResponse(volunteer.id)
 
+
 def editSkill(request, volunteer_id):
     """Method to edit skills and interests"""
     if request.method == 'POST':
@@ -147,3 +149,64 @@ def editSkill(request, volunteer_id):
         createInputToken(request, interests, 'Interest', volunteer_id)
 
         return HttpResponse('ok')
+
+
+class GetInterviewed(LoginRequiredMixin, generic.View):
+    """
+        This view will show the list of pending interview for a volunteer
+    """
+    template = 'volunteer/get_interviewed.html'
+
+    def get(self, request):
+        # First of all we get the pending interviews of the volunteer
+        interviews = Interview.objects.filter(interviewee=request.user)
+        return_data = []
+        for interview in interviews:
+            # We get all students assigned to interverview.assignment class
+            # that belongs to the interview.group
+            students = Student_Class.objects.filter(falClass=interview.assignment.falClass)
+            users = interview.group.user_set.all()
+            students_class_group = self.get_students_group(students, users)
+
+            # We want to return the username-firstname of each student
+            user_names = ''
+
+            # This is the general case (more than one student)
+            if (len(students_class_group) > 1):
+                cont = 0
+                for user in students_class_group:
+                    user_names += user.username + ' - ' + user.first_name
+                    if not(cont == (len(users) - 1)):
+                        user_names += ', '
+                    cont += 1
+            # This is the base case (Just one student)
+            else:
+                user_names = students_class_group[0].username + ' - ' + students_class_group[0].first_name
+
+            return_data.append(
+                {
+                    'interview': interview,
+                    'group_users': user_names
+                }
+            )
+
+        return render(
+            request,
+            self.template,
+            {'interviews_data': return_data}
+        )
+
+    def get_students_group(self, students=[], group=[]):
+        students_in_group = []
+        for student in students:
+            if student.student in group:
+                students_in_group.append(student.student)
+
+        return students_in_group
+
+
+class ReviewQuestionsView(LoginRequiredMixin, generic.View):
+    def get(self, request, interview_id):
+        questions = Interview_Question_Map.objects.filter(interview=interview_id)
+
+        return questions

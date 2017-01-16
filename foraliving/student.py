@@ -26,7 +26,7 @@ class CompleteVideo(LoginRequiredMixin, generic.View):
         volunteer = ""
 
         try:
-            group = Group.objects.exclude(name="Student").get(user=request.user.id)
+            group = Group.objects.exclude(name=request.user.username).get(user=request.user.id)
         except ObjectDoesNotExist:
             group = None
 
@@ -66,7 +66,7 @@ class StudentAssignment(LoginRequiredMixin, generic.View):
         questions = Interview_Question_Map.objects.filter(interview_id=interview_id)
         question_number = Interview_Question_Map.objects.filter(interview_id=interview.id).count()
         try:
-            group = Group.objects.get(user=request.user.id)
+            group = Group.objects.exclude(name=request.user.username).get(user=request.user.id)
         except ObjectDoesNotExist:
             group = ""
         for question in questions:
@@ -190,7 +190,7 @@ class SendEmail(LoginRequiredMixin, generic.View):
 class AssignmentList(LoginRequiredMixin, generic.View):
     """Generic View to display the assignment list """
     login_url = settings.LOGIN_URL
-    conduct_view = 'student/select_assignment.html'
+    select_assignment = 'student/select_assignment.html'
 
     def get(self, request):
         try:
@@ -203,5 +203,5 @@ class AssignmentList(LoginRequiredMixin, generic.View):
         if count_interview ==1:
             return redirect('assignment', interview_id=interview[0].id)
         else:
-            return render(request, self.conduct_view, {'interview': interview})
+            return render(request, self.select_assignment, {'interview': interview})
 

@@ -2,7 +2,7 @@ from django.conf import settings
 from django.conf.urls import include, url
 from django.conf.urls.static import static
 from django.contrib import admin
-from . import views
+from foraliving.general import Videos
 from foraliving.recording import RecordingType, RecordingSetupMicrophone, RecordingSetupFace, RecordingSetupBattery, \
     QuestionInterview, Recording, Orientation, SaveRecording, protected_serve
 from foraliving.student import CompleteVideo, StudentAssignment, ConductVideo, SelectQuestion, SelectQuestionEdit, \
@@ -11,7 +11,12 @@ from foraliving.volunteer import VolunteerProfile, VolunteerEdit
 from foraliving.general import Videos
 from foraliving.volunteer import Contact, editSkill, GetInterviewed
 from foraliving.teacher import TeacherStudentT1, TeacherVolunteerT6, TeacherVideosT8, asignment_list, get_student, \
-    student_list, list_student_group, AssignGroup, uniqueGroup, TeacherVolunteerT6a, AssignVolunteer, list_groups
+    student_list, list_student_group, AssignGroup, uniqueGroup, TeacherVolunteerT6a, AssignVolunteer, list_groups, \
+    TeacherVolunteerT9, groupList, studentList, CreateInterview
+from foraliving.volunteer import Contact, editSkill
+from foraliving.volunteer import VolunteerProfile, VolunteerEdit
+
+from . import views
 
 urlpatterns = [
     url(r"^admin/", include(admin.site.urls)),
@@ -59,18 +64,23 @@ urlpatterns = [
     # teacher
     url(r"^teacher/class/$", TeacherStudentT1.as_view(), name='teacher_class'),
     url(r"^teacher/volunteer/list/$", TeacherVolunteerT6.as_view(), name='teacher_volunteer'),
+    url(r"^teacher/interview-volunteer/create/$", CreateInterview.as_view(), name='create_interview_volunteer'),
+    url(r"teacher/interview/create/(?P<user_id>\d+)/$", TeacherVolunteerT9.as_view(), name='create_interview'),
     url(r"^teacher/volunteer/assign/(?P<user_id>\d+)/(?P<assignment_id>\d+)/$", TeacherVolunteerT6a.as_view(),
         name='teacher_volunteer_assign'),
     url(r"^teacher/videos/$", TeacherVideosT8.as_view(), name='teacher_videos'),
-    url(r"^get-assignment/(?P<class_id>\d+)/$", asignment_list, name='assignment_list'),
-    url(r"^get-student/(?P<assignment_id>\d+)/$", get_student, name='student_list'),
-    url(r"^student-list/(?P<class_id>\d+)/$", student_list, name='class_student_list'),
-    url(r"list-student-group", list_student_group, name='list-student_group'),
     url(r"assign_group/$", AssignGroup.as_view(), name='assign_group'),
-    url(r"^unique-group/$", uniqueGroup, name='uniqueGroup'),
     url(r"^assign/volunteer/(?P<volunteer_id>\d+)/(?P<assignment_id>\d+)/(?P<user_id>\d+)/$",
         AssignVolunteer.as_view(), name='assign_volunteer'),
-    url(r"^groups/$", list_groups, name='list_groups')
+
+    url(r"^groups/$", list_groups, name='list_groups'),
+    url(r"^unique-group/$", uniqueGroup, name='uniqueGroup'),
+    url(r"^get/student-list/(?P<assignment_id>\d+)/$", studentList, name='student_list'),
+    url(r"^get/student-group/(?P<assignment_id>\d+)/$", groupList, name='group_list'),
+    url(r"^get-assignment/(?P<class_id>\d+)/$", asignment_list, name='assignment_list'),
+    url(r"^get-student/(?P<assignment_id>\d+)/$", get_student, name='student_list_assignment'),
+    url(r"^student-list/(?P<class_id>\d+)/$", student_list, name='class_student_list'),
+    url(r"list-student-group", list_student_group, name='list-student_group'),
 
 ]
 

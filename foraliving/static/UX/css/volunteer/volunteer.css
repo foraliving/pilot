@@ -35,3 +35,18 @@
     max-width: 350px;
     width: 350px;
 }
+
+.interview {
+  background-color: #D9DEDA;
+  border-radius: 5px;
+  border: 2px solid #D9DEDA;
+  margin-bottom: 5px;
+  margin-left: 5px;
+  padding-bottom: 5px;
+  text-align: center;
+  width: 25%;
+}
+
+.center {
+  text-align: center;
+}

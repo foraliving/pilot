@@ -1,0 +1,66 @@
+{% extends 'volunteer/base.html' %}
+
+{% load staticfiles %}
+{% load bootstrap3 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+{% bootstrap_messages %}
+
+{% block list %}
+    <li><a href="{% url 'volunteer_profile'  user_id=request.user.id interview_id=0%}">Profile</a></li>
+    <li class="active"><a href="{% url 'volunteer_get_interviewed' %}">Get Interviewed</a></li>
+{% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'UX/css/simpleGridTemplate.css' %}">
+    <link rel="stylesheet" href="{% static 'UX/css/volunteer/volunteer.css' %}">
+{% endblock %}
+
+{% block body %}
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h1>Upcoming interviews</h1>
+        <h4>Interviews have been scheduled with the following students. Click Join Interview at the scheduled interview time</h4>
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            {% for row in interviews_data %}
+            <div class="col-md-6 interview">
+                <div class="row">
+                    <h4><strong>{{ row.interview.group }}</strong></h4>
+                </div>
+                <div class="row">
+                    <h4>({{ row.group_users }})</h4>
+                </div>
+                <div class="row">
+                    <a href="#">Review Questions</a>
+                </div>
+                <div class="row">
+                    <a href="#" class="btn btn-success">Join Meeting</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <h2>Storytelling Tips</h2>
+            <h5>
+                Share personal experiences that will help students make connections between what they are learning,
+                their personality traits and their futures. Youth need your prospective on effective ways to navigate
+                a career path. What did you learn from your successes and failures? What important understanding do
+                you have now that you didn’t have when you were young?
+            </h5>
+        </div>
+        <div class="row center">
+            <strong>Example Personal Stories</strong>
+        </div>
+        <div class="row center">
+            <iframe width="400" height="275" src="https://www.youtube.com/embed/ihOsdC85-gc" frameborder="0" allowfullscreen></iframe>
+            <iframe width="400" height="275" src="https://www.youtube.com/embed/LUtcigWSBsw" frameborder="0" allowfullscreen></iframe>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %} {% endblock %}
