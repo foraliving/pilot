@@ -1,0 +1,78 @@
+{% extends 'volunteer/base.html' %}
+
+{% load staticfiles %}
+{% load bootstrap3 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+{% bootstrap_messages %}
+
+{% block title %}
+<title>Get Interviewed</title>
+{% endblock %}
+
+{% block list %}
+    <li><a href="{% url 'volunteer_profile'  user_id=request.user.id interview_id=0%}">Profile</a></li>
+    <li class="active"><a href="{% url 'volunteer_get_interviewed' %}">Get Interviewed</a></li>
+{% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'UX/css/simpleGridTemplate.css' %}">
+    <link rel="stylesheet" href="{% static 'UX/css/volunteer/volunteer.css' %}">
+{% endblock %}
+
+{% block body %}
+<div class="panel panel-default">
+    <div class="panel-body">
+        <h1 class="main-title">Upcoming interviews</h1>
+        <h4 class="description">Interviews have been scheduled with the following students. Click Join Interview at the scheduled interview time</h4>
+
+        <div class="row row-centered">
+            {% for row in interviews_data %}
+            <div class="col-md-3 interview col-centered">
+                <div class="center">
+                    <h4><strong>{{ row.group_name }}</strong></h4>
+                </div>
+                <div class="center">
+                    <h4>({{ row.group_users }})</h4>
+                </div>
+                <div class="center">
+                    <a href="#">Review Questions</a>
+                </div>
+                <div class="center">
+                    <a href="#" class="btn button-general">Join Interview</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <hr class="hr-middle">
+
+    <div class="panel-body">
+        <div>
+            <h2><strong>Storytelling Tips</strong></h2>
+            <h4 class="description">
+                Share personal experiences that will help students make connections between what they are learning,
+                their personality traits and their futures. Youth need your prospective on effective ways to navigate
+                a career path. What did you learn from your successes and failures? What important understanding do
+                you have now that you didn’t have when you were young?
+            </h4>
+        </div>
+        <div class="row center">
+            <h4><strong>Example Personal Stories</strong></h4>
+        </div>
+        <div class="row center">
+            <div class="col-md-6">
+                <iframe class="video" src="https://www.youtube.com/embed/ihOsdC85-gc" frameborder="0" allowfullscreen></iframe>
+                <h4>Robotics Engineer</h4>
+            </div>
+            <div class="col-md-6">
+                <iframe class="video" src="https://www.youtube.com/embed/LUtcigWSBsw" frameborder="0" allowfullscreen></iframe>
+                <h4>Singer Songwriter</h4>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %} {% endblock %}
