@@ -4,7 +4,7 @@
 {% bootstrap_javascript jquery=1 %}
 {% bootstrap_messages %}
 {% block list %}
-<li><a href="{% url 'teacher_class' %}">Student</a></li>
+<li><a href="{% url 'teacher_class' %}">Students</a></li>
 <li class="active"><a href="{%url 'teacher_volunteer'%}">Volunteers</a></li>
 <li><a href="{%url 'teacher_videos'%}">Videos</a></li>
 {% endblock %}
@@ -28,9 +28,9 @@
 {% block body %}
 <div class="container">
     {% if group %}
-    <h2 style="text-align: center;"> Assig a volunteer to be interviewed by {{group.name}} </h2>
+    <h2 style="text-align: center;"> Assign a volunteer to be interviewed by {{group.name}} </h2>
     {% else %}
-    <h2 style="text-align: center;"> Assig a volunteer to be interviewed by {{userInfo.first_name}} {{userInfo.last_name}} </h2>
+    <h2 style="text-align: center;"> Assign a volunteer to be interviewed by {{userInfo.first_name}} {{userInfo.last_name}} </h2>
     {% endif %}
     <div class="panel-body">
         <div class="panel panel-default">

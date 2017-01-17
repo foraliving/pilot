@@ -3,6 +3,49 @@ $(document).ready(function () {
         'destroy': true,
         "paging": false,
     });
+
+    var assignment_id = $("#assignment_hidden").val();
+    var class_id = $("#class_hidden").val();
+    if (class_id != null) {
+        $('#classname').val(class_id);
+        $('#classname').selectpicker('refresh');
+        var url = "/foraliving/get-assignment/" + class_id + "/";
+        $.ajax({
+            method: "GET",
+            url: url,
+            contentType: "application/json"
+        }).done(function (data) {
+            $("#options").html("");
+            $("#options").selectpicker('refresh');
+
+            $("#options").html("");
+            var opt = $('<option />');
+            opt.val("B2");
+            opt.text("Delete Class");
+            $('#options').append(opt);
+
+            $('#options').append(opt);
+            var opt = $('<option />');
+            opt.val("A1");
+            opt.text("New Assignment");
+            $('#options').append(opt);
+
+            $.each(data.results, function (id, data) {
+                var opt = $('<option />');
+                opt.val(data.id);
+                opt.text(data.title);
+                $('#options').append(opt);
+            });
+            $("#options").selectpicker('refresh');
+            $('#options').val(assignment_id);
+            $("#options").selectpicker('refresh');
+        });
+    }
+
+
+    getClass(assignment_id, class_id);
+
+
     $("#classname").change(function () {
         if ($("#classname").val() != 0) {
             var class_id = $("#classname").val();
@@ -17,21 +60,15 @@ $(document).ready(function () {
 
                 $("#options").html("");
                 var opt = $('<option />');
-                opt.val("A0");
-                opt.text("Select an option");
-                $('#options').append(opt);
-                var opt = $('<option />');
                 opt.val("B2");
                 opt.text("Delete Class");
                 $('#options').append(opt);
 
-                if (data.results == "") {
-                    $('#options').append(opt);
-                    var opt = $('<option />');
-                    opt.val("A1");
-                    opt.text("New Assignment");
-                    $('#options').append(opt);
-                }
+                $('#options').append(opt);
+                var opt = $('<option />');
+                opt.val("A1");
+                opt.text("New Assignment");
+                $('#options').append(opt);
 
                 $.each(data.results, function (id, data) {
                     var opt = $('<option />');
@@ -183,7 +220,9 @@ $(document).ready(function () {
             data: {'selected[]': selected, 'group': group, 'group_name': group_name},
         }).done(function (data) {
             $('#add_group').modal('toggle');
-            getClass();
+            var assignment_id = $("#options").val();
+            var class_id = $("#classname").val();
+            getClass(assignment_id, class_id);
         });
     }
 
@@ -197,7 +236,9 @@ $(document).ready(function () {
 
             }
             else {
-                getClass();
+                var assignment_id = $("#options").val();
+                var class_id = $("#classname").val();
+                getClass(assignment_id, class_id);
 
             }
         }
@@ -259,10 +300,8 @@ $(document).ready(function () {
     }
 
 
-    function getClass() {
-        var assignment_id = $("#options").val();
-        var class_id = $("#classname").val();
-        var url = "/foraliving/student-list/" + class_id + "/";
+    function getClass(assignment_id, class_id) {
+        var url = "/foraliving/student-list/" + class_id + "/" + assignment_id + "/";
         $.ajax({
             method: "GET",
             url: url,
@@ -317,7 +356,6 @@ $(document).ready(function () {
                         else {
                             return "<a href='/foraliving/teacher/volunteer/assign/" + full[0] + "/" + assignment_id + "/'> Add </a>";
                         }
-
                     }
                 }
                 ]

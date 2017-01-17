@@ -47,6 +47,7 @@ $(document).ready(function () {
 
 
     function assignVolounteer() {
+        var class_id = $("#classname").val();
         var volunteer_id = $('#volunteer_id').val();
         var assignment = $('#assignment').val();
         var option = $('input[name=options]:checked').val();
@@ -57,7 +58,7 @@ $(document).ready(function () {
             url: "/foraliving/teacher/interview-volunteer/create/",
             data: {'assignment': assignment, 'result': result, 'new_option': new_option, 'volunteer_id': volunteer_id},
         }).done(function (data) {
-            window.location.href = '/foraliving/teacher/class/';
+            window.location.href = '/foraliving/teacher/class/?class=' + class_id + "&assignment=" + assignment;
         });
 
     }
@@ -83,48 +84,57 @@ $(document).ready(function () {
 
             var result = $('#result');
             result.html('');
-
-            var assignment_id = $("#assignment").val();
-            $("#assignment").selectpicker('refresh');
-            $.ajax({
-                method: "GET",
-                url: "/foraliving/get/student-list/" + assignment_id,
-                contentType: "application/json"
-            }).done(function (data) {
-
-                if (data != "") {
-                    result.append('<h4 style="text-align: center";> Students </h4>')
-                }
-
-                $.each(data, function (id, data) {
-                    variable = "";
-                    variable = '<label><input type="radio" name="options" value="a' +
-                        data.pk + '" /> ' + data.fields.first_name + " " + data.fields.last_name + '</label>';
-                    result.append(variable);
-                    result.append("</br>")
-                });
-            });
             var result = $('#groups');
             result.html('');
 
-            $.ajax({
-                method: "GET",
-                url: "/foraliving/get/student-group/" + assignment_id,
-                contentType: "application/json"
-            }).done(function (data) {
+            var assignment_id = $("#assignment").val();
+            $("#assignment").selectpicker('refresh');
+        });
+        return false;
+    });
 
 
-                if (data != "") {
-                    result.append('<h4 style="text-align: center";> Groups </h4>')
-                }
+    $("#assignment").change(function () {
+        var assignment_id = $("#assignment").val();
+        $.ajax({
+            method: "GET",
+            url: "/foraliving/get/student-list/" + assignment_id,
+            contentType: "application/json"
+        }).done(function (data) {
 
-                $.each(data, function (id, data) {
-                    variable = "";
-                    variable = '<label><input type="radio" name="options" value="b' +
-                        data.pk + '" /> ' + data.fields.name + '</label>';
-                    result.append(variable);
-                    result.append("</br>")
-                });
+            if (data != "") {
+                result.append('<h4 style="text-align: center";> Students </h4>')
+            }
+
+            $.each(data, function (id, data) {
+                variable = "";
+                variable = '<label><input type="radio" name="options" value="a' +
+                    data.pk + '" /> ' + data.fields.first_name + " " + data.fields.last_name + '</label>';
+                result.append(variable);
+                result.append("</br>")
+            });
+        });
+
+        var result = $('#groups');
+        result.html('');
+
+        $.ajax({
+            method: "GET",
+            url: "/foraliving/get/student-group/" + assignment_id,
+            contentType: "application/json"
+        }).done(function (data) {
+
+
+            if (data != "") {
+                result.append('<h4 style="text-align: center";> Groups </h4>')
+            }
+
+            $.each(data, function (id, data) {
+                variable = "";
+                variable = '<label><input type="radio" name="options" value="b' +
+                    data.pk + '" /> ' + data.fields.name + '</label>';
+                result.append(variable);
+                result.append("</br>")
             });
         });
         return false;

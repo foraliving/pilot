@@ -7,9 +7,6 @@ from foraliving.recording import RecordingType, RecordingSetupMicrophone, Record
     QuestionInterview, Recording, Orientation, SaveRecording, protected_serve
 from foraliving.student import CompleteVideo, StudentAssignment, ConductVideo, SelectQuestion, SelectQuestionEdit, \
     SendEmail, AssignmentList
-from foraliving.volunteer import VolunteerProfile, VolunteerEdit
-from foraliving.general import Videos
-from foraliving.volunteer import Contact, editSkill, GetInterviewed
 from foraliving.teacher import TeacherStudentT1, TeacherVolunteerT6, TeacherVideosT8, asignment_list, get_student, \
     student_list, list_student_group, AssignGroup, uniqueGroup, TeacherVolunteerT6a, AssignVolunteer, list_groups, \
     TeacherVolunteerT9, groupList, studentList, CreateInterview
@@ -51,11 +48,6 @@ urlpatterns = [
         name='volunteer_profile'),
     url(r'^volunteer/profile/edit/(?P<user_id>\d+)/$', VolunteerEdit.as_view(), name='volunteer_profile_edit'),
     url(r'^edit-skills/(?P<volunteer_id>\d+)/$', editSkill, name='editSkill'),
-    url(
-        r'^volunteer/get_interviewed$',
-        GetInterviewed.as_view(),
-        name='volunteer_get_interviewed'
-    ),
 
     # general
     url(r"^$", Videos.as_view(), name='videos'),
@@ -79,7 +71,7 @@ urlpatterns = [
     url(r"^get/student-group/(?P<assignment_id>\d+)/$", groupList, name='group_list'),
     url(r"^get-assignment/(?P<class_id>\d+)/$", asignment_list, name='assignment_list'),
     url(r"^get-student/(?P<assignment_id>\d+)/$", get_student, name='student_list_assignment'),
-    url(r"^student-list/(?P<class_id>\d+)/$", student_list, name='class_student_list'),
+    url(r"^student-list/(?P<class_id>\d+)/(?P<assignment_id>\d+)/$", student_list, name='class_student_list'),
     url(r"list-student-group", list_student_group, name='list-student_group'),
 
 ]

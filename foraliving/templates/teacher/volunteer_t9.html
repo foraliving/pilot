@@ -4,7 +4,7 @@
 {% bootstrap_javascript jquery=1 %}
 {% bootstrap_messages %}
 {% block list %}
-<li><a href="{% url 'teacher_class' %}">Student</a></li>
+<li><a href="{% url 'teacher_class' %}">Students</a></li>
 <li class="active"><a href="{%url 'teacher_volunteer'%}">Volunteers</a></li>
 <li><a href="{%url 'teacher_videos'%}">Videos</a></li>
 {% endblock %}
@@ -47,15 +47,16 @@
                     </div>
                     <div class="form=group" style="text-align: center;">
                         <select class="selectpicker" id="assignment" name="assignment" data-live-search="true" style="color: white; background-color: #565656; border-color: #565656;
-     border-style: solid;">
+     border-style: solid;" title="Select an assignment">
                         </select>
                         <label class="checkbox">
-                            <input type="checkbox" value="" name="options" style="opacity:0; position:absolute; left:9999px;"></label>
+                            <input type="checkbox" value="" name="options"
+                                   style="opacity:0; position:absolute; left:9999px;"></label>
 
                     </div>
                     <br>
                     <div>
-                        <h4 style="text-align: center" ;> Select the interviewer</h4>
+                        <h4 style="text-align: center";> Select the interviewer</h4>
                         <br>
                     </div>
                     <div class="form=group" id="result" style="text-align: center;">

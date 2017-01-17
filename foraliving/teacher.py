@@ -1,4 +1,5 @@
 import json
+from django.urls import reverse
 from django.shortcuts import redirect
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import connection
@@ -23,10 +24,14 @@ class TeacherStudentT1(LoginRequiredMixin, generic.View):
         :param request:
         :return:
         """
+        class_id = request.GET.get("class")
+        assignment = request.GET.get("assignment")
         user_add_ons = User_Add_Ons.objects.get(user=request.user)
         class_info = Class.objects.filter(teacher=user_add_ons)
         group_list = Group.objects.all()
-        return render(request, self.question_view, {'class_info': class_info, 'group_list': group_list})
+        return render(request, self.question_view,
+                      {'class_info': class_info, 'group_list': group_list,
+                       'class_id':  class_id, 'assignment': assignment})
 
 
 class TeacherVolunteerT6(LoginRequiredMixin, generic.View):
@@ -129,26 +134,25 @@ def get_student(request, assignment_id):
     return JsonResponse({'results': list(results)})
 
 
-def student_list(request, class_id):
+def student_list(request, class_id, assignment_id):
     """
     Return the student list in relation
     :param request:
     :param class_id:
     :return:
     """
-
     cursor_v = connection.cursor()
     cursor_v.execute(
-        """select au.id, au.username, au.first_name, au.last_name, fi.interviewee_id, au2.first_name, au2.last_name, au2.id,  ag.name
-from auth_user au
-inner join foraliving_student_class fsc on au.id=fsc.student_id
-left join auth_user_groups aug on au.id=aug.user_id
-left join auth_group ag on ag.id=aug.group_id
-left join foraliving_interview fi on ag.id=fi.group_id
-left join auth_user au2 on fi.interviewee_id=au2.id
-where fsc."falClass_id"=%s
-group by au.id, au.username, au.first_name, au.last_name, fi.interviewee_id, au2.first_name, au2.last_name, au2.id, ag.name""",
-        [class_id])
+        """select au.id, au.username, au.first_name, au.last_name, fi.interviewee_id, au2.first_name, au2.last_name, au2.id, ag.name
+            from auth_user au
+            inner join foraliving_student_class fsc on au.id=fsc.student_id and (fsc."falClass_id"=%s)
+            left join auth_user_groups aug on au.id=aug.user_id
+            left join auth_group ag on ag.id=aug.group_id
+            left join foraliving_interview fi on ag.id=fi.group_id and (fi.assignment_id=%s)
+            left join auth_user au2 on fi.interviewee_id=au2.id
+            left join foraliving_assignment fa on fa.id=fi.assignment_id and (fsc."falClass_id"=%s)
+            group by au.id, au.username, au.first_name, au.last_name, fi.interviewee_id, au2.first_name, au2.last_name, au2.id, ag.name""",
+                    [class_id, assignment_id, class_id])
 
     results = cursor_v.fetchall()
     return JsonResponse({'results': list(results)})
@@ -175,7 +179,6 @@ def list_groups(request):
     leads_as_json = serializers.serialize('json', groups)
 
     return HttpResponse(leads_as_json, content_type='application/json')
-
 
 
 class AssignGroup(LoginRequiredMixin, generic.View):
@@ -213,7 +216,7 @@ def uniqueGroup(request):
     """
     if request.is_ajax():
         group = request.GET.get('group')
-        count_group = (Group.objects.filter(name=group).count())
+        count_group = (Group.objects.filter(name__iexact=group).count())
         if count_group >= 1:
             return HttpResponse('true')
         else:
@@ -241,7 +244,7 @@ class AssignVolunteer(LoginRequiredMixin, generic.View):
 
         interview = Interview.objects.create(group=group, assignment=assignment, interviewee=volunteer)
 
-        return redirect('teacher_class')
+        return redirect(reverse('teacher_class') + '?class=' + str(assignment.falClass.id) + '&assignment=' + str(assignment.id))
 
 
 class TeacherVolunteerT9(LoginRequiredMixin, generic.View):
@@ -269,7 +272,7 @@ def studentList(request, assignment_id):
     """
     assignment = Assignment.objects.get(pk=assignment_id)
     group = Interview.objects.filter(assignment=assignment).values('group')
-    groups = Group.objects.exclude(pk__in =group).values('pk')
+    groups = Group.objects.exclude(pk__in=group).values('pk')
 
     student_class = Student_Class.objects.filter(falClass=assignment.falClass).values('student_id')
 
@@ -285,8 +288,11 @@ def groupList(request, assignment_id):
     :return:
     """
     assignment = Assignment.objects.get(pk=assignment_id)
+    print(assignment.title)
     group = Interview.objects.filter(assignment=assignment).values('group')
-    groups = Group.objects.exclude(pk__in =group).values('pk')
+    for data in group:
+        print(data)
+    groups = Group.objects.exclude(pk__in=group).values('pk')
 
     student_class = Student_Class.objects.filter(falClass=assignment.falClass).values('student_id')
 

@@ -3,7 +3,7 @@
 {% bootstrap_css %}
 {% bootstrap_javascript jquery=1 %}
 {% block list %}
-<li class="active"><a href="{% url 'teacher_class' %}">Student</a></li>
+<li class="active"><a href="{% url 'teacher_class' %}">Students</a></li>
 <li><a href="{%url 'teacher_volunteer'%}">Volunteers</a></li>
 <li><a href="{%url 'teacher_videos'%}">Videos</a></li>
 {% endblock %}
@@ -62,17 +62,15 @@
         </div>
         <div class="col-sm-3">
             <select class="selectpicker" id="classname" name="classname" data-live-search="true" style="color: white; background-color: #565656; border-color: #565656;
-     border-style: solid;">
-                <option value="0">Add Classroom</option>
+     border-style: solid;" title="Search menu items">
                 {%for data in class_info%}
                 <option value="{{data.id}}">{{data.name}}</option>
-                {%endfor%}</select>
+                {%endfor%}
+                <option value="0">Add Classroom</option>
+            </select>
         </div>
         <div class="col-sm-3">
-            <select class="selectpicker" id="options" name="options" data-live-search="true">
-                <option value="A0">Select an option</option>
-                <option value="A1">New Assignment</option>
-                <option value="B2">Delete class</option>
+            <select class="selectpicker" id="options" name="options" data-live-search="true" title="Search menu items">
             </select>
         </div>
     </div>
@@ -98,6 +96,8 @@
         </div>
     </div>
 </div>
+<input type="hidden" value="{{class_id}}" id="class_hidden">
+<input type="hidden" value="{{assignment}}" id="assignment_hidden">
 {% include 'teacher/add_group.html' %}
 {% endblock %}
 {% block scripts %}
