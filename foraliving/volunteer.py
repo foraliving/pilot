@@ -172,11 +172,6 @@ class GetInterviewed(LoginRequiredMixin, generic.View):
             user_names = ''
             group_name = interview.group
 
-            for s in students:
-                print(s.student)
-            print(students)
-            print(users)
-            print(students_class_group)
             # This is the general case (more than one student)
             if (len(students_class_group) > 1):
                 cont = 0
@@ -212,8 +207,18 @@ class GetInterviewed(LoginRequiredMixin, generic.View):
         return students_in_group
 
 
-class ReviewQuestionsView(LoginRequiredMixin, generic.View):
-    def get(self, request, interview_id):
-        questions = Interview_Question_Map.objects.filter(interview=interview_id)
+class InterviewQuestionsView(LoginRequiredMixin, generic.View):
+    template = 'volunteer/interview_questions.html'
 
-        return questions
+    def get(self, request, interview_id):
+        interview = get_object_or_404(Interview, pk=interview_id)
+        questions = Interview_Question_Map.objects.filter(interview=interview)
+
+        return render(
+            request,
+            self.template,
+            {
+                'interview_questions': questions,
+                'group_name': interview.group
+            }
+        )
