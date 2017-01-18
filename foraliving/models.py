@@ -172,8 +172,6 @@ class Interview(models.Model):
     group = models.ForeignKey(Group)
     date = models.DateTimeField(default=datetime.now, blank=True)
     assignment = models.ForeignKey(Assignment, on_delete=models.CASCADE, related_name='assignment')
-    session_key = models.CharField(max_length=50)
-    status = models.CharField(max_length=50)
 
     def __unicode__(self):
         return 'Interview of ' + str(self.interviewee) + ' by ' + str(self.assignment)

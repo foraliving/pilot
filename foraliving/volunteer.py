@@ -8,7 +8,6 @@ from django.views import generic
 from foraliving.views import createInputToken
 from .forms import *
 from foraliving.models import Volunteer_User_Add_Ons, Interview, Interview_Question_Video_Map, Interview_Question_Map
-from foraliving.models import Student_Class
 from mail_templated import EmailMessage
 
 
@@ -106,7 +105,6 @@ class VolunteerEdit(LoginRequiredMixin, generic.View):
             )
         else:
             return redirect(self.login_url)
-
 
     def post(self, request, user_id):
         """
@@ -222,3 +220,5 @@ class InterviewQuestionsView(LoginRequiredMixin, generic.View):
                 'group_name': interview.group
             }
         )
+
+        return questions

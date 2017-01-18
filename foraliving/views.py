@@ -96,7 +96,7 @@ def uniqueEmail(request):
     """
     if request.is_ajax():
         email = request.GET.get('email')
-        count_user = (User.objects.filter(email=email).count())
+        count_user = (User.objects.filter(email__iexact=email).count())
         if count_user >= 1:
             return HttpResponse('true')
         else:
@@ -111,7 +111,7 @@ def uniqueUsername(request):
     """
     if request.is_ajax():
         username = request.GET.get('username')
-        count_user = (User.objects.filter(username=username).count())
+        count_user = (User.objects.filter(username__iexact=username).count())
         if count_user >= 1:
             return HttpResponse('true')
         else:

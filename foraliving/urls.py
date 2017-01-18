@@ -84,7 +84,7 @@ urlpatterns = [
     url(r"^get/student-group/(?P<assignment_id>\d+)/$", groupList, name='group_list'),
     url(r"^get-assignment/(?P<class_id>\d+)/$", asignment_list, name='assignment_list'),
     url(r"^get-student/(?P<assignment_id>\d+)/$", get_student, name='student_list_assignment'),
-    url(r"^student-list/(?P<class_id>\d+)/$", student_list, name='class_student_list'),
+    url(r"^student-list/(?P<class_id>\d+)/(?P<assignment_id>\d+)/$", student_list, name='class_student_list'),
     url(r"list-student-group", list_student_group, name='list-student_group'),
 
 ]
