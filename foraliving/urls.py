@@ -9,7 +9,8 @@ from foraliving.student import CompleteVideo, StudentAssignment, ConductVideo, S
     SendEmail, AssignmentList
 from foraliving.volunteer import VolunteerProfile, VolunteerEdit
 from foraliving.general import Videos
-from foraliving.volunteer import Contact, editSkill, GetInterviewed, InterviewQuestionsView
+from foraliving.volunteer import Contact, editSkill, GetInterviewed, InterviewQuestionsView, JoinInterviewView, \
+    GetQuestionFromInterviewQuestion
 from foraliving.teacher import TeacherStudentT1, TeacherVolunteerT6, TeacherVideosT8, asignment_list, get_student, \
     student_list, list_student_group, AssignGroup, uniqueGroup, TeacherVolunteerT6a, AssignVolunteer, list_groups, \
     TeacherVolunteerT9, groupList, studentList, CreateInterview
@@ -60,6 +61,16 @@ urlpatterns = [
         r'^volunteer/interview/(?P<interview_id>\d+)/questions$',
         InterviewQuestionsView.as_view(),
         name='volunteer_interview_questions'
+    ),
+    url(
+        r'^volunteer/interview/(?P<interview_id>\d+)/join$',
+        JoinInterviewView.as_view(),
+        name='volunteer_join_interview'
+    ),
+    url(
+        r'^volunteer/interview/question/(?P<question_id>[0-9]+)/$',
+        GetQuestionFromInterviewQuestion.as_view(),
+        name='interview_question_show'
     ),
 
     # general

@@ -39,7 +39,7 @@
                     <a href="{% url 'volunteer_interview_questions' row.interview.id %}">Review Questions</a>
                 </div>
                 <div class="center">
-                    <a href="#" class="btn button-general">Join Interview</a>
+                    <a href="{% url 'volunteer_join_interview' row.interview.id %}" class="btn button-general">Join Interview</a>
                 </div>
             </div>
             {% endfor %}

@@ -1,5 +1,5 @@
 import json
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from django.conf import settings
 from django.shortcuts import render, redirect, get_object_or_404, reverse
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -206,10 +206,15 @@ class GetInterviewed(LoginRequiredMixin, generic.View):
 
 
 class InterviewQuestionsView(LoginRequiredMixin, generic.View):
+    """
+        This view will show the questions of an Interview (previously selected)
+    """
     template = 'volunteer/interview_questions.html'
 
     def get(self, request, interview_id):
+        # We get the Interview if exists
         interview = get_object_or_404(Interview, pk=interview_id)
+        # We search the questions of the interview
         questions = Interview_Question_Map.objects.filter(interview=interview)
 
         return render(
@@ -222,3 +227,38 @@ class InterviewQuestionsView(LoginRequiredMixin, generic.View):
         )
 
         return questions
+
+
+class JoinInterviewView(LoginRequiredMixin, generic.View):
+    """
+        This wiew will manage the remote connection of an interview
+    """
+    template = 'volunteer/join_interview.html'
+
+    def get(self, request, interview_id):
+        # We get the Interview if exists
+        interview = get_object_or_404(Interview, pk=interview_id)
+        # We search the questions of the interview
+        questions = Interview_Question_Map.objects.filter(interview=interview)
+        data = {}
+        for i_question in questions:
+            data[i_question.question.id] = i_question.question.name
+
+        return render(
+            request,
+            self.template,
+            {
+                'interview_questions': questions,
+                'questions_array': data
+            }
+        )
+
+
+class GetQuestionFromInterviewQuestion(LoginRequiredMixin, generic.View):
+    """
+        Get the GPG key for customer
+    """
+    def get(self, request, question_id):
+        interview_question = get_object_or_404(Interview_Question_Map, pk=question_id)
+
+        return JsonResponse(interview_question.question.name, safe=False)
