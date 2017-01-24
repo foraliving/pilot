@@ -31,7 +31,7 @@ class TeacherStudentT1(LoginRequiredMixin, generic.View):
         group_list = Group.objects.all()
         return render(request, self.question_view,
                       {'class_info': class_info, 'group_list': group_list,
-                       'class_id':  class_id, 'assignment': assignment})
+                       'class_id': class_id, 'assignment': assignment})
 
 
 class TeacherVolunteerT6(LoginRequiredMixin, generic.View):
@@ -61,6 +61,7 @@ class TeacherVolunteerT6a(LoginRequiredMixin, generic.View):
         :param request:
         :return:
         """
+        assignment = Assignment.objects.get(pk=assignment_id)
         volunteer_initial = Volunteer_User_Add_Ons.objects.values('user')
         volunteers = User.objects.filter(pk__in=volunteer_initial)
         try:
@@ -72,7 +73,7 @@ class TeacherVolunteerT6a(LoginRequiredMixin, generic.View):
 
         return render(request, self.question_view,
                       {'volunteers': volunteers, 'group': group, 'userInfo': user, 'assignment_id': assignment_id,
-                       'user_id': user_id})
+                       'user_id': user_id, 'class': assignment.falClass.id})
 
 
 class TeacherVideosT8(LoginRequiredMixin, generic.View):
@@ -88,11 +89,19 @@ class TeacherVideosT8(LoginRequiredMixin, generic.View):
         """
         user_add_ons = User_Add_Ons.objects.get(user=request.user.id)
         classname = Class.objects.filter(teacher=user_add_ons)
-        school = School.objects.get(pk=user_add_ons.school.id)
-        user_school = User_Add_Ons.objects.filter(school=school)
-        videos = Video.objects.filter(created_by__in=user_school)
-        videos = Interview_Question_Video_Map.objects.filter(video__in=videos).order_by('-video')
-        return render(request, self.question_view, {'videos': videos, 'classname': classname})
+        class_id = request.GET.get('class')
+        if class_id and class_id !='0':
+            assignments = Assignment.objects.filter(falClass__in=class_id).values('pk')
+            interview = Interview.objects.filter(assignment__in=assignments).values('pk')
+            interview_question = Interview_Question_Map.objects.filter(interview_id__in=interview)
+            videos = Interview_Question_Video_Map.objects.filter(interview_question__in=interview_question).order_by('-video')
+        else:
+            class_id = 0
+            school = School.objects.get(pk=user_add_ons.school.id)
+            user_school = User_Add_Ons.objects.filter(school=school)
+            videos = Video.objects.filter(created_by__in=user_school)
+            videos = Interview_Question_Video_Map.objects.filter(video__in=videos).order_by('-video')
+        return render(request, self.question_view, {'videos': videos, 'classname': classname, 'class_id': class_id})
 
 
 from django.core import serializers
@@ -143,7 +152,7 @@ def student_list(request, class_id, assignment_id):
     """
     cursor_v = connection.cursor()
     cursor_v.execute(
-        """select au.id, au.username, au.first_name, au.last_name, fi.interviewee_id, au2.first_name, au2.last_name, au2.id, ag.name
+        """select au.id, au.username, au.first_name, au.last_name, fi.interviewee_id, au2.first_name, au2.last_name, au2.id, ag.name, ag.id
             from auth_user au
             inner join foraliving_student_class fsc on au.id=fsc.student_id and (fsc."falClass_id"=%s)
             left join auth_user_groups aug on au.id=aug.user_id
@@ -151,8 +160,8 @@ def student_list(request, class_id, assignment_id):
             left join foraliving_interview fi on ag.id=fi.group_id and (fi.assignment_id=%s)
             left join auth_user au2 on fi.interviewee_id=au2.id
             left join foraliving_assignment fa on fa.id=fi.assignment_id and (fsc."falClass_id"=%s)
-            group by au.id, au.username, au.first_name, au.last_name, fi.interviewee_id, au2.first_name, au2.last_name, au2.id, ag.name""",
-                    [class_id, assignment_id, class_id])
+            group by au.id, au.username, au.first_name, au.last_name, fi.interviewee_id, au2.first_name, au2.last_name, au2.id, ag.name, ag.id""",
+        [class_id, assignment_id, class_id])
 
     results = cursor_v.fetchall()
     return JsonResponse({'results': list(results)})
@@ -173,10 +182,13 @@ def list_student_group(request):
 
 
 def list_groups(request):
-    users = User.objects.values('username')
-    groups = Group.objects.exclude(name__in=users)
-    groups_json = serializers.serialize('json', groups)
-    leads_as_json = serializers.serialize('json', groups)
+    class_id = request.GET.get("class_id")
+    if class_id:
+        group_class = Class_Group.objects.filter(falClass=class_id).values('group')
+        groups = Group.objects.filter(pk__in=group_class)
+        leads_as_json = serializers.serialize('json', groups)
+    else:
+        leads_as_json = None
 
     return HttpResponse(leads_as_json, content_type='application/json')
 
@@ -192,13 +204,16 @@ class AssignGroup(LoginRequiredMixin, generic.View):
         """
         students = request.POST.getlist("selected[]")
         student = User.objects.filter(pk__in=students)
-
+        class_id = request.POST.get('class_id')
+        classObject = Class.objects.get(pk=class_id)
         group_name = request.POST.get("group_name")
         group = request.POST.get('group')
 
         if group_name:
             groupObject = Group.objects.create(name=group_name)
             groupObject.save()
+            groupClass = Class_Group.objects.create(group=groupObject, falClass=classObject)
+            groupClass.save()
         else:
             groupObject = Group.objects.get(pk=group)
 
@@ -244,7 +259,8 @@ class AssignVolunteer(LoginRequiredMixin, generic.View):
 
         interview = Interview.objects.create(group=group, assignment=assignment, interviewee=volunteer)
 
-        return redirect(reverse('teacher_class') + '?class=' + str(assignment.falClass.id) + '&assignment=' + str(assignment.id))
+        return redirect(
+            reverse('teacher_class') + '?class=' + str(assignment.falClass.id) + '&assignment=' + str(assignment.id))
 
 
 class TeacherVolunteerT9(LoginRequiredMixin, generic.View):
@@ -288,10 +304,7 @@ def groupList(request, assignment_id):
     :return:
     """
     assignment = Assignment.objects.get(pk=assignment_id)
-    print(assignment.title)
     group = Interview.objects.filter(assignment=assignment).values('group')
-    for data in group:
-        print(data)
     groups = Group.objects.exclude(pk__in=group).values('pk')
 
     student_class = Student_Class.objects.filter(falClass=assignment.falClass).values('student_id')
@@ -332,3 +345,30 @@ class CreateInterview(LoginRequiredMixin, generic.View):
         interview = Interview.objects.create(group=group, assignment=assignment, interviewee=volunteer)
 
         return HttpResponse('true')
+
+
+class GroupInterface(LoginRequiredMixin, generic.View):
+    """Generic view to display the group interface"""
+    login_url = settings.LOGIN_URL
+    group_view = 'teacher/group_t4.html'
+
+    def get(self, request, class_id, assignment_id, group_id):
+        """
+        :param request:
+        :return:
+        """
+        group = Group.objects.get(pk=group_id)
+        student_class = Student_Class.objects.filter(falClass=class_id).values('student')
+        try:
+            interview = Interview.objects.get(assignment=assignment_id, group=group_id)
+            interview_question = Interview_Question_Map.objects.filter(interview_id=interview.id)
+            videos = Interview_Question_Video_Map.objects.filter(interview_question__in=interview_question)
+            volunteer = Volunteer_User_Add_Ons.objects.get(user=interview.interviewee.id)
+        except:
+            interview = None
+            videos = None
+            volunteer = None
+
+        users = User.objects.filter(groups__in=group_id, pk__in=student_class)
+        return render(request, self.group_view, {'group': group, 'users': users,
+                                                 'interview': interview, 'videos': videos, 'volunteer': volunteer})

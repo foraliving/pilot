@@ -4,24 +4,64 @@
 {% bootstrap_javascript jquery=1 %}
 {% bootstrap_messages %}
 {% block list %}
-<li><a  href="{% url 'teacher_class' %}">Student</a></li>
-<li><a  href="{%url 'teacher_volunteer'%}">Volunteers</a></li>
-<li class="active"><a  href="{%url 'teacher_videos'%}">Videos</a></li>
+<li><a href="{% url 'teacher_class' %}">Student</a></li>
+<li><a href="{%url 'teacher_volunteer'%}">Volunteers</a></li>
+<li class="active"><a href="{%url 'teacher_videos'%}">Videos</a></li>
 {% endblock %}
 {% load staticfiles %}
 {% block styles %}
 <link rel="stylesheet" href="{% static 'UX/css/student/recording.css' %}">
 <link rel="stylesheet" href="{% static 'UX/css/simpleGridTemplate.css' %}">
+<link rel="stylesheet" href="{% static 'UX/css/bootstrap-select/bootstrap-select.min.css' %}">
+<script src="{% static 'js/select/bootstrap-select.min.js' %}"></script>
+<script src="{% static 'js/teacher/videos.js' %}"></script>
 {% endblock %}
 {% block body %}
 <div class="container">
-     <div class="form-group">
-        <div class="col-sm-4">
-            <select class="form-control" id="class" name="class">
-                {%for data in classname%}
-                <option value="{{data.id}}">{{data.name}}</option>
-                {%endfor%}</select>
+    <div class="col-sm-4">
+        <select class="selectpicker" id="classname" name="classname" data-live-search="true"
+                title="Search menu items">
+            {% if class_id == 0 %}
+            <option value=0 selected>All Classes</option>
+            {% else %}
+            <option value=0>All Classes</option>
+            {% endif %}
+            {%for data in classname%}
+            {% ifequal data.id|stringformat:"i" class_id %}
+            <option value="{{data.id}}" selected> {{data.name}}</option>
+            {% else %}
+            <option value="{{data.id}}">{{data.name}}</option>
+            {% endifequal %}
+            {%endfor%}</select>
+    </div>
+</div>
+<br>
+<div class="container">
+    <div class="gallery">
+        {% for video in videos %}
+        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+            <div class="thumbnail" style="text-align: center; width: 82%;">
+                <div style="text-align: right;"> Delete</div>
+                <div class="embed-responsive embed-responsive-16by9">
+                    <video controls>
+                        <source src="/foraliving/media/{{video.video.url}}">
+                    </video>
+                </div>
+                <div style="margin-left: 8%;">
+                    <p class="tag">{{video.video.name}}</p>
+                    <p class="text-column">{{video.interview_question.interview.interviewee.first_name}},
+                        {{video.interview_question.interview.interviewee.volunteer_user_add_ons.workTitle}}</p>
+                    {% if video.video.status == "approved"%}
+                    <div class="page-title" style="font-size: 18px; text-align: left;">
+                    </div>
+                    {% else %}
+                    <div class="link" style="font-size: 18px; text-align: left;">
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
         </div>
+        {% endfor %}
     </div>
 </div>
 {% endblock %}

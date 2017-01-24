@@ -1,5 +1,5 @@
 $(document).ready(function () {
-
+    //method to validate the T9 Form
     $(document).on('click', '#assign-volunteer-id', function (e) {
         var modal = $("#createInterview").validate({
             onkeyup: false,
@@ -45,7 +45,7 @@ $(document).ready(function () {
         });
     });
 
-
+    //function to assign a volunteer in one interview
     function assignVolounteer() {
         var class_id = $("#classname").val();
         var volunteer_id = $('#volunteer_id').val();
@@ -63,6 +63,7 @@ $(document).ready(function () {
 
     }
 
+    //method to detect the changes in the class select
     $("#classname").change(function () {
         var class_id = $("#classname").val();
         var url = "/foraliving/get-assignment/" + class_id + "/";
@@ -93,7 +94,7 @@ $(document).ready(function () {
         return false;
     });
 
-
+    //method to detect the changes in the assignment select
     $("#assignment").change(function () {
         var assignment_id = $("#assignment").val();
         $.ajax({
@@ -118,6 +119,7 @@ $(document).ready(function () {
         var result = $('#groups');
         result.html('');
 
+        //method to generate the group and student list
         $.ajax({
             method: "GET",
             url: "/foraliving/get/student-group/" + assignment_id,

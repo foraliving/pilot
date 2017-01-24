@@ -27,10 +27,14 @@
 {% endblock %}
 {% block body %}
 <div class="container">
+    <div>
+        <h4><a href="{% url 'teacher_class' %}?class={{class}}&assignment={{assignment_id}}"> >Back</a></h4>
+    </div>
     {% if group %}
     <h2 style="text-align: center;"> Assign a volunteer to be interviewed by {{group.name}} </h2>
     {% else %}
-    <h2 style="text-align: center;"> Assign a volunteer to be interviewed by {{userInfo.first_name}} {{userInfo.last_name}} </h2>
+    <h2 style="text-align: center;"> Assign a volunteer to be interviewed by {{userInfo.first_name}}
+        {{userInfo.last_name}} </h2>
     {% endif %}
     <div class="panel-body">
         <div class="panel panel-default">
@@ -56,8 +60,9 @@
                     <tr data-link="" style="vertical-align: middle;">
                         <td></td>
                         <td style="font-size:14px; text-align: center; vertical-align: middle;">
-                            <a  class="btn" href="/foraliving/assign/volunteer/{{data.id}}/{{assignment_id}}/{{user_id}}/"
-                                    style="margin-top: 0px; margin-bottom: 0px;
+                            <a class="btn"
+                               href="/foraliving/assign/volunteer/{{data.id}}/{{assignment_id}}/{{user_id}}/"
+                               style="margin-top: 0px; margin-bottom: 0px;
                                     font-size: 14px; max-height: 30px; background-color:#8CCA8B; border-color: #8CCA8B; border-style: hidden; color:white">
                                 Assign
                             </a>

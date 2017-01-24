@@ -23,7 +23,6 @@ class Interest(CategoryBase):
     def __unicode__(self):
         return str(self.name)
 
-
 class LMS(models.Model):
     name = models.CharField(max_length=128)
     url = models.CharField(max_length=128)
@@ -141,6 +140,18 @@ class Class(models.Model):
     class Meta:
         verbose_name = 'FAL Class'
         verbose_name_plural = 'FAL Classes'
+
+    def __unicode__(self):
+        return str(self.name) + ':' + str(self.teacher)
+
+
+class Class_Group(models.Model):
+    group = models.OneToOneField(Group, on_delete=models.CASCADE)
+    falClass = models.ForeignKey(Class, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = 'Class Groups'
+        verbose_name_plural = 'Class Groups'
 
     def __unicode__(self):
         return str(self.name) + ':' + str(self.teacher)
