@@ -15,6 +15,14 @@ body {
     font-weight:600;
 }
 
+.link {
+    color: #5da4d2
+}
+
+.header-border {
+    border-color: #f9d236;
+}
+
 .button-general {
     background-color: #99c64c;
     color:white;

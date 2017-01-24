@@ -1,4 +1,5 @@
 $(document).ready(function () {
+    //definition initial of the datatable
     var user_table = $("#data-table").DataTable({
         'destroy': true,
         "paging": false,
@@ -6,7 +7,8 @@ $(document).ready(function () {
 
     var assignment_id = $("#assignment_hidden").val();
     var class_id = $("#class_hidden").val();
-    if (class_id != null) {
+    if (class_id != 'None') {
+        //Verify if exist a class sent how parameter
         $('#classname').val(class_id);
         $('#classname').selectpicker('refresh');
         var url = "/foraliving/get-assignment/" + class_id + "/";
@@ -15,6 +17,7 @@ $(document).ready(function () {
             url: url,
             contentType: "application/json"
         }).done(function (data) {
+            // reload the assignment options
             $("#options").html("");
             $("#options").selectpicker('refresh');
 
@@ -39,13 +42,14 @@ $(document).ready(function () {
             $("#options").selectpicker('refresh');
             $('#options').val(assignment_id);
             $("#options").selectpicker('refresh');
+
+            //get the student in relation with the assignment and ckass
+            getClass(assignment_id, class_id);
         });
     }
 
 
-    getClass(assignment_id, class_id);
-
-
+    //method to verify if the teacher select other class
     $("#classname").change(function () {
         if ($("#classname").val() != 0) {
             var class_id = $("#classname").val();
@@ -76,8 +80,8 @@ $(document).ready(function () {
                     opt.text(data.title);
                     $('#options').append(opt);
                 });
-
                 $("#options").selectpicker('refresh');
+                $('#data-table').dataTable().fnClearTable();
             });
 
             return false;
@@ -86,6 +90,7 @@ $(document).ready(function () {
         }
     });
 
+    //verify if the teacher change the option to "user an existing group"
     $("#use_group").change(function () {
         if ($('#use_group').is(':checked')) {
             $("#group_name").hide();
@@ -96,45 +101,51 @@ $(document).ready(function () {
         }
     });
 
+    //method to make the ajax call that get the student list that the teacher want to assign
     $('html').on('click', '#add_to_group', function (e) {
-        var selected = [];
-        $('.checkboxes input:checked').each(function () {
-            selected.push($(this).attr('value'));
-        });
+        class_id = $("#classname").val();
+        assignment_id = $("#options").val();
+        if (assignment_id != "") {
 
-        $.ajax({
-            type: "POST",
-            url: "/foraliving/list-student-group/",
-            data: {'selected[]': selected},
-        }).done(function (data) {
-            $("#students_name > tbody").html("");
-            $.each(data, function (id, data) {
-                $('#students_name').append('<tr><td>' + data.fields.first_name + ' ' + data.fields.last_name + '</td></tr>')
+            var selected = [];
+            $('.checkboxes input:checked').each(function () {
+                selected.push($(this).attr('value'));
             });
 
             $.ajax({
-                type: "GET",
-                url: "/foraliving/groups/",
+                type: "POST",
+                url: "/foraliving/list-student-group/",
+                data: {'selected[]': selected},
             }).done(function (data) {
-                $("#group").html("");
-                $("#group").selectpicker('refresh');
-
+                $("#students_name > tbody").html("");
                 $.each(data, function (id, data) {
-                    var opt = $('<option />');
-                    opt.val(data.pk);
-                    opt.text(data.fields.name);
-                    $('#group').append(opt);
+                    $('#students_name').append('<tr><td>' + data.fields.first_name + ' ' + data.fields.last_name + '</td></tr>')
                 });
-                $("#group").selectpicker('refresh');
+                $.ajax({
+                    type: "GET",
+                    url: "/foraliving/groups/?class_id=" + class_id,
+                }).done(function (data) {
+                    $("#group").html("");
+                    $("#group").selectpicker('refresh');
+
+                    $.each(data, function (id, data) {
+                        var opt = $('<option />');
+                        opt.val(data.pk);
+                        opt.text(data.fields.name);
+                        $('#group').append(opt);
+                    });
+                    $("#group").selectpicker('refresh');
+
+                    e.preventDefault();
+                    $("#group_name").hide();
+                    $("#use_group").prop("checked", true);
+                    $('input[name=group_name]').val("");
+                    $('#group').selectpicker('show');
+                    $('#add_group').modal();
+                    $('input[name=data]').val(selected);
+                });
             });
-        });
-        e.preventDefault();
-        $("#group_name").hide();
-        $("#use_group").prop("checked", true);
-        $('input[name=group_name]').val("");
-        $('#group').selectpicker('show');
-        $('#add_group').modal();
-        $('input[name=data]').val(selected);
+        }
     });
 
     $("#add_group").on("shown.bs.modal", function () {
@@ -145,10 +156,12 @@ $(document).ready(function () {
 
     $('#add_group').on('hidden.bs.modal', function () {
         var formID = $('#addGroup');
+        //reset the form when the modal is open
         formID.validate().resetForm();
     })
 
 
+    //method to verify the unique group
     $.validator.addMethod("uniqueGroup", function () {
         var group = $("input[name=group_name]").val();
         var valid = false
@@ -167,6 +180,9 @@ $(document).ready(function () {
 
 
     }, "This group name is already taken! Try another.");
+
+
+    //method to validate the group form
     $(document).on('click', '#save_group', function (e) {
         var modal = $("#addGroup").validate({
             onkeyup: false,
@@ -207,26 +223,29 @@ $(document).ready(function () {
         });
     });
 
+    //method to assign students to group
     function sendGroup() {
         var selected = [];
         $('.checkboxes input:checked').each(function () {
             selected.push($(this).attr('value'));
         });
+        var class_id = $("#classname").val();
         var group = $('#group').val();
         var group_name = $('input[name=group_name]').val()
-        $.ajax({
-            type: "POST",
-            url: "/foraliving/assign_group/",
-            data: {'selected[]': selected, 'group': group, 'group_name': group_name},
-        }).done(function (data) {
-            $('#add_group').modal('toggle');
-            var assignment_id = $("#options").val();
-            var class_id = $("#classname").val();
-            getClass(assignment_id, class_id);
-        });
+        if (selected != null) {
+            $.ajax({
+                type: "POST",
+                url: "/foraliving/assign_group/",
+                data: {'selected[]': selected, 'group': group, 'group_name': group_name, 'class_id': class_id},
+            }).done(function (data) {
+                $('#add_group').modal('toggle');
+                var assignment_id = $("#options").val();
+                getClass(assignment_id, class_id);
+            });
+        }
     }
 
-
+    //method to verify the changes in the assignment select
     $("#options").change(function () {
         if ($("#options").val() != "A0") {
             if ($("#options").val() == "A1") {
@@ -247,59 +266,7 @@ $(document).ready(function () {
         }
     });
 
-
-    function getAssignment() {
-        var assignment_id = $("#options").val();
-
-        $.ajax({
-            method: "GET",
-            url: "/foraliving/get-student/" + assignment_id + "/",
-            contentType: "application/json"
-        }).done(function (data) {
-            var data_s = data.results;
-
-            $('#data-table').dataTable().fnClearTable();
-            var user_table = $("#data-table").DataTable({
-                'destroy': true,
-                "paging": false,
-                'data': data_s,
-                "columnDefs": [{
-                    "targets": 0,
-                    "render": function (data, type, full, meta) {
-                        return '<div> </div>';
-                    }
-                }, {
-                    "targets": 1,
-                    "render": function (data, type, full, meta) {
-                        if (full[4] != null) {
-                            return "<div>" + full[1] + "<a href=''> (" + full[4] + ")</a></div>";
-                        }
-                        else {
-                            return "<div><a href=''> (" + full[1] + ")</a></div>";
-                        }
-                    }
-                }, {
-                    "targets": 3,
-                    "render": function (data, type, full, meta) {
-                        return full[2];
-                    }
-                }, {
-                    "targets": 4,
-                    "render": function (data, type, full, meta) {
-                        return full[3];
-                    }
-                }, {
-                    "targets": 2,
-                    "render": function (data, type, full, meta) {
-                        return "<div> <a href='/foraliving/volunteer/profile/" + full[5] + "/0'>" + full[6] + " " + full[7] + "</a> <i class='fa fa-btn fa-close' style='margin-left: 10px;' title='Delete'></i>" + "</a>" + "</div>";
-                    }
-                }
-                ]
-            });
-        });
-    }
-
-
+    //method to display the stuents in relation with the class and assignment
     function getClass(assignment_id, class_id) {
         var url = "/foraliving/student-list/" + class_id + "/" + assignment_id + "/";
         $.ajax({
@@ -331,10 +298,13 @@ $(document).ready(function () {
                     "targets": 1,
                     "render": function (data, type, full, meta) {
                         if (full[8] != null && full[8] != full[1]) {
-                            return "<div>" + full[1] + "<a href=''> (" + full[8] + ")</a></div>";
+                            return "<div>" + full[1] + "<a href='/foraliving/teacher/group/" + class_id + "/" + assignment_id + "/" + full[9] + "/'>  (" + full[8] + ")</a></div>";
+                        }
+                        if (full[9] == null) {
+                            return "<div>" + full[1] + "</div>";
                         }
                         else {
-                            return "<div><a href=''> " + full[1] + "</a></div>";
+                            return "<div><a href='/foraliving/teacher/group/" + class_id + "/" + assignment_id + "/" + full[9] + "/'> " + full[1] + "</a></div>";
                         }
                     }
                 }, {

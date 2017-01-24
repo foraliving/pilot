@@ -61,8 +61,7 @@
             Students
         </div>
         <div class="col-sm-3">
-            <select class="selectpicker" id="classname" name="classname" data-live-search="true" style="color: white; background-color: #565656; border-color: #565656;
-     border-style: solid;" title="Search menu items">
+            <select class="selectpicker" id="classname" name="classname" data-live-search="true" title="Search menu items">
                 {%for data in class_info%}
                 <option value="{{data.id}}">{{data.name}}</option>
                 {%endfor%}

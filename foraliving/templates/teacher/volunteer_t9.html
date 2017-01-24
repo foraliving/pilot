@@ -32,6 +32,9 @@
 {% endblock %}
 {% block body %}
 <div class="container">
+    <div>
+        <h4><a href="{% url 'teacher_volunteer' %}"> >Back</a></h4>
+    </div>
     <h2 style="text-align: center;"> Assign students to {{volunteer.first_name}} {{volunteer.last_name}} </h2>
     <div class="panel-body">
         <div class="panel panel-default">
@@ -56,7 +59,7 @@
                     </div>
                     <br>
                     <div>
-                        <h4 style="text-align: center";> Select the interviewer</h4>
+                        <h4 style="text-align: center" ;> Select the interviewer</h4>
                         <br>
                     </div>
                     <div class="form=group" id="result" style="text-align: center;">

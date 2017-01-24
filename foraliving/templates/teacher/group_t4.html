@@ -1,0 +1,98 @@
+{% extends 'teacher/base.html' %}
+{% load bootstrap3 %}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery=1 %}
+{% bootstrap_messages %}
+{% block list %}
+<li><a href="{% url 'teacher_class' %}">Student</a></li>
+<li><a href="{%url 'teacher_volunteer'%}">Volunteers</a></li>
+<li class="active"><a href="{%url 'teacher_videos'%}">Videos</a></li>
+{% endblock %}
+{% load staticfiles %}
+{% block styles %}
+<link rel="stylesheet" href="{% static 'UX/css/student/recording.css' %}">
+<link rel="stylesheet" href="{% static 'UX/css/simpleGridTemplate.css' %}">
+{% endblock %}
+{% block body %}
+<div class="container">
+    <div class="panel">
+        <div class="panel-heading">
+            <div class="row">
+                <div class="col-xs-4 col-sm-5 col-md-4 col-lg-8 title-line-height page-title">
+                    Group: {{group.name}}
+                </div>
+                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-2 title-line-height text-right">
+                    <div class="btn-group">
+                        <button class="btn button-general" type="submit" id="save_group" style="width: 120px;"> Save
+                        </button>
+                    </div>
+                </div>
+                <div class="col-xs-4 col-sm-3 col-md-4 col-lg-2 title-line-height text-right">
+                    <div class="btn-group">
+                        <button class="btn button-general" type="submit" id="delete_group"
+                                style="background-color: grey; color: white; width: 120px;"> Delete
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="row" style="font-size:18px;">
+                <div class="col-sm-6 col-md-6 col-lg-8 title-line-height">
+                    {% for data in users %}
+                    {% if forloop.last %}
+                    {{data.first_name}} {{data.last_name}}
+                    {% else %}
+                    {{data.first_name}} {{data.last_name}},
+                    {% endif %}
+                    {% endfor %}
+                </div>
+                <div class="col-sm-6 col-md-6 col-lg-4 title-line-height text-right"> Interviewee:
+                    {% if volunteer %}
+                    <a
+                            href="{% url 'volunteer_profile' user_id=interview.interviewee.id interview_id=interview.id %}">{{interview.interviewee.first_name}}
+                        {{interview.interviewee.last_name}} </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <hr style="border-top: 1px solid #b7abab;">
+        <div class="panel-body">
+            <div class="container">
+                <div class="gallery">
+                    {% for video in videos %}
+                    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                        <div class="thumbnail" style="text-align: center; width: 82%;">
+                            <div style="text-align: right;"> Delete</div>
+                            <div class="embed-responsive embed-responsive-16by9">
+                                <video controls>
+                                    <source src="/foraliving/media/{{video.video.url}}">
+                                </video>
+                            </div>
+                            <div style="margin-left: 8%;">
+                                <p class="tag">{{video.video.name}}</p>
+                                <p class="text-column">{{video.interview_question.interview.interviewee.first_name}},
+                                    {{volunteer.workTitle}}</p>
+                                {% if video.video.status == "approved"%}
+                                <div class="page-title" style="font-size: 18px; text-align: left;">
+                                    <input type="checkbox" checked> Approved
+                                </div>
+                                {% else %}
+                                <div class="link" style="font-size: 18px; text-align: left;">
+                                    <input type="checkbox"> Approve
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+
+</script>
+{% endblock %}
