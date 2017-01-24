@@ -21,7 +21,7 @@
 {% endblock %}
 {% block list %}
 <li><a href="{% url 'volunteer_profile'  user_id=request.user.id interview_id=0%}">Profile</a></li>
-<li><a href="">Get Interviewed</a></li>
+<li><a href="{% url 'volunteer_get_interviewed' %}">Get Interviewed</a></li>
 {% endblock %}
 {% block body %}
 <header>

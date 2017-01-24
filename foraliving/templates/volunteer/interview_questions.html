@@ -1,0 +1,109 @@
+{% extends 'volunteer/base.html' %}
+
+{% load staticfiles %}
+{% load bootstrap3 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+{% bootstrap_messages %}
+
+{% block title %}
+<title>Get Interviewed</title>
+{% endblock %}
+
+{% block list %}
+    <li><a href="{% url 'volunteer_profile'  user_id=request.user.id interview_id=0%}">Profile</a></li>
+    <li class="active"><a href="{% url 'volunteer_get_interviewed' %}">Get Interviewed</a></li>
+{% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'UX/css/simpleGridTemplate.css' %}">
+    <link rel="stylesheet" href="{% static 'UX/css/volunteer/volunteer.css' %}">
+{% endblock %}
+
+{% block body %}
+<div class="panel panel-default">
+    <div class="panel-body">
+        <a href="{% url 'volunteer_get_interviewed' %}"><i class="fa fa-angle-left" aria-hidden="true">Back</i></a>
+        <h1 class="main-title">Questions for Interview with {{ group_name }}</h1>
+        <ol>
+            {% for inter_question in interview_questions %}
+                <li>
+                    <h4 class="description">
+                        {{ inter_question.question.name }}
+                    </h4>
+                </li>
+            {% endfor %}
+        </ol>
+    </div>
+
+    <hr class="hr-middle">
+
+    <div class="panel-body">
+        <h2><strong>About the Interview Process</strong></h2>
+        <ul>
+            <li>
+                <h4 class="description">
+                    Each video recorded will be a single question.
+                </h4>
+            </li>
+            <li>
+                <h4 class="description">
+                    The student will start recording and after a 5 second countdown will ask you a question.
+                </h4>
+            </li>
+            <li>
+                <h4 class="description">
+                    Avoid industry jargon and define industry-spefic terms.
+                </h4>
+            </li>
+            <li>
+                <h4 class="description">
+                    Ask the student to start over when needed.
+                </h4>
+            </li>
+            <li>
+                <h4 class="description">
+                    Look into the camera lens as much as possible.
+                </h4>
+            </li>
+        </ul>
+    </div>
+
+    <hr class="hr-middle">
+
+    <div class="panel-body">
+        <h2><strong>Code of Conduct</strong></h2>
+        <ul>
+            <li>
+                <h4 class="description">
+                    School, teacher, parent and/or For A Living representatives will be present and monitoring interviews.
+                </h4>
+            </li>
+            <li>
+                <h4 class="description">
+                    Only the student first names and usernames are shown. You shall not ask students to provide any additional
+                    identifying information such as, but not limited to, last name, address, or phone number. When being
+                    interviewed remotely, you will not ask the name or the location of the student’s school.
+                </h4>
+            </li>
+            <li>
+                <h4 class="description">
+                    Avoid industry jargon and define industry-spefic terms.
+                </h4>
+            </li>
+            <li>
+                <h4 class="description">
+                    Ask the student to start over when needed.
+                </h4>
+            </li>
+            <li>
+                <h4 class="description">
+                    Look into the camera lens as much as possible.
+                </h4>
+            </li>
+        </ul>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %} {% endblock %}

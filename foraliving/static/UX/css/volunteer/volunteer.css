@@ -90,3 +90,32 @@
 .description {
   text-align: justify;
 }
+
+.panel-heading h3 {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: normal;
+  width: 75%;
+  padding-top: 8px;
+}
+
+.question {
+  border-radius: 5px;
+  border: 2px solid #e8e5df;
+  margin-bottom: 5px;
+  margin-left: 5px;
+  padding-bottom: 5px;
+  text-align: center;
+}
+
+.simple-link {
+  text-decoration: none !important;
+  color: black;
+}
+
+.video {
+  border-radius: 5px;
+  border: 2px solid #e8e5df;
+  margin: 0 0 0 0;
+}

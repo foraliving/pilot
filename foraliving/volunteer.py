@@ -1,5 +1,5 @@
 import json
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from django.conf import settings
 from django.shortcuts import render, redirect, get_object_or_404, reverse
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -106,7 +106,6 @@ class VolunteerEdit(LoginRequiredMixin, generic.View):
         else:
             return redirect(self.login_url)
 
-
     def post(self, request, user_id):
         """
             Method to receive the profile information that the user want to edit.
@@ -127,6 +126,7 @@ class VolunteerEdit(LoginRequiredMixin, generic.View):
         messages.success(request, "Profile Edited Successfully")
 
         return HttpResponse(volunteer.id)
+
 
 def editSkill(request, volunteer_id):
     """Method to edit skills and interests"""
@@ -170,11 +170,6 @@ class GetInterviewed(LoginRequiredMixin, generic.View):
             user_names = ''
             group_name = interview.group
 
-            for s in students:
-                print(s.student)
-            print(students)
-            print(users)
-            print(students_class_group)
             # This is the general case (more than one student)
             if (len(students_class_group) > 1):
                 cont = 0
@@ -210,8 +205,60 @@ class GetInterviewed(LoginRequiredMixin, generic.View):
         return students_in_group
 
 
-class ReviewQuestionsView(LoginRequiredMixin, generic.View):
+class InterviewQuestionsView(LoginRequiredMixin, generic.View):
+    """
+        This view will show the questions of an Interview (previously selected)
+    """
+    template = 'volunteer/interview_questions.html'
+
     def get(self, request, interview_id):
-        questions = Interview_Question_Map.objects.filter(interview=interview_id)
+        # We get the Interview if exists
+        interview = get_object_or_404(Interview, pk=interview_id)
+        # We search the questions of the interview
+        questions = Interview_Question_Map.objects.filter(interview=interview)
+
+        return render(
+            request,
+            self.template,
+            {
+                'interview_questions': questions,
+                'group_name': interview.group
+            }
+        )
 
         return questions
+
+
+class JoinInterviewView(LoginRequiredMixin, generic.View):
+    """
+        This wiew will manage the remote connection of an interview
+    """
+    template = 'volunteer/join_interview.html'
+
+    def get(self, request, interview_id):
+        # We get the Interview if exists
+        interview = get_object_or_404(Interview, pk=interview_id)
+        # We search the questions of the interview
+        questions = Interview_Question_Map.objects.filter(interview=interview)
+        data = {}
+        for i_question in questions:
+            data[i_question.question.id] = i_question.question.name
+
+        return render(
+            request,
+            self.template,
+            {
+                'interview_questions': questions,
+                'questions_array': data
+            }
+        )
+
+
+class GetQuestionFromInterviewQuestion(LoginRequiredMixin, generic.View):
+    """
+        Get the GPG key for customer
+    """
+    def get(self, request, question_id):
+        interview_question = get_object_or_404(Interview_Question_Map, pk=question_id)
+
+        return JsonResponse(interview_question.question.name, safe=False)

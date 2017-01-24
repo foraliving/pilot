@@ -7,7 +7,15 @@ from foraliving.recording import RecordingType, RecordingSetupMicrophone, Record
     QuestionInterview, Recording, Orientation, SaveRecording, protected_serve
 from foraliving.student import CompleteVideo, StudentAssignment, ConductVideo, SelectQuestion, SelectQuestionEdit, \
     SendEmail, AssignmentList
+<<<<<<< HEAD
 from foraliving.teacher import TeacherStudentT1, TeacherVolunteerT6, TeacherVideosT8, asignment_list,\
+=======
+from foraliving.volunteer import VolunteerProfile, VolunteerEdit
+from foraliving.general import Videos
+from foraliving.volunteer import Contact, editSkill, GetInterviewed, InterviewQuestionsView, JoinInterviewView, \
+    GetQuestionFromInterviewQuestion
+from foraliving.teacher import TeacherStudentT1, TeacherVolunteerT6, TeacherVideosT8, asignment_list, get_student, \
+>>>>>>> 2ff40e5eec217b26404ac641f7ce40d33df67154
     student_list, list_student_group, AssignGroup, uniqueGroup, TeacherVolunteerT6a, AssignVolunteer, list_groups, \
     TeacherVolunteerT9, groupList, studentList, CreateInterview, GroupInterface
 from foraliving.volunteer import Contact, editSkill
@@ -48,6 +56,26 @@ urlpatterns = [
         name='volunteer_profile'),
     url(r'^volunteer/profile/edit/(?P<user_id>\d+)/$', VolunteerEdit.as_view(), name='volunteer_profile_edit'),
     url(r'^edit-skills/(?P<volunteer_id>\d+)/$', editSkill, name='editSkill'),
+    url(
+        r'^volunteer/get_interviewed$',
+        GetInterviewed.as_view(),
+        name='volunteer_get_interviewed'
+    ),
+    url(
+        r'^volunteer/interview/(?P<interview_id>\d+)/questions$',
+        InterviewQuestionsView.as_view(),
+        name='volunteer_interview_questions'
+    ),
+    url(
+        r'^volunteer/interview/(?P<interview_id>\d+)/join$',
+        JoinInterviewView.as_view(),
+        name='volunteer_join_interview'
+    ),
+    url(
+        r'^volunteer/interview/question/(?P<question_id>[0-9]+)/$',
+        GetQuestionFromInterviewQuestion.as_view(),
+        name='interview_question_show'
+    ),
 
     # general
     url(r"^$", Videos.as_view(), name='videos'),

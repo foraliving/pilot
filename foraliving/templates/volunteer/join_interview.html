@@ -1,0 +1,83 @@
+{% extends 'volunteer/base.html' %}
+
+{% load staticfiles %}
+{% load bootstrap3 %}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery=1 %}
+{% bootstrap_messages %}
+
+{% block title %}
+<title>Get Interviewed</title>
+{% endblock %}
+
+{% block list_navheader %}
+    <h3 class="navbar-brand" style="color: black;">
+        <strong>For A Living</strong>
+    </h3>
+{% endblock %}
+
+{% block list %}
+    <li><a style="margin-top: 10px;" class="btn btn-default" href="#">Done</a></li>
+{% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'UX/css/simpleGridTemplate.css' %}">
+    <link rel="stylesheet" href="{% static 'UX/css/volunteer/volunteer.css' %}">
+{% endblock %}
+
+{% block body %}
+<div class="panel panel-default">
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-xs-12 col-md-8">
+                <h2 id="current-question"><strong>Interview Questions</strong></h2>
+                <div class="question" id="dynamic-question-container">
+                    <h2><strong>Current Question</strong></h2>
+                    <h2 id="dynamic-question">Question</h2>
+                </div>
+                <h2 id="upcoming-question">Upcoming questions</h2>
+                <ol>
+                    {% for inter_question in interview_questions %}
+                        <li>
+                            <h4 class="description">
+                                <a
+                                    onclick="selectQuestion({{ inter_question.question.id }})"
+                                    class="simple-link">
+                                    {{ inter_question.question.name }}
+                                </a>
+                            </h4>
+                        </li>
+                    {% endfor %}
+                </ol>
+            </div>
+            <div class="col-xs-6 col-md-4">
+                <video class="video" id="remoteVideo" autoplay></video>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+    <script type="text/javascript">
+        function selectQuestion(question_id) {
+            $('#current-question').hide();
+            $('#upcoming-question').show();
+
+            var key_url = '/foraliving/volunteer/interview/question/' + question_id + '/';
+            $.ajax({
+                method: 'GET',
+                url: key_url,
+                dataType: 'json',
+            }).done(function (data) {
+                document.getElementById("dynamic-question").innerHTML = data;
+            });
+            document.getElementById('dynamic-question-container').style.display = "block";
+        }
+
+        $(document).ready(function () {
+            $('#dynamic-question-container').hide();
+            $('#upcoming-question').hide();
+        });
+    </script>
+{% endblock %}
