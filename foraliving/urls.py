@@ -7,19 +7,13 @@ from foraliving.recording import RecordingType, RecordingSetupMicrophone, Record
     QuestionInterview, Recording, Orientation, SaveRecording, protected_serve
 from foraliving.student import CompleteVideo, StudentAssignment, ConductVideo, SelectQuestion, SelectQuestionEdit, \
     SendEmail, AssignmentList
-<<<<<<< HEAD
 from foraliving.teacher import TeacherStudentT1, TeacherVolunteerT6, TeacherVideosT8, asignment_list,\
-=======
+    student_list, list_student_group, AssignGroup, uniqueGroup, TeacherVolunteerT6a, AssignVolunteer, list_groups, \
+    TeacherVolunteerT9, groupList, studentList, CreateInterview, GroupInterface
 from foraliving.volunteer import VolunteerProfile, VolunteerEdit
 from foraliving.general import Videos
 from foraliving.volunteer import Contact, editSkill, GetInterviewed, InterviewQuestionsView, JoinInterviewView, \
     GetQuestionFromInterviewQuestion
-from foraliving.teacher import TeacherStudentT1, TeacherVolunteerT6, TeacherVideosT8, asignment_list, get_student, \
->>>>>>> 2ff40e5eec217b26404ac641f7ce40d33df67154
-    student_list, list_student_group, AssignGroup, uniqueGroup, TeacherVolunteerT6a, AssignVolunteer, list_groups, \
-    TeacherVolunteerT9, groupList, studentList, CreateInterview, GroupInterface
-from foraliving.volunteer import Contact, editSkill
-from foraliving.volunteer import VolunteerProfile, VolunteerEdit
 
 from . import views
 
