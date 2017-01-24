@@ -13,7 +13,9 @@
 <link rel="stylesheet" href="{% static 'UX/css/student/recording.css' %}">
 <link rel="stylesheet" href="{% static 'UX/css/simpleGridTemplate.css' %}">
 <link rel="stylesheet" href="{% static 'UX/css/bootstrap-select/bootstrap-select.min.css' %}">
+<link rel="stylesheet" href="{% static 'UX/css/bootstrap-toggle/toggle.css' %}">
 <script src="{% static 'js/select/bootstrap-select.min.js' %}"></script>
+<script src="{% static 'js/toggle/toggle.js' %}"></script>
 <script src="{% static 'js/teacher/videos.js' %}"></script>
 {% endblock %}
 {% block body %}
@@ -41,7 +43,7 @@
         {% for video in videos %}
         <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
             <div class="thumbnail" style="text-align: center; width: 82%;">
-                <div style="text-align: right;"> Delete</div>
+                <div style="text-align: right;"> </div>
                 <div class="embed-responsive embed-responsive-16by9">
                     <video controls>
                         <source src="/foraliving/media/{{video.video.url}}">
@@ -52,10 +54,12 @@
                     <p class="text-column">{{video.interview_question.interview.interviewee.first_name}},
                         {{video.interview_question.interview.interviewee.volunteer_user_add_ons.workTitle}}</p>
                     {% if video.video.status == "approved"%}
-                    <div class="page-title" style="font-size: 18px; text-align: left;">
+                    <div class="checkbox" style="font-size:14px;">
+                        <input type="checkbox" disabled checked data-toggle="toggle" data-on="Approved" data-off="Not Approved" data-onstyle="success" data-offstyle="danger">
                     </div>
                     {% else %}
-                    <div class="link" style="font-size: 18px; text-align: left;">
+                    <div class="checkbox disabled">
+                        <input type="checkbox" disabled data-toggle="toggle" data-on="Approved" data-off="Not Approved" data-onstyle="success" data-offstyle="danger">
                     </div>
                     {% endif %}
                 </div>
