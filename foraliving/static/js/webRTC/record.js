@@ -52,7 +52,7 @@ if (!isSecureOrigin) {
 // Enable experimental Web Platform features flag in Chrome 49
 var videoSelect = document.querySelector('select#videoSource');
 var selectors = [videoSelect];
-var videoElement = document.getElementById('gum');
+// var videoElement = document.getElementById('gum');
 
 function gotDevices(deviceInfos) {
     // Handles being called several times to update labels. Preserve values.
@@ -73,7 +73,7 @@ function gotDevices(deviceInfos) {
             option.text = deviceInfo.label || 'camera ' + (videoSelect.length + 1);
             videoSelect.appendChild(option);
         } else {
-            console.log('Some other kind of source/device: ', deviceInfo);
+            // console.log('Some other kind of source/device: ', deviceInfo);
         }
     }
 
@@ -94,7 +94,7 @@ function handleSuccess(stream) {
     if (window.URL) {
         gumVideo.src = window.URL.createObjectURL(stream);
     } else {
-        gumVideo.src = stream;
+        gumVideo.srcObject = stream;
     }
 }
 
@@ -102,26 +102,24 @@ function handleError(error) {
     console.log('navigator.getUserMedia error: ', error);
 }
 
-function gotStream(stream) {
-    window.stream = stream; // make stream available to console
-    videoElement.srcObject = stream;
-    // Refresh button list in case labels have become available
-    return navigator.mediaDevices.enumerateDevices();
-}
-
 function start() {
-    var videoSource = videoSelect.value;
-
-    var constraints = {
-        audio: true,
-        video: {facingMode: "environment", deviceId: videoSource ? {exact: videoSource} : undefined}
-    };
-
     if (window.stream) {
         window.stream.getTracks().forEach(function(track) {
             track.stop();
         });
     }
+
+    var videoSource = videoSelect.value;
+    console.log(videoSelect, videoSelect.selectedIndex);
+
+    var videoDebug = document.getElementById('debugVideo');
+    videoDebug.innerHTML = 'Video: ' + videoSelect.value;
+
+    var constraints = {
+        audio: true,
+        // video: {facingMode: "environment", deviceId: videoSource ? {exact: videoSource} : undefined}
+        video: {deviceId: videoSource ? {exact: videoSource} : undefined}
+    };
 
     if (/Edge\/\d./i.test(navigator.userAgent)) {
         // This is Microsoft Edge
@@ -138,10 +136,9 @@ function start() {
             console.log(error.name + ": " + error.message);
             handleSuccess();
         });
-    }
-
-    else {
-        navigator.mediaDevices.getUserMedia(constraints).then(gotStream).then(handleSuccess).catch(handleError);
+    } else {
+        console.log('Not edge');
+        navigator.mediaDevices.getUserMedia(constraints).then(handleSuccess).catch(handleError);
     }
 }
 
