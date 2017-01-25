@@ -52,6 +52,7 @@ if (!isSecureOrigin) {
 // Enable experimental Web Platform features flag in Chrome 49
 var videoSelect = document.querySelector('select#videoSource');
 var selectors = [videoSelect];
+var videoElement = document.getElementById('gum');
 
 function gotDevices(deviceInfos) {
     // Handles being called several times to update labels. Preserve values.
@@ -101,6 +102,13 @@ function handleError(error) {
     console.log('navigator.getUserMedia error: ', error);
 }
 
+function gotStream(stream) {
+    window.stream = stream; // make stream available to console
+    videoElement.srcObject = stream;
+    // Refresh button list in case labels have become available
+    return navigator.mediaDevices.enumerateDevices();
+}
+
 function start() {
     var videoSource = videoSelect.value;
 
@@ -108,6 +116,12 @@ function start() {
         audio: true,
         video: {facingMode: "environment", deviceId: videoSource ? {exact: videoSource} : undefined}
     };
+
+    if (window.stream) {
+        window.stream.getTracks().forEach(function(track) {
+            track.stop();
+        });
+    }
 
     if (/Edge\/\d./i.test(navigator.userAgent)) {
         // This is Microsoft Edge
@@ -127,7 +141,7 @@ function start() {
     }
 
     else {
-        navigator.mediaDevices.getUserMedia(constraints).then(handleSuccess).catch(handleError);
+        navigator.mediaDevices.getUserMedia(constraints).then(gotStream).then(handleSuccess).catch(handleError);
     }
 }
 
