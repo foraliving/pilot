@@ -62,24 +62,24 @@
                         <p class="tag">{{volunteer.workTitle}}</p>
                         <p class="text_column">{{video.video.name}}</p>
                         <p></p>
-                        {% if video.video.status == "pending"%}
+                        {% if video.video.status == "new"%}
                         <div style="text-align: center;">
                             <button class='btn btn-video btn-title border-radius'
                                     onclick="location.href='{% url 'send_email' video_id=video.video.id %}'"
                                     style="font-size:14px;"> Send to teacher
                             </button>
                         </div>
-                        {% elif video.video.status == "Under Review by teacher" %}
+                        {% elif video.video.status == "pending" %}
                         <div style="text-align: center;">
                             <p class="video-message"
                                style="text-align: center; font-size: 14px; margin-bottom: 8px; padding-top: 21%; color:black;">
-                                {{video.video.status}} </p>
+                                Under Review by teacher </p>
                         </div>
                         {% else %}
                         <div style="text-align: center;">
                             <p class="video-message"
                                style="text-align: center; font-size: 14px; margin-bottom: 8px; padding-top: 21%; color:green;">
-                                {{video.video.status}} </p>
+                                Approved </p>
                         </div>
                         {% endif %}
                     </div>
