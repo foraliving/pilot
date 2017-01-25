@@ -110,10 +110,6 @@ function start() {
     }
 
     var videoSource = videoSelect.value;
-    console.log(videoSelect, videoSelect.selectedIndex);
-
-    var videoDebug = document.getElementById('debugVideo');
-    videoDebug.innerHTML = 'Video: ' + videoSelect.value;
 
     var constraints = {
         audio: true,
@@ -137,7 +133,6 @@ function start() {
             handleSuccess();
         });
     } else {
-        console.log('Not edge');
         navigator.mediaDevices.getUserMedia(constraints).then(handleSuccess).catch(handleError);
     }
 }

@@ -7,6 +7,8 @@
 {% block styles %}
 <link rel="stylesheet" href="{% static 'UX/css/student/recording.css' %}">
 <link rel="stylesheet" href="{% static 'UX/css/student/overlay.css' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/css/bootstrap-select.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/js/bootstrap-select.min.js"></script>
 {% endblock %}
 <div class="panel panel-info">
     <div class="panel-heading">
@@ -19,13 +21,10 @@
         <div class="panel panel-default">
             <div class="panel-body">
                 <div class="row">
-                    <div class="select">
-                        <label for="videoSource">Video source: </label><select id="videoSource"></select>
-                    </div>
-                    <div>
-                        <label id="debugVideo">test</label>
-                    </div>
                     <div class="col-md-6 col-sm-6 .col-lg-6" style="text-align: center;">
+                        <div class="select" style="margin-bottom: 5px;">
+                            <label for="videoSource">Select camera: </label><select class="selectpicker show-tick" id="videoSource"></select>
+                        </div>
                         <video id="gum" autoplay loop muted="muted"></video>
                         <div style="display:none;" id="custom-message">Recording starts in ..
                             <br>
