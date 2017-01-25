@@ -7,9 +7,9 @@ from foraliving.recording import RecordingType, RecordingSetupMicrophone, Record
     QuestionInterview, Recording, Orientation, SaveRecording, protected_serve
 from foraliving.student import CompleteVideo, StudentAssignment, ConductVideo, SelectQuestion, SelectQuestionEdit, \
     SendEmail, AssignmentList
-from foraliving.teacher import TeacherStudentT1, TeacherVolunteerT6, TeacherVideosT8, asignment_list,\
+from foraliving.teacher import TeacherStudentT1, TeacherVolunteerT6, TeacherVideosT8, asignment_list, \
     student_list, list_student_group, AssignGroup, uniqueGroup, TeacherVolunteerT6a, AssignVolunteer, list_groups, \
-    TeacherVolunteerT9, groupList, studentList, CreateInterview, GroupInterface
+    TeacherVolunteerT9, groupList, studentList, CreateInterview, GroupInterface, update_video
 from foraliving.volunteer import VolunteerProfile, VolunteerEdit
 from foraliving.general import Videos
 from foraliving.volunteer import Contact, editSkill, GetInterviewed, InterviewQuestionsView, JoinInterviewView, \
@@ -94,7 +94,8 @@ urlpatterns = [
     url(r"^student-list/(?P<class_id>\d+)/(?P<assignment_id>\d+)/$", student_list, name='class_student_list'),
     url(r"list-student-group", list_student_group, name='list-student_group'),
     url(r"teacher/group/(?P<class_id>\d+)/(?P<assignment_id>\d+)/(?P<group_id>\d+)/$", GroupInterface.as_view(),
-        name='list-student_group'),
+        name='group_info'),
+    url(r"^video/update/(?P<video_id>\d+)/(?P<flag_id>\d+)/$", update_video, name='update_video'),
 
 ]
 

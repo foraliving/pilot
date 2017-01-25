@@ -90,11 +90,12 @@ class TeacherVideosT8(LoginRequiredMixin, generic.View):
         user_add_ons = User_Add_Ons.objects.get(user=request.user.id)
         classname = Class.objects.filter(teacher=user_add_ons)
         class_id = request.GET.get('class')
-        if class_id and class_id !='0':
+        if class_id and class_id != '0':
             assignments = Assignment.objects.filter(falClass__in=class_id).values('pk')
             interview = Interview.objects.filter(assignment__in=assignments).values('pk')
             interview_question = Interview_Question_Map.objects.filter(interview_id__in=interview)
-            videos = Interview_Question_Video_Map.objects.filter(interview_question__in=interview_question).order_by('-video')
+            videos = Interview_Question_Video_Map.objects.filter(interview_question__in=interview_question).order_by(
+                '-video')
         else:
             class_id = 0
             school = School.objects.get(pk=user_add_ons.school.id)
@@ -315,6 +316,21 @@ def groupList(request, assignment_id):
 
     leads_as_json = serializers.serialize('json', group)
     return HttpResponse(leads_as_json, content_type='application/json')
+
+
+def update_video(request, video_id, flag_id):
+    """
+    Method to update the video status
+    :param request:
+    :return:
+    """
+    print (flag_id)
+    if flag_id == '1':
+        video = Video.objects.filter(pk=video_id).update(status='pending')
+    else:
+        video = Video.objects.filter(pk=video_id).update(status='approved')
+
+    return HttpResponse('true')
 
 
 class CreateInterview(LoginRequiredMixin, generic.View):

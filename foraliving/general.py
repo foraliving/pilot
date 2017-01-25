@@ -30,6 +30,6 @@ class Videos(LoginRequiredMixin, generic.View):
             user_add_ons = User_Add_Ons.objects.get(user=request.user.id)
             school = School.objects.get(pk=user_add_ons.school.id)
             user_school = User_Add_Ons.objects.filter(school=school)
-            videos = Video.objects.filter(created_by__in=user_school)
+            videos = Video.objects.filter(created_by__in=user_school, status='approved')
             videos = Interview_Question_Video_Map.objects.filter(video__in=videos).order_by('-video')
         return render(request, self.conduct_view, {'videos': videos, 'school': school, 'user_type': user_type.type.name})

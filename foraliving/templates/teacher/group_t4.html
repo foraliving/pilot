@@ -12,6 +12,7 @@
 {% block styles %}
 <link rel="stylesheet" href="{% static 'UX/css/student/recording.css' %}">
 <link rel="stylesheet" href="{% static 'UX/css/simpleGridTemplate.css' %}">
+<script src="{% static 'js/teacher/group.js' %}"></script>
 {% endblock %}
 {% block body %}
 <div class="container">
@@ -74,11 +75,11 @@
                                     {{volunteer.workTitle}}</p>
                                 {% if video.video.status == "approved"%}
                                 <div class="page-title" style="font-size: 18px; text-align: left;">
-                                    <input type="checkbox" checked> Approved
+                                    <input type="checkbox" checked name="status" class="status" value="{{video.video.id}}"> <label>Approved</label>
                                 </div>
                                 {% else %}
                                 <div class="link" style="font-size: 18px; text-align: left;">
-                                    <input type="checkbox"> Approve
+                                    <input type="checkbox" name="status"  class="status" value="{{video.video.id}}"> <label>Approve</label>
                                 </div>
                                 {% endif %}
                             </div>
