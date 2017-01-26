@@ -333,12 +333,22 @@ def update_video(request, video_id, flag_id):
 
 def delete_interview(request):
     """
-    Method to remove the volunteer
+    Method to remove a volunteer
     :param request:
     :return:
     """
     interview = request.POST.get('interview_id')
     Interview.objects.filter(pk=interview).delete()
+    return HttpResponse('true')
+
+def delete_class(request):
+    """
+    Method to remove a class
+    :param request:
+    :return:
+    """
+    class_id = request.POST.get('class_id')
+    Class.objects.filter(pk=class_id).delete()
     return HttpResponse('true')
 
 

@@ -48,7 +48,6 @@ $(document).ready(function () {
         });
     }
 
-
     //method to verify if the teacher select other class
     $("#classname").change(function () {
         if ($("#classname").val() != 0) {
@@ -249,43 +248,56 @@ $(document).ready(function () {
     $(document).on('click', '.delete-volunteer', function (e) {
         var interview_id = e.target.id;
         $('#delete-modal').modal();
-        $('.confirm-delete-modal', '#delete-modal').attr('id', interview_id);
+        $('.confirm-delete-modal', '#delete-modal').attr('id', 'interview-' + interview_id);
+        $('#myModalLabelDelete').text("Are you sure you want to remove this volunteer?")
         e.preventDefault();
     });
 
 
     $('body').on('click', 'button.confirm-delete-modal', function (e) {
-        var interview_id = e.target.id;
+        var option = e.target.id.split('-')[0];
+        var id = e.target.id.split('-')[1];
         var class_id = $("#classname").val();
         var assignment_id = $("#options").val();
-        $.ajax({
-            type: "POST",
-            url: "/foraliving/interview/delete/",
-            data: {'interview_id': interview_id},
-        }).done(function (data) {
-            $("#delete-modal").modal("hide");
-            getClass(assignment_id, class_id);
-        });
 
+        if (option == "interview") {
+            $.ajax({
+                type: "POST",
+                url: "/foraliving/interview/delete/",
+                data: {'interview_id': interview_id},
+            }).done(function (data) {
+                $("#delete-modal").modal("hide");
+                getClass(assignment_id, class_id);
+            });
+        }
+        else if (option == "class") {
+            $.ajax({
+                type: "POST",
+                url: "/foraliving/class/delete/",
+                data: {'class_id': class_id},
+            }).done(function (data) {
+                $("#delete-modal").modal("hide");
+                window.location.href = '/foraliving/teacher/class/';
+            });
+        }
     });
 
     //method to verify the changes in the assignment select
     $("#options").change(function () {
-        if ($("#options").val() != "A0") {
-            if ($("#options").val() == "A1") {
+        if ($("#options").val() == "A1") {
 
-            }
-            else if ($("#options").val() == "B2") {
-
-            }
-            else {
-                var assignment_id = $("#options").val();
-                var class_id = $("#classname").val();
-                getClass(assignment_id, class_id);
-
-            }
         }
-        else if ($("#company").val() == 0) {
+        else if ($("#options").val() == "B2") {
+            var class_id = $("#classname").val();
+            $('#delete-modal').modal();
+            $('.confirm-delete-modal', '#delete-modal').attr('id', 'class-' + class_id);
+            $('#myModalLabelDelete').text("Are you sure you want to remove this class?")
+
+        }
+        else {
+            var assignment_id = $("#options").val();
+            var class_id = $("#classname").val();
+            getClass(assignment_id, class_id);
 
         }
     });
