@@ -8,7 +8,6 @@ from django.db.models.fields import BLANK_CHOICE_DASH
 class volunteerUserSignupForm(forms.ModelForm):
     password = forms.CharField(widget=PasswordInput())
 
-
     class Meta:
         model = User
         fields = ['first_name', 'last_name', 'email', 'username', 'password', ]
@@ -54,3 +53,8 @@ class volunteerSignupForm(forms.ModelForm):
         model = Volunteer_User_Add_Ons
         # fields = '__all__'
         exclude = ['user']
+
+
+class TeacherAddClass(forms.Form):
+    class_name = forms.CharField(label="Class name")
+    students_csv = forms.FileField(required=True, label='Upload File')

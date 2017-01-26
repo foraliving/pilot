@@ -388,3 +388,18 @@ class GroupInterface(LoginRequiredMixin, generic.View):
         users = User.objects.filter(groups__in=group_id, pk__in=student_class)
         return render(request, self.group_view, {'group': group, 'users': users,
                                                  'interview': interview, 'videos': videos, 'volunteer': volunteer})
+
+
+class AddClass(LoginRequiredMixin, generic.View):
+    template = 'teacher/add_class.html'
+
+    def get(self, request):
+        form = TeacherAddClass()
+
+        return render(
+            request,
+            self.template,
+            {
+                'add_class_form': form
+            }
+        )

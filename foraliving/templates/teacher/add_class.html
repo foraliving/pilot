@@ -1,0 +1,104 @@
+{% extends 'teacher/base.html' %}
+{% load bootstrap3 %}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery=1 %}
+{% bootstrap_messages %}
+{% load staticfiles %}
+
+{% block list %}
+<li class="active"><a href="{% url 'teacher_class' %}">Student</a></li>
+<li><a href="{%url 'teacher_volunteer'%}">Volunteers</a></li>
+<li><a href="{%url 'teacher_videos'%}">Videos</a></li>
+{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'UX/css/student/recording.css' %}">
+<link rel="stylesheet" href="{% static 'UX/css/simpleGridTemplate.css' %}">
+<script src="{% static 'js/teacher/group.js' %}"></script>
+<link rel="stylesheet"
+  href='{% static "bootstrap-fileinput/css/fileinput.css" %}'
+  media="all"
+  type="text/css"
+>
+<script src='{% static "bootstrap-fileinput/js/fileinput.js" %}' type="text/javascript"></script>
+<script type="text/javascript"
+        src='{% static "jquery-validate/jquery.validate.min.js" %}'></script>
+{% endblock %}
+
+{% block body %}
+<div class="container">
+    <div class="panel">
+        <div class="panel-heading">
+            <div class="row">
+                <h2>Class Setup</h2>
+            </div>
+        </div>
+    <div class="panel-body">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <form id="upload" method="post" class="form" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <div>
+                            <h2><strong>{{ add_class_form.class_name.label }}</strong></h2>
+                        </div>
+                        <div class="form-group">
+                            {{ add_class_form.class_name }}
+                            {{ add_class_form.class_name.errors }}
+                        </div>
+
+                        <div>
+                            <h2><strong>Upload Student List</strong></h2>
+                            <div class="container">
+                                <h5>After entering student information into the spreadsheet, upload the file.</h5>
+                                <div>
+                                    <h4>STEP 1: Download template</h4>
+                                </div>
+                                <div>
+                                    <h4>STEP 2:  Add students names and parent email addresses to the template and save the file</h4>
+                                </div>
+                                <div class="form-group">
+                                    <h4>STEP 3:  Select file off your computer</h4>
+                                    <div class="col-md-4" style="padding-left: 0px;">
+                                        <input id="students_csv" name="students_csv" type="file" multiple>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+$(document).ready(function () {
+    $("#students_csv").fileinput({
+        showUpload: true,
+        showCaption: false,
+        browseClass: "btn btn-default btn-sm",
+        fileType: "csv",
+        allowedFileExtensions: ['csv']
+    });
+
+    $("#upload").validate({
+        errorPlacement: function (error, element) {
+            error.appendTo(element.closest(".form-group"))
+        },
+        rules: {
+            class_name: {
+                required: true
+            },
+            students_csv: {
+                required: true
+                // extension: "csv"
+            }
+        }
+    });
+});
+</script>
+{% endblock %}
