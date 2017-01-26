@@ -56,10 +56,10 @@ var selectors = [videoSelect];
 
 function gotDevices(deviceInfos) {
     // Handles being called several times to update labels. Preserve values.
-    var values = selectors.map(function (select) {
+    var values = selectors.map(function(select) {
         return select.value;
     });
-    selectors.forEach(function (select) {
+    selectors.forEach(function(select) {
         while (select.firstChild) {
             select.removeChild(select.firstChild);
         }
@@ -77,10 +77,10 @@ function gotDevices(deviceInfos) {
         }
     }
 
-    selectors.forEach(function (select, selectorIndex) {
-        if (Array.prototype.slice.call(select.childNodes).some(function (n) {
-                return n.value === values[selectorIndex];
-            })) {
+    selectors.forEach(function(select, selectorIndex) {
+        if (Array.prototype.slice.call(select.childNodes).some(function(n) {
+            return n.value === values[selectorIndex];
+        })) {
             select.value = values[selectorIndex];
         }
     });
@@ -104,7 +104,7 @@ function handleError(error) {
 
 function start() {
     if (window.stream) {
-        window.stream.getTracks().forEach(function (track) {
+        window.stream.getTracks().forEach(function(track) {
             track.stop();
         });
     }
@@ -339,8 +339,7 @@ function timer() {
 }
 
 function save() {
-    $(".bootstrap-select .show-tick").css('z-index', 0);
-    $("button.dropdown-toggle").css('z-index', 0)
+
     var sizeTheOverlays = function () {
         $(".overlay").resize().each(function () {
             var h = $(this).parent().outerHeight();

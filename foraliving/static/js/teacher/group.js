@@ -23,6 +23,14 @@ $(document).ready(function () {
             async: true,
             contentType: "application/json"
         }).done(function (data) {
+            if (data == 0) {
+            $(".alert-videos").hide();
+            }
+            else {
+                $(".alert-videos").show();
+                $(".alert-videos").text("You have " + data + " video(s) waiting to be approved")
+            }
+
         });
     });
 });

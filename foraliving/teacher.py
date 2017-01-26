@@ -309,7 +309,7 @@ def groupList(request, assignment_id):
 
 def update_video(request, video_id, flag_id):
     """
-    Method to update the video status
+    Method to update the video status and return the count of new videos pending
     :param request:
     :return:
     """
@@ -318,10 +318,22 @@ def update_video(request, video_id, flag_id):
     else:
         video = Video.objects.filter(pk=video_id).update(status='approved')
 
-    return HttpResponse('true')
+    interview_question_video = Interview_Question_Video_Map.objects.get(video=video_id)
+    interview_question = Interview_Question_Map.objects.filter(
+        interview=interview_question_video.interview_question.interview)
+    interview_question_video_map = Interview_Question_Video_Map.objects.filter(
+        interview_question__in=interview_question)
+
+    count = 0
+    for data in interview_question_video_map:
+        if data.video.status == "pending" or data.video.status == "new":
+            count = count + 1
+
+    return HttpResponse(count)
 
 def delete_interview(request):
     """
+    Method to remove the volunteer
     :param request:
     :return:
     """
@@ -370,6 +382,7 @@ class GroupInterface(LoginRequiredMixin, generic.View):
         :param request:
         :return:
         """
+        count = 0
         group = Group.objects.get(pk=group_id)
         student_class = Student_Class.objects.filter(falClass=class_id).values('student')
         try:
@@ -377,6 +390,11 @@ class GroupInterface(LoginRequiredMixin, generic.View):
             interview_question = Interview_Question_Map.objects.filter(interview_id=interview.id)
             videos = Interview_Question_Video_Map.objects.filter(interview_question__in=interview_question)
             volunteer = Volunteer_User_Add_Ons.objects.get(user=interview.interviewee.id)
+
+            for data in videos:
+                if data.video.status == "pending" or data.video.status == 'new':
+                    count = count + 1
+
         except:
             interview = None
             videos = None
@@ -384,4 +402,4 @@ class GroupInterface(LoginRequiredMixin, generic.View):
 
         users = User.objects.filter(groups__in=group_id, pk__in=student_class)
         return render(request, self.group_view, {'group': group, 'users': users,
-                                                 'interview': interview, 'videos': videos, 'volunteer': volunteer})
+                                                 'interview': interview, 'videos': videos, 'volunteer': volunteer, 'count': count})

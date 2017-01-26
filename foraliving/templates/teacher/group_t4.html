@@ -57,6 +57,11 @@
             </div>
         </div>
         <hr style="border-top: 1px solid #b7abab;">
+        {% if count > 0 %}
+        <div class="alert alert-warning alert-videos" role="alert">
+            You have {{count}} video(s) waiting to be approved
+        </div>
+        {% endif %}
         <div class="panel-body">
             <div class="container">
                 <div class="gallery">
@@ -75,11 +80,13 @@
                                     {{volunteer.workTitle}}</p>
                                 {% if video.video.status == "approved"%}
                                 <div class="page-title" style="font-size: 18px; text-align: left;">
-                                    <input type="checkbox" checked name="status" class="status" value="{{video.video.id}}"> <label>Approved</label>
+                                    <input type="checkbox" checked name="status" class="status"
+                                           value="{{video.video.id}}"> <label>Approved</label>
                                 </div>
                                 {% else %}
                                 <div class="link" style="font-size: 18px; text-align: left;">
-                                    <input type="checkbox" name="status"  class="status" value="{{video.video.id}}"> <label>Approve</label>
+                                    <input type="checkbox" name="status" class="status" value="{{video.video.id}}">
+                                    <label>Approve</label>
                                 </div>
                                 {% endif %}
                             </div>
