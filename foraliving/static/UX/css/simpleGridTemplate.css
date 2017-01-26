@@ -60,14 +60,22 @@ body {
 
 
 .btn.focus, .btn:focus, .btn:hover {
-    background-color: #f9d236;
+    background-color: #e8e0e0;
     border-color: #e8e8e8;
+    color:black;
 }
 
 .paragraph {
     text-align: justify;
     font-size: 16px;
     color: black;
+}
+
+.alert-videos {
+font-size: 18px;
+    text-align: center;
+    color:black;
+    background-color: #fff0be;
 }
 
 td.details-control2 {

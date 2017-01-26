@@ -339,8 +339,7 @@ function timer() {
 }
 
 function save() {
-    $(".bootstrap-select .show-tick").css('z-index', 0);
-    $("button.dropdown-toggle").css('z-index', 0);
+
     var sizeTheOverlays = function () {
         $(".overlay").resize().each(function () {
             var h = $(this).parent().outerHeight();

@@ -121,29 +121,6 @@ def asignment_list(request, class_id):
     return JsonResponse({'results': list(assignment)})
 
 
-def get_student(request, assignment_id):
-    """
-    :param request:
-    :param class_id:
-    :return:
-    """
-
-    cursor_v = connection.cursor()
-    cursor_v.execute(
-        """SELECT au.id, au.username, au.first_name, au.last_name, ag.name, fi.interviewee_id, au2.first_name, au2.last_name
-            FROM auth_user au
-            INNER JOIN auth_user_groups aug ON au.id=aug.user_id
-            INNER JOIN auth_group ag ON ag.id=aug.group_id
-            INNER JOIN foraliving_interview fi ON ag.id=fi.group_id
-            INNER JOIN foraliving_assignment fa ON fi.assignment_id=fa.id
-            INNER JOIN auth_user au2 ON fi.interviewee_id=au2.id
-            WHERE fi.assignment_id =%s
-            GROUP BY au.id, au.username, au.first_name, au.last_name, ag.name, fi.interviewee_id, au2.first_name, au2.last_name""",
-        [assignment_id])
-    results = cursor_v.fetchall()
-    return JsonResponse({'results': list(results)})
-
-
 def student_list(request, class_id, assignment_id):
     """
     Return the student list in relation
@@ -153,16 +130,28 @@ def student_list(request, class_id, assignment_id):
     """
     cursor_v = connection.cursor()
     cursor_v.execute(
-        """select au.id, au.username, au.first_name, au.last_name, fi.interviewee_id, au2.first_name, au2.last_name, au2.id, ag.name, ag.id
-            from auth_user au
-            inner join foraliving_student_class fsc on au.id=fsc.student_id and (fsc."falClass_id"=%s)
-            left join auth_user_groups aug on au.id=aug.user_id
-            left join auth_group ag on ag.id=aug.group_id
-            left join foraliving_interview fi on ag.id=fi.group_id and (fi.assignment_id=%s)
-            left join auth_user au2 on fi.interviewee_id=au2.id
-            left join foraliving_assignment fa on fa.id=fi.assignment_id and (fsc."falClass_id"=%s)
-            group by au.id, au.username, au.first_name, au.last_name, fi.interviewee_id, au2.first_name, au2.last_name, au2.id, ag.name, ag.id""",
-        [class_id, assignment_id, class_id])
+        """select au.id, au.username, au.first_name, au.last_name,  fi.interviewee_id, au2.first_name, au2.last_name, au2.id, ag.name, ag.id, fi.id as "interview_id",
+        (Select count(*) From foraliving_video fv2
+        inner join foraliving_interview_question_video_map fiqvm2 on fv2.id=fiqvm2.video_id
+        inner join foraliving_interview_question_map fiqm2 on fiqvm2.interview_question_id=fiqm2.id
+        inner join foraliving_interview fi2 on fi2.id=fiqm2.interview_id
+        where fi2.id=fi.id and fv2.status = 'pending' ) as pending,
+
+        (Select count(*) From foraliving_video fv3
+        inner join foraliving_interview_question_video_map fiqvm3 on fv3.id=fiqvm3.video_id
+        inner join foraliving_interview_question_map fiqm3 on fiqvm3.interview_question_id=fiqm3.id
+        inner join foraliving_interview fi3 on fi3.id=fiqm3.interview_id
+        where fi3.id=fi.id and fv3.status = 'approved' ) as approvals
+
+        from auth_user au
+        inner join foraliving_student_class fsc on au.id=fsc.student_id and (fsc."falClass_id"=(%s))
+        left join auth_user_groups aug on au.id=aug.user_id
+        left join auth_group ag on ag.id=aug.group_id
+        left join foraliving_interview fi on ag.id=fi.group_id and (fi.assignment_id=(%s))
+        left join auth_user au2 on fi.interviewee_id=au2.id
+        left join foraliving_assignment fa on fa.id=fi.assignment_id and (fsc."falClass_id"=(%s))
+        group by au.id, au.username, au.first_name, au.last_name,  fi.interviewee_id, au2.first_name, au2.last_name, au2.id, ag.name, ag.id, fi.id""",
+        (class_id, assignment_id, class_id,))
 
     results = cursor_v.fetchall()
     return JsonResponse({'results': list(results)})
@@ -320,16 +309,46 @@ def groupList(request, assignment_id):
 
 def update_video(request, video_id, flag_id):
     """
-    Method to update the video status
+    Method to update the video status and return the count of new videos pending
     :param request:
     :return:
     """
-    print (flag_id)
     if flag_id == '1':
         video = Video.objects.filter(pk=video_id).update(status='pending')
     else:
         video = Video.objects.filter(pk=video_id).update(status='approved')
 
+    interview_question_video = Interview_Question_Video_Map.objects.get(video=video_id)
+    interview_question = Interview_Question_Map.objects.filter(
+        interview=interview_question_video.interview_question.interview)
+    interview_question_video_map = Interview_Question_Video_Map.objects.filter(
+        interview_question__in=interview_question)
+
+    count = 0
+    for data in interview_question_video_map:
+        if data.video.status == "pending" or data.video.status == "new":
+            count = count + 1
+
+    return HttpResponse(count)
+
+def delete_interview(request):
+    """
+    Method to remove a volunteer
+    :param request:
+    :return:
+    """
+    interview = request.POST.get('interview_id')
+    Interview.objects.filter(pk=interview).delete()
+    return HttpResponse('true')
+
+def delete_class(request):
+    """
+    Method to remove a class
+    :param request:
+    :return:
+    """
+    class_id = request.POST.get('class_id')
+    Class.objects.filter(pk=class_id).delete()
     return HttpResponse('true')
 
 
@@ -373,6 +392,7 @@ class GroupInterface(LoginRequiredMixin, generic.View):
         :param request:
         :return:
         """
+        count = 0
         group = Group.objects.get(pk=group_id)
         student_class = Student_Class.objects.filter(falClass=class_id).values('student')
         try:
@@ -380,6 +400,11 @@ class GroupInterface(LoginRequiredMixin, generic.View):
             interview_question = Interview_Question_Map.objects.filter(interview_id=interview.id)
             videos = Interview_Question_Video_Map.objects.filter(interview_question__in=interview_question)
             volunteer = Volunteer_User_Add_Ons.objects.get(user=interview.interviewee.id)
+
+            for data in videos:
+                if data.video.status == "pending" or data.video.status == 'new':
+                    count = count + 1
+
         except:
             interview = None
             videos = None
@@ -387,7 +412,7 @@ class GroupInterface(LoginRequiredMixin, generic.View):
 
         users = User.objects.filter(groups__in=group_id, pk__in=student_class)
         return render(request, self.group_view, {'group': group, 'users': users,
-                                                 'interview': interview, 'videos': videos, 'volunteer': volunteer})
+                'interview': interview, 'videos': videos, 'volunteer': volunteer, 'count': count})
 
 
 class AddClass(LoginRequiredMixin, generic.View):

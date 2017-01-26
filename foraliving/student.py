@@ -29,18 +29,17 @@ class CompleteVideo(LoginRequiredMixin, generic.View):
             group = Group.objects.exclude(name=request.user.username).get(user=request.user.id)
         except ObjectDoesNotExist:
             group = None
-
-        interview_question = Interview_Question_Map.objects.filter(interview_id__in=interview_id)
+        interview_question = Interview_Question_Map.objects.filter(interview_id=interview_id)
         videos = Interview_Question_Video_Map.objects.filter(interview_question__in=interview_question)
 
         if videos:
             volunteer = Volunteer_User_Add_Ons.objects.get(user=videos[0].interview_question.interview.interviewee.id)
             for data in videos:
-                if data.video.status == "Under Review by teacher":
-                    count = count + 1
                 if data.video.status == "pending":
+                    count = count + 1
+                if data.video.status == "new":
                     count_pending = count_pending + 1
-                if data.video.status == "Approved by teacher":
+                if data.video.status == "approved":
                     count_approved = count_approved + 1
 
             if count != 0 or count_pending != 0:
@@ -163,26 +162,26 @@ class SendEmail(LoginRequiredMixin, generic.View):
     def get(self, request, video_id):
         interview_question_video = Interview_Question_Video_Map.objects.get(video=video_id)
 
-        assignment = Assignment.objects.get(pk=interview_question_video.interview_question.interview.assignment.id)
-
         interview_question = Interview_Question_Map.objects.filter(
             interview=interview_question_video.interview_question.interview)
+
         interview_question_video_map = Interview_Question_Video_Map.objects.filter(
             interview_question__in=interview_question)
 
         count = 0
         for data in interview_question_video_map:
-            if data.video.status == "Under Review by teacher":
+            if data.video.status == "pending":
                 count = count + 1
 
+        assignment = Assignment.objects.get(pk=interview_question_video.interview_question.interview.assignment.id)
         if count == 0:
             email_to = assignment.falClass.teacher.user.email
             message = EmailMessage('student/send_email.html', {'assignment': assignment}, "noelia.pazos@viaro.net",
-                                   to=[email_to])
+                                   to=['noelia3pazos@gmail.com'])
             message.send()
 
         video = Video.objects.get(pk=video_id)
-        video.status = 'Under Review by teacher'
+        video.status = 'pending'
         video.save()
         return redirect('complete_video', interview_id=interview_question_video.interview_question.interview.id)
 
