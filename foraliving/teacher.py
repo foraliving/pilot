@@ -1,4 +1,5 @@
-import json
+import csv
+import io
 from django.urls import reverse
 from django.shortcuts import redirect
 from django.core.exceptions import ObjectDoesNotExist
@@ -425,6 +426,43 @@ class AddClass(LoginRequiredMixin, generic.View):
             request,
             self.template,
             {
-                'add_class_form': form
+                'add_class_form': form,
+                'students_template_url': settings.STUDENTS_TEMPLATE
             }
         )
+
+    def post(self, request):
+        form = TeacherAddClass(data=request.POST, files=request.FILES)
+        if form.is_valid():
+            csv_data = None
+            csv_headers = ["Student's First Name", "Student's Last Name", "Parent's Email Address"]
+            for chunk in form.cleaned_data['students_csv'].chunks():
+                csv_data = chunk
+
+            reader_list = csv.DictReader(io.StringIO(csv_data.decode("utf-8")))
+
+            for idx, header in enumerate(reader_list.fieldnames):
+                if (header != csv_headers[idx]):
+                    csv_error = "'" + header + "' should have to be '" + csv_headers[idx] + "'"
+
+                    return render(
+                        request,
+                        self.template,
+                        {
+                            'add_class_form': form,
+                            'students_template_url': settings.STUDENTS_TEMPLATE,
+                            'error': csv_error
+                        }
+                    )
+
+            for row in reader_list:
+                print(row)
+
+            return render(
+                request,
+                self.template,
+                {
+                    'add_class_form': form,
+                    'students_template_url': settings.STUDENTS_TEMPLATE
+                }
+            )
