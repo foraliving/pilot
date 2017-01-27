@@ -36,48 +36,52 @@
                         <strong>Header Error:</strong> {{ error }}
                     </div>
                 {% endif %}
+                {% if success %}
+                    <div class="alert alert-success">
+                        <strong>Success:</strong> {{ success }}
+                    </div>
+                {% endif %}
             {% endblock %}
             <div>
                 <h2 class="page-title"><strong>Class Setup</strong></h2>
             </div>
         </div>
-    <div class="panel-body">
-        <div class="panel panel-default">
-            <div class="panel-body">
-                <form id="upload" method="post" class="form" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    <div class="form-group">
-                        <div>
-                            <h2><strong>{{ add_class_form.class_name.label }}</strong></h2>
-                        </div>
+        <div class="panel-body">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <form id="upload" method="post" class="form" enctype="multipart/form-data">
+                        {% csrf_token %}
                         <div class="form-group">
-                            {{ add_class_form.class_name }}
-                            {{ add_class_form.class_name.errors }}
-                        </div>
-
-                        <div>
-                            <h2><strong>Upload Student List</strong></h2>
-                            <div class="container">
-                                <h5>After entering student information into the spreadsheet, upload the file.</h5>
-                                <div>
-                                    <h4>STEP 1: <a href="{{students_template_url}}">Download template</a></h4>
-                                </div>
-                                <div>
-                                    <h4>STEP 2:  Add students names and parent email addresses to the template and save the file</h4>
-                                </div>
-                                <div class="form-group">
-                                    <h4>STEP 3:  Select file off your computer</h4>
-                                    <div class="col-md-4" style="padding-left: 0px;">
-                                        <input id="students_csv" name="students_csv" type="file" multiple>
+                            <div>
+                                <h2><strong>{{ add_class_form.class_name.label }}</strong></h2>
+                            </div>
+                            <div class="form-group">
+                                {{ add_class_form.class_name }}
+                                {{ add_class_form.class_name.errors }}
+                            </div>
+                            <div>
+                                <h2><strong>Upload Student List</strong></h2>
+                                <div class="container">
+                                    <h5>After entering student information into the spreadsheet, upload the file.</h5>
+                                    <div>
+                                        <h4>STEP 1: <a href="{{students_template_url}}">Download template</a></h4>
+                                    </div>
+                                    <div>
+                                        <h4>STEP 2:  Add students names and parent email addresses to the template and save the file</h4>
+                                    </div>
+                                    <div class="form-group">
+                                        <h4>STEP 3:  Select file off your computer</h4>
+                                        <div class="col-md-4" style="padding-left: 0px;">
+                                            <input id="students_csv" name="students_csv" type="file" multiple>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </form>
+                    </form>
+                </div>
             </div>
         </div>
-    </div>
     </div>
 </div>
 {% endblock %}
@@ -91,7 +95,12 @@ $(document).ready(function () {
         browseClass: "btn btn-default btn-sm",
         fileType: "csv",
         allowedFileExtensions: ['csv'],
-        allowedPreviewTypes: []
+        allowedPreviewTypes: [],
+        fileActionSettings: {
+            showZoom: false,
+            showUpload: false,
+            indicatorNew: ''
+        }
     });
 
     $("#upload").validate({
@@ -104,7 +113,6 @@ $(document).ready(function () {
             },
             students_csv: {
                 required: true
-                // extension: "csv"
             }
         }
     });

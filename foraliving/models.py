@@ -134,8 +134,8 @@ class Class(models.Model):
     lms = models.ForeignKey(LMS, on_delete=models.CASCADE)
     teacher = models.ForeignKey(User_Add_Ons, on_delete=models.CASCADE, )
     name = models.CharField(max_length=128)
-    academic_year = models.IntegerField()
-    semester = models.CharField(max_length=128)
+    academic_year = models.IntegerField(default=None, null=True)
+    semester = models.CharField(max_length=128, default=None, null=True)
 
     class Meta:
         verbose_name = 'FAL Class'
