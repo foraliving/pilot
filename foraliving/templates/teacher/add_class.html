@@ -84,11 +84,15 @@
         </div>
     </div>
 </div>
+
+{% include 'teacher/new_assignment_modal.html' %}
 {% endblock %}
 
 {% block scripts %}
 <script>
 $(document).ready(function () {
+    var upload_complete = "{{upload_complete}}";
+
     $("#students_csv").fileinput({
         showUpload: true,
         showCaption: false,
@@ -116,6 +120,39 @@ $(document).ready(function () {
             }
         }
     });
+
+    // Necessary to eval against a String, because of the parsing from Django to JS
+    if (upload_complete == "True") {
+        $('#show-message').hide();
+        var class_id = "{{class_id}}";
+
+        $('#new_assgingment').modal('show');
+        $("#new_assgingment_form").validate();
+
+        $("#new_assgingment_form").submit(function(event) {
+            var add_url = '/foraliving/teacher/class/' + class_id + '/new/assignment/';
+            var token = $('input[name="csrfmiddlewaretoken"]').prop('value');
+            var assignment_name = $('#assignment_name').val();
+            var description = $('#description').val();
+
+            event.preventDefault();
+
+            $.ajax({
+                method: 'POST',
+                url: add_url,
+                data: {
+                    'csrfmiddlewaretoken': token,
+                    'assignment_name': assignment_name,
+                    'description': description
+                },
+                dataType: 'json',
+            }).done(function (data) {
+                $('#show-message').show();
+                $('#success-message').html( "<strong>Success:</strong> " + data);
+            });
+        });
+
+    }
 });
 </script>
 {% endblock %}

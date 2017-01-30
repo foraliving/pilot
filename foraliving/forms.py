@@ -58,3 +58,8 @@ class volunteerSignupForm(forms.ModelForm):
 class TeacherAddClass(forms.Form):
     class_name = forms.CharField(label="Class name")
     students_csv = forms.FileField(required=True, label='Upload File')
+
+
+class TeacherAddClassAssignment(forms.Form):
+    assignment_name = forms.CharField(label="Assignment name")
+    description = forms.CharField(label="Description", required=False)

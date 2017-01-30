@@ -168,10 +168,10 @@ class Student_Class(models.Model):
 class Assignment(models.Model):
     title = models.CharField(max_length=128)
     falClass = models.ForeignKey(Class, on_delete=models.CASCADE)
-    document = models.CharField(max_length=128)
-    due_date = models.DateTimeField()
-    creation_date = models.DateTimeField()
-    description = models. CharField(max_length=256)
+    document = models.CharField(max_length=128, blank=True, null=True)
+    due_date = models.DateTimeField(blank=True, null=True)
+    creation_date = models.DateTimeField(auto_now_add=True)
+    description = models. CharField(max_length=256, blank=True, null=True)
 
     def __unicode__(self):
         return str(self.title) + ' (' + str(self.falClass) + ')'

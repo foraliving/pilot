@@ -12,7 +12,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import generic
 from django.contrib.auth.models import User
 from .forms import *
-from foraliving.models import Class, User_Add_Ons, Volunteer_User_Add_Ons
+from foraliving.models import Class, User_Add_Ons, Volunteer_User_Add_Ons, Assignment
 
 
 class TeacherStudentT1(LoginRequiredMixin, generic.View):
@@ -435,6 +435,7 @@ class AddClass(LoginRequiredMixin, generic.View):
             request,
             self.template,
             {
+                'upload_complete': False,
                 'add_class_form': form,
                 'students_template_url': settings.STUDENTS_TEMPLATE
             }
@@ -472,6 +473,7 @@ class AddClass(LoginRequiredMixin, generic.View):
                         request,
                         self.template,
                         {
+                            'upload_complete': False,
                             'add_class_form': form,
                             'students_template_url': settings.STUDENTS_TEMPLATE,
                             'error': csv_error
@@ -496,7 +498,10 @@ class AddClass(LoginRequiredMixin, generic.View):
             request,
             self.template,
             {
-                'add_class_form': form,
+                'upload_complete': True,
+                'class_id': new_class.id,
+                'class_name': new_class.name,
+                'add_class_form': TeacherAddClass(),
                 'students_template_url': settings.STUDENTS_TEMPLATE,
                 'success': str(len(new_students)) + ' students added correctly'
             }
@@ -599,3 +604,22 @@ class AddClass(LoginRequiredMixin, generic.View):
             studentsInClass.append(student_class)
 
         return studentsInClass
+
+
+class AddClassAssignment(LoginRequiredMixin, generic.View):
+    def post(self, request, class_id):
+        new_class = Class.objects.get(pk=class_id)
+        form = TeacherAddClassAssignment(data=request.POST)
+        message = "Assignment not added"
+
+        if form.is_valid():
+            assignment = Assignment(
+                falClass=new_class,
+                title=form.cleaned_data['assignment_name'],
+                description=form.cleaned_data['description']
+            )
+            assignment.save()
+
+            message = "Assignment added successfully"
+
+        return JsonResponse(message, safe=False)
