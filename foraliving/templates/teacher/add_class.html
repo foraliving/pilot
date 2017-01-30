@@ -64,7 +64,7 @@
                                 <div class="container">
                                     <h5>After entering student information into the spreadsheet, upload the file.</h5>
                                     <div>
-                                        <h4>STEP 1: <a href="{{students_template_url}}">Download template</a></h4>
+                                        <h4>STEP 1: <a href="/foraliving/teacher/class/new/download/template">Download template</a></h4>
                                     </div>
                                     <div>
                                         <h4>STEP 2:  Add students names and parent email addresses to the template and save the file</h4>
@@ -149,6 +149,7 @@ $(document).ready(function () {
             }).done(function (data) {
                 $('#show-message').show();
                 $('#success-message').html( "<strong>Success:</strong> " + data);
+                $(location).attr('href','/foraliving/teacher/class');
             });
         });
 

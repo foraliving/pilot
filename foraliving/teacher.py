@@ -1,11 +1,12 @@
 import csv
 import io
 import urllib.request
+import os
 from django.urls import reverse
 from django.shortcuts import redirect
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import connection
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse, Http404
 from django.conf import settings
 from django.shortcuts import render
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -436,8 +437,7 @@ class AddClass(LoginRequiredMixin, generic.View):
             self.template,
             {
                 'upload_complete': False,
-                'add_class_form': form,
-                'students_template_url': settings.STUDENTS_TEMPLATE
+                'add_class_form': form
             }
         )
 
@@ -475,7 +475,6 @@ class AddClass(LoginRequiredMixin, generic.View):
                         {
                             'upload_complete': False,
                             'add_class_form': form,
-                            'students_template_url': settings.STUDENTS_TEMPLATE,
                             'error': csv_error
                         }
                     )
@@ -502,7 +501,6 @@ class AddClass(LoginRequiredMixin, generic.View):
                 'class_id': new_class.id,
                 'class_name': new_class.name,
                 'add_class_form': TeacherAddClass(),
-                'students_template_url': settings.STUDENTS_TEMPLATE,
                 'success': str(len(new_students)) + ' students added correctly'
             }
         )
@@ -623,3 +621,16 @@ class AddClassAssignment(LoginRequiredMixin, generic.View):
             message = "Assignment added successfully"
 
         return JsonResponse(message, safe=False)
+
+
+class DownloadTemplate(LoginRequiredMixin, generic.View):
+    def get(self, request):
+        path = 'files/FAL_classroom_roster.csv'
+        file_path = os.path.join(settings.MEDIA_ROOT, path)
+        if os.path.exists(file_path):
+            with open(file_path, 'rb') as fh:
+                response = HttpResponse(fh.read(), content_type="application/vnd.ms-excel")
+                response['Content-Disposition'] = 'inline; filename=' + os.path.basename(file_path)
+                return response
+        else:
+            raise Http404
