@@ -34,6 +34,13 @@ body {
     font-size: 14px;
 }
 
+.button-general-2 {
+    background-color: white;
+    color: #99c64c;
+    font-size: 14px;
+    border-color: #99c64c;
+}
+
 .my-error-class {
     color: #FF0000; /* red */
 }
