@@ -23,35 +23,105 @@
         </div>
     </div>
     <div class="panel-body" style="background-color: #efefef;">
-        <form class="form-horizontal">
-            <div class="form-group" align="center">
-                <label class='control-label col-sm-3'>Name</label>
-                <div class="col-sm-4">
+        <form class="">
+            <div class="form-group row" align="left">
+                <div class="col-sm-2"></div>
+                <label class='control-label col-sm-2' align="left">Name</label>
+                <div class="col-sm-3">
                     Noelia Pazos
                 </div>
             </div>
-            <div class="form-group" align="center">
-                <label class='control-label col-sm-3'>Username</label>
-                <div class="col-sm-4">
+            <div class="form-group row" align="center">
+                <div class="col-sm-2"></div>
+                <label class='control-label col-sm-2' align="left">Username</label>
+                <div class="col-sm-3">
                     <input type="text" id="username" name="username" class="form-control" required>
                 </div>
             </div>
-            <div class="form-group" align="center">
-                <label class='control-label col-sm-3'>Password</label>
-                <div class="col-sm-4">
+            <div class="form-group row" align="center">
+                <div class="col-sm-2"></div>
+                <label class='control-label col-sm-2' style="margin-top:3px;" align="left">Password</label>
+                <div class="col-sm-3" style="margin-top:3px;">
                     <input type="text" id="password" name="password" class="form-control" required>
                 </div>
-                <div class="col-sm-3">
-                    <button class="btn btn-success"> Get Another Password</button>
+                <div class="col-sm-3" style="margin-top:3px;">
+                    <button class="btn button-general-2"> Get Another Password</button>
                 </div>
             </div>
-            <div class="form-group" align="center">
-                <label class='control-label col-sm-3'>Terms and Conditions</label>
+            <div class="form-group row" align="left">
+                <div class="col-sm-2">
+                </div>
+                <div class="col-sm-2">
+                </div>
+                <div class="col-sm-3" style="margin-top: -10px;">
+                    Note: Your child's teacher will be able to retrieve this password
+                </div>
+            </div>
+            <div class="form-group row" align="left">
+                <div class="col-sm-2">
+                </div>
+                <label class='control-label col-sm-2'>Terms & Conditions</label>
                 <br>
             </div>
-            <div class="form-group" align="center">
-                <textarea class="form-control" rows="5" id="comment"></textarea>
-                <input type="checkbox" id="terms" name="terms" class="form-control" required> Hola
+            <div class="form-group row" align="left">
+                <div class="col-sm-2">
+                </div>
+                <div class="col-sm-8">
+                    <textarea class="form-control" rows="5" id="comment" style="height: 400px;" readonly>
+
+                        As the parent or legal guardian of -student name-, I give my child permission to speak to adults not associated
+                        with the school.
+                        Duis porta vestibulum dignissim. Nullam hendrerit, velit sed placerat tempus, nisl nisl elemen-
+                        tum sem, ut lacinia erat nibh eget orci. Nunc eget lorem vel tortor viverra tempor. In ac volut-
+                        pat tortor. Vivamus sollicitudin nisl sed tempus lacinia. Aliquam eget sapien ac mi finibus
+
+                        aliquam. Nulla imperdiet sapien varius, blandit arcu ac, hendrerit dui. Nam sed porttitor
+
+                        massa. Nunc vel ipsum metus. Quisque pellentesque velit non leo pretium, at lobortis nisi
+
+                        tempor. Etiam ut arcu orci. Mauris ut nisl lacinia ante ornare pharetra et eleifend enim. Sed
+
+                        eget tortor faucibus, interdum sapien nec, tempus orci. Pellentesque et metus enim. Ut placer-
+                        at, est eget bibendum cursus, eros lacus maximus felis, ut pharetra nisl arcu a turpis.
+
+                        Etiam ut arcu orci. Mauris ut nisl lacinia ante ornare pharetra et eleifend enim. Sed eget tortor
+
+                        faucibus, interdum sapien nec, tempus orci. Pellentesque et metus enim. Ut placerat, est eget
+
+                        bibendum cursus, eros lacus maximus felis, ut pharetra nisl arcu a turpis.
+
+                        Duis porta vestibulum dignissim. Nullam hendrerit, velit sed placerat tempus, nisl nisl elemen-
+                        tum sem, ut lacinia erat nibh eget orci. Nunc eget lorem vel tortor viverra tempor. In ac volut-
+                        pat tortor. Vivamus sollicitudin nisl sed tempus lacinia. Aliquam eget sapien ac mi finibus
+
+                        aliquam. Nulla imperdiet sapien varius, blandit arcu ac, hendrerit dui. Nam sed porttitor
+
+                        massa. Nunc vel ipsum metus. Quisque pellentesque velit non leo pretium, at lobortis nisi
+
+                        tempor. Etiam ut arcu orci. Mauris ut nisl lacinia ante ornare pharetra et eleifend enim. Sed
+
+                        eget tortor faucibus, interdum sapien nec, tempus orci. Pellentesque et metus enim. Ut placer-
+                        at, est eget bibendum cursus, eros lacus maximus felis, ut pharetra nisl arcu a turpis.
+
+                        Etiam ut arcu orci. Mauris ut nisl lacinia ante ornare pharetra et eleifend enim. Sed eget tortor
+                    </textarea>
+                </div>
+            </div>
+            <div class="form-group row" align="left">
+                <div class="col-sm-2">
+                </div>
+                <div class="col-sm-3">
+                    <div class="checkbox">
+                        <label><input type="checkbox" value="">I agree to the Terms & Conditions </label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row" align="left">
+                <div class="col-sm-2">
+                </div>
+                <div class="col-sm-5">
+                    <button type="button" id="setupAccount" class="save btn button-general">Submit</button>
+                </div>
             </div>
         </form>
     </div>
