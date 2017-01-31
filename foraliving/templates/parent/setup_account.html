@@ -1,0 +1,63 @@
+{% extends 'parent/base.html' %}
+{% load staticfiles %}
+{% block styles %}
+
+{% endblock %}
+{% block body %}
+<header>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.15.0/jquery.validate.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.15.0/additional-methods.js"></script>
+    <link rel="stylesheet" href="{% static 'UX/css/simpleGridTemplate.css' %}">
+</header>
+<div class="panel panel-default">
+    <div class="panel-heading" style="background-color: white;">
+        <div class="row">
+            <div class="col-lg-12 center">
+                <img src="{% static 'UX/images/FAL-Logo.png' %}" class="img-responsive" style="float: none;
+    margin: 0 auto;">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12 center">
+                <h2 class="text-center"> Create Your Child's Account</h2></div>
+        </div>
+    </div>
+    <div class="panel-body" style="background-color: #efefef;">
+        <form class="form-horizontal">
+            <div class="form-group" align="center">
+                <label class='control-label col-sm-3'>Name</label>
+                <div class="col-sm-4">
+                    Noelia Pazos
+                </div>
+            </div>
+            <div class="form-group" align="center">
+                <label class='control-label col-sm-3'>Username</label>
+                <div class="col-sm-4">
+                    <input type="text" id="username" name="username" class="form-control" required>
+                </div>
+            </div>
+            <div class="form-group" align="center">
+                <label class='control-label col-sm-3'>Password</label>
+                <div class="col-sm-4">
+                    <input type="text" id="password" name="password" class="form-control" required>
+                </div>
+                <div class="col-sm-3">
+                    <button class="btn btn-success"> Get Another Password</button>
+                </div>
+            </div>
+            <div class="form-group" align="center">
+                <label class='control-label col-sm-3'>Terms and Conditions</label>
+                <br>
+            </div>
+            <div class="form-group" align="center">
+                <textarea class="form-control" rows="5" id="comment"></textarea>
+                <input type="checkbox" id="terms" name="terms" class="form-control" required> Hola
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+</script>
+{% endblock %}

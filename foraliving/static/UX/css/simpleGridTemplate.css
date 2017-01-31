@@ -43,7 +43,7 @@ body {
     border-color: #FF0000;
 }
 
-.btn-file{
+.btn-file {
     background-color: #99c64c;
     color: white;
 }
@@ -58,11 +58,10 @@ body {
     color: white;
 }
 
-
 .btn.focus, .btn:focus, .btn:hover {
     background-color: #e8e0e0;
     border-color: #e8e8e8;
-    color:black;
+    color: black;
 }
 
 .paragraph {
@@ -72,9 +71,9 @@ body {
 }
 
 .alert-videos {
-font-size: 18px;
+    font-size: 18px;
     text-align: center;
-    color:black;
+    color: black;
     background-color: #fff0be;
 }
 
@@ -148,7 +147,6 @@ tr.shown td.details-control2 {
 .glyphicon-trash {
     color: white !important;
 }
-
 
 #faqs ul {
     font-size: 20px;
@@ -792,3 +790,26 @@ fieldset[disabled] a.btn {
     }
 
 }
+
+@media (min-width: 992px) {
+    .videos-display {
+        width: 50%;
+        height: 389px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .videos-display {
+        width: 50%;
+        height: 415px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .videos-display2 {
+        height: 300px;
+    }
+}
+
+
+

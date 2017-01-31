@@ -135,7 +135,7 @@ def student_list(request, class_id, assignment_id):
         inner join foraliving_interview_question_video_map fiqvm2 on fv2.id=fiqvm2.video_id
         inner join foraliving_interview_question_map fiqm2 on fiqvm2.interview_question_id=fiqm2.id
         inner join foraliving_interview fi2 on fi2.id=fiqm2.interview_id
-        where fi2.id=fi.id and fv2.status = 'pending' ) as pending,
+        where fi2.id=fi.id and (fv2.status = 'pending' or  fv2.status = 'new') ) as pending,
 
         (Select count(*) From foraliving_video fv3
         inner join foraliving_interview_question_video_map fiqvm3 on fv3.id=fiqvm3.video_id
@@ -428,3 +428,23 @@ class AddClass(LoginRequiredMixin, generic.View):
                 'add_class_form': form
             }
         )
+
+def studentPersonalInfo(request, class_id):
+    """
+    :param request:
+    :param class_id:
+    :return:
+    """
+    student_class = Student_Class.objects.filter(falClass=class_id).values('student')
+    students = User.objects.filter(pk__in=student_class).values('id', 'first_name', 'last_name', 'username', 'email')
+
+    return JsonResponse({'results': list(students)})
+
+def getPassword(request):
+    """
+    :param request:
+    :return:
+    """
+    user_id = request.GET.get('user_id')
+    user = User.objects.get(pk=user_id).values('password')
+    return HttpResponse(user)

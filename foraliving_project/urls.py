@@ -17,6 +17,7 @@ from django.conf.urls import url, include
 from django.contrib import admin
 from foraliving import views
 from foraliving.views import VolunteerForm
+from foraliving.parent import AccountSetup
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -25,6 +26,7 @@ urlpatterns = [
     url(r"^$", views.index, name="home"),
     url(r"^theme/", views.sitetheme, name='theme'),
     url(r"^volunteer/create/", VolunteerForm.as_view(), name='vSignup'),
+    url(r"^account/setup/", AccountSetup.as_view(), name='accountSetup'),
     url(r"^create-skills/(?P<volunteer_id>\d+)/$", views.createSkill, name='createSkill'),
     url(r"^unique-email/", views.uniqueEmail, name='uniqueEmail'),
     url(r"^unique-username/", views.uniqueUsername, name='uniqueUsername'),

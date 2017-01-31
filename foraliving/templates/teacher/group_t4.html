@@ -65,34 +65,37 @@
         <div class="panel-body">
             <div class="container">
                 <div class="gallery">
-                    {% for video in videos %}
-                    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                        <div class="thumbnail" style="text-align: center; width: 82%;">
-                            <div style="text-align: right;"> Delete</div>
-                            <div class="embed-responsive embed-responsive-16by9">
-                                <video controls>
-                                    <source src="/foraliving/media/{{video.video.url}}">
-                                </video>
-                            </div>
-                            <div style="margin-left: 8%;">
-                                <p class="tag">{{video.video.name}}</p>
-                                <p class="text-column">{{video.interview_question.interview.interviewee.first_name}},
-                                    {{volunteer.workTitle}}</p>
-                                {% if video.video.status == "approved"%}
-                                <div class="page-title" style="font-size: 18px; text-align: left;">
-                                    <input type="checkbox" checked name="status" class="status"
-                                           value="{{video.video.id}}"> <label>Approved</label>
+                    <div class="container-fluid">
+                        {% for video in videos %}
+                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 videos-display">
+                            <div class="thumbnail" style="text-align: center; width: 85%;">
+                                <div style="text-align: right;"> Delete</div>
+                                <div class="embed-responsive embed-responsive-16by9">
+                                    <video controls>
+                                        <source src="/foraliving/media/{{video.video.url}}">
+                                    </video>
                                 </div>
-                                {% else %}
-                                <div class="link" style="font-size: 18px; text-align: left;">
-                                    <input type="checkbox" name="status" class="status" value="{{video.video.id}}">
-                                    <label>Approve</label>
+                                <div style="margin-left: 8%;">
+                                    <p class="tag">{{video.video.name}}</p>
+                                    <p class="text-column">
+                                        {{video.interview_question.interview.interviewee.first_name}},
+                                        {{volunteer.workTitle}}</p>
+                                    {% if video.video.status == "approved"%}
+                                    <div class="page-title" style="font-size: 18px; text-align: left;">
+                                        <input type="checkbox" checked name="status" class="status"
+                                               value="{{video.video.id}}"> <label>Approved</label>
+                                    </div>
+                                    {% else %}
+                                    <div class="link" style="font-size: 18px; text-align: left;">
+                                        <input type="checkbox" name="status" class="status" value="{{video.video.id}}">
+                                        <label>Approve</label>
+                                    </div>
+                                    {% endif %}
                                 </div>
-                                {% endif %}
                             </div>
                         </div>
+                        {% endfor %}
                     </div>
-                    {% endfor %}
                 </div>
             </div>
         </div>

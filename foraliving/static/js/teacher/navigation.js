@@ -8,6 +8,7 @@ $(document).ready(function () {
     var assignment_id = $("#assignment_hidden").val();
     var class_id = $("#class_hidden").val();
     if (class_id != 'None') {
+        $("#assignment-div").show();
         //Verify if exist a class sent how parameter
         $('#classname').val(class_id);
         $('#classname').selectpicker('refresh');
@@ -19,9 +20,14 @@ $(document).ready(function () {
         }).done(function (data) {
             // reload the assignment options
             $("#options").html("");
-            $("#options").selectpicker('refresh');
+            $("#options").selectpicker('refresh')
 
             $("#options").html("");
+            var opt = $('<option />');
+            opt.val("C3");
+            opt.text("Student info");
+            $('#options').append(opt);
+
             var opt = $('<option />');
             opt.val("B2");
             opt.text("Delete Class");
@@ -63,6 +69,11 @@ $(document).ready(function () {
 
                 $("#options").html("");
                 var opt = $('<option />');
+                opt.val("C3");
+                opt.text("Student info");
+                $('#options').append(opt);
+
+                var opt = $('<option />');
                 opt.val("B2");
                 opt.text("Delete Class");
                 $('#options').append(opt);
@@ -81,11 +92,12 @@ $(document).ready(function () {
                 });
                 $("#options").selectpicker('refresh');
                 $('#data-table').dataTable().fnClearTable();
+                $('#student-table').dataTable().fnClearTable();
             });
 
             return false;
-        } else if ($("#company").val() == 0) {
-
+        } else if ($("#classname").val() == 0) {
+            window.location = "/foraliving/teacher/class/new/";
         }
     });
 
@@ -98,6 +110,16 @@ $(document).ready(function () {
             $("#group_name").show();
             $('#group').selectpicker('hide');
         }
+    });
+
+    $('html').on('click', '.password', function (e) {
+        var user_id = e.target.id;
+        $.ajax({
+            type: "GET",
+            url: "/foraliving/get-password/?user_id=" + user_id,
+        }).done(function (data) {
+            alert (data);
+        })
     });
 
     //method to make the ajax call that get the student list that the teacher want to assign
@@ -284,23 +306,92 @@ $(document).ready(function () {
 
     //method to verify the changes in the assignment select
     $("#options").change(function () {
+        var class_id = $("#classname").val();
         if ($("#options").val() == "A1") {
 
         }
         else if ($("#options").val() == "B2") {
-            var class_id = $("#classname").val();
             $('#delete-modal').modal();
             $('.confirm-delete-modal', '#delete-modal').attr('id', 'class-' + class_id);
             $('#myModalLabelDelete').text("Are you sure you want to remove this class?")
 
         }
+        else if ($("#options").val() == "C3") {
+            $("#assignment-div").hide();
+            $("#student-div").show();
+            $("#student-table").DataTable({
+                'destroy': true,
+                "paging": false,
+            });
+
+            getPersonalInfo(class_id);
+        }
         else {
+            $("#assignment-div").show();
+            $("#student-div").hide();
             var assignment_id = $("#options").val();
             var class_id = $("#classname").val();
             getClass(assignment_id, class_id);
 
         }
     });
+
+
+    function getPersonalInfo(class_id) {
+        var url = "/foraliving/student-info/" + class_id + "/";
+        $.ajax({
+            method: "GET",
+            url: url,
+            contentType: "application/json"
+        }).done(function (data) {
+            var data_s = data.results;
+            $('#student-table').dataTable().fnClearTable();
+            $("#student-table").DataTable({
+                'destroy': true,
+                "paging": true,
+                'data': data_s,
+                "columnDefs": [{
+                    "targets": 0,
+                    "data": "username",
+                    "render": function (data, type, full, meta) {
+                        return data;
+                    }
+                }, {
+                    "targets": 1,
+                    "data": "first_name",
+                    "render": function (data, type, full, meta) {
+                        return data;
+                    }
+                }, {
+                    "targets": 2,
+                    "data": "last_name",
+                    "render": function (data, type, full, meta) {
+                        return data;
+                    }
+                }, {
+                    "targets": 3,
+                    "data": "email",
+                    "render": function (data, type, full, meta) {
+                        return data;
+                    }
+                }, {
+                    "targets": 4,
+                    "data": "",
+                    "render": function (data, type, full, meta) {
+                        return "<div id=' " + full['id'] + "' class='password'> ******** </div>";
+                    }
+                }, {
+                    "targets": 5,
+                    "data": "",
+                    "render": function (data, type, full, meta) {
+                        return '<div style="text-align: center;"><i style="color:red;" class="fa fa-times" aria-hidden="true"></i> </div>';
+                    }
+                }
+                ]
+            });
+        });
+    }
+
 
     //method to display the stuents in relation with the class and assignment
     function getClass(assignment_id, class_id) {
@@ -372,7 +463,7 @@ $(document).ready(function () {
                         if (full[4] != null && (full[12] == 0 && full[11] == 0)) {
                             return "<div> <a href='/foraliving/volunteer/profile/" + full[4] + "/0'>" + full[5] +
                                 " " + full[6] + "</a> <i class='fa fa-btn fa-close delete-volunteer' id=' " + full[10] + "'" +
-                                " style='margin-left: 10px;' title='Delete'></i></div>";
+                                " style='margin-left: 10px; color:red;' title='Delete'></i></div>";
                         }
                         else if (full[4] != null) {
                             return "<div> <a href='/foraliving/volunteer/profile/" + full[4] + "/0'>" + full[5] +
