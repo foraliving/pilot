@@ -123,7 +123,8 @@ $(document).ready(function () {
 
     // Necessary to eval against a String, because of the parsing from Django to JS
     if (upload_complete == "True") {
-        $('#show-message').hide();
+        $('#show-success-message').hide();
+        $('#show-error-message').hide();
         var class_id = "{{class_id}}";
 
         $('#new_assgingment').modal('show');
@@ -147,9 +148,16 @@ $(document).ready(function () {
                 },
                 dataType: 'json',
             }).done(function (data) {
-                $('#show-message').show();
-                $('#success-message').html( "<strong>Success:</strong> " + data);
-                $(location).attr('href','/foraliving/teacher/class');
+                if (data !== "Assignment not added") {
+                    $('#show-error-message').hide();
+                    $('#show-success-message').show();
+                    $('#success-message').html("<strong>Success:</strong> " + data);
+                    $(location).attr('href','/foraliving/teacher/class');
+                } else {
+                    $('#show-success-message').hide();
+                    $('#show-error-message').show();
+                    $('#error-message').html("<strong>Error:</strong> " + data);
+                }
             });
         });
 
