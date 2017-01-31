@@ -54,6 +54,8 @@ class TestUpload(TestCase):
     def test_add_new_class_too_many_headers(self):
         """
             Verify the post method to add the new class and assign students to the new class
+            Error:
+                Too many headers
         """
         path = 'files/test_file_more_headers.csv'
         file_path = os.path.join(settings.MEDIA_ROOT, path)
@@ -75,6 +77,8 @@ class TestUpload(TestCase):
     def test_add_new_class_wrong_headers(self):
         """
             Verify the post method to add the new class and assign students to the new class
+            Error:
+                wrong headers
         """
         path = 'files/test_file_wrong_headers.csv'
         file_path = os.path.join(settings.MEDIA_ROOT, path)
@@ -97,6 +101,8 @@ class TestUpload(TestCase):
     def test_add_new_class_no_name(self):
         """
             Verify the post method to add the new class and assign students to the new class
+            Error:
+                No class name
         """
         path = 'files/test_file.csv'
         file_path = os.path.join(settings.MEDIA_ROOT, path)

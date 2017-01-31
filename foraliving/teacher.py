@@ -438,6 +438,7 @@ class AddClass(LoginRequiredMixin, generic.View):
     instance a user per student.
     """
     template = 'teacher/add_class.html'
+    teacher = None
 
     def get(self, request):
         """
@@ -459,7 +460,7 @@ class AddClass(LoginRequiredMixin, generic.View):
         Here will be managed the data uploaded and will be instanciated the class with the
         students
         """
-
+        self.teacher = request.user
         # First of all we validate the form
         form = TeacherAddClass(data=request.POST, files=request.FILES)
         if form.is_valid():
