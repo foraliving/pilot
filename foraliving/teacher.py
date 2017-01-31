@@ -479,7 +479,7 @@ class AddClass(LoginRequiredMixin, generic.View):
             for idx, header in enumerate(reader_list.fieldnames):
                 # We validate the headers not just by name but by order too
                 validate = True
-                csv_error = csv_error = "Too much headers, the file must have 3 headers"
+                csv_error = csv_error = "Too many headers, the file must have 3 headers"
                 # We validate how many headers the file have
                 if (len(reader_list.fieldnames) != 3):
                     validate = False
@@ -509,20 +509,35 @@ class AddClass(LoginRequiredMixin, generic.View):
             new_students = []
             # Second we are going to generate all students with their user_type
             for row in reader_list:
-                student, user_type = self.generate_save_student(row)
+                email = row["Parent's Email Address"].strip()
+                exist_student = self.verify_email(email)
+                if exist_student:
+                    student, user_type = self.generate_save_student(row)
+                else:
+                    student = User.objects.filter(email=email)[0]
                 new_students.append(student)
 
             self.generate_student_class(new_students, new_class)
+
+            return render(
+                request,
+                self.template,
+                {
+                    'upload_complete': True,
+                    'class_id': new_class.id,
+                    'class_name': new_class.name,
+                    'add_class_form': TeacherAddClass(),
+                    'success': str(len(new_students)) + ' students added correctly'
+                }
+            )
 
         return render(
             request,
             self.template,
             {
-                'upload_complete': True,
-                'class_id': new_class.id,
-                'class_name': new_class.name,
-                'add_class_form': TeacherAddClass(),
-                'success': str(len(new_students)) + ' students added correctly'
+                'upload_complete': False,
+                'add_class_form': form,
+                'error': 'Class name missed'
             }
         )
 
@@ -623,6 +638,11 @@ class AddClass(LoginRequiredMixin, generic.View):
             studentsInClass.append(student_class)
 
         return studentsInClass
+
+    def verify_email(self, email):
+        if len(User.objects.filter(email=email)) > 0:
+            return False
+        return True
 
 
 class AddClassAssignment(LoginRequiredMixin, generic.View):
