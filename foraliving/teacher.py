@@ -478,10 +478,18 @@ class AddClass(LoginRequiredMixin, generic.View):
             # Here we validate the three headers, the function 'enumerate' is used to have an index
             for idx, header in enumerate(reader_list.fieldnames):
                 # We validate the headers not just by name but by order too
-                if (header != csv_headers[idx]):
+                validate = True
+                csv_error = csv_error = "Too much headers, the file must have 3 headers"
+                # We validate how many headers the file have
+                if (len(reader_list.fieldnames) != 3):
+                    validate = False
+
+                if (header != csv_headers[idx] and validate):
                     # If the header is wrong then we show up an error message
+                    validate = False
                     csv_error = "'" + header + "' should have to be '" + csv_headers[idx] + "'"
 
+                if not validate:
                     return render(
                         request,
                         self.template,
