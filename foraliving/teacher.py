@@ -418,6 +418,19 @@ class GroupInterface(LoginRequiredMixin, generic.View):
                 'interview': interview, 'videos': videos, 'volunteer': volunteer, 'count': count})
 
 
+def studentPersonalInfo(request, class_id):
+    """
+    :param request:
+    :param class_id:
+    :return:
+    """
+    student_class = Student_Class.objects.filter(falClass=class_id).values('student')
+    students = User.objects.filter(pk__in=student_class).values('id', 'first_name', 'last_name', 'username',
+                                                                'email')
+
+    return JsonResponse({'results': list(students)})
+
+
 class AddClass(LoginRequiredMixin, generic.View):
     """
     Here the Teacher will be able to SetUp a class and upload a csv
@@ -440,26 +453,6 @@ class AddClass(LoginRequiredMixin, generic.View):
                 'add_class_form': form
             }
         )
-
-def studentPersonalInfo(request, class_id):
-    """
-    :param request:
-    :param class_id:
-    :return:
-    """
-    student_class = Student_Class.objects.filter(falClass=class_id).values('student')
-    students = User.objects.filter(pk__in=student_class).values('id', 'first_name', 'last_name', 'username', 'email')
-
-    return JsonResponse({'results': list(students)})
-
-def getPassword(request):
-    """
-    :param request:
-    :return:
-    """
-    user_id = request.GET.get('user_id')
-    user = User.objects.get(pk=user_id).values('password')
-    return HttpResponse(user)
 
     def post(self, request):
         """
