@@ -14,6 +14,7 @@
 {% block styles %}
 <link rel="stylesheet" href="{% static 'UX/css/student/recording.css' %}">
 <link rel="stylesheet" href="{% static 'UX/css/simpleGridTemplate.css' %}">
+<link rel="stylesheet" href="{% static 'UX/css/teacher/styles.css' %}">
 <script src="{% static 'js/teacher/group.js' %}"></script>
 <link rel="stylesheet"
   href='{% static "bootstrap-fileinput/css/fileinput.css" %}'
@@ -29,60 +30,81 @@
 <div class="container">
     <div class="panel">
         <div class="panel-heading">
-            <div class="row">
-                <h2>Class Setup</h2>
+            {% block messages %}
+                {% if error %}
+                    <div class="alert alert-danger">
+                        <strong>Header Error:</strong> {{ error }}
+                    </div>
+                {% endif %}
+                {% if success %}
+                    <div class="alert alert-success">
+                        <strong>Success:</strong> {{ success }}
+                    </div>
+                {% endif %}
+            {% endblock %}
+            <div>
+                <h2 class="page-title"><strong>Class Setup</strong></h2>
             </div>
         </div>
-    <div class="panel-body">
-        <div class="panel panel-default">
-            <div class="panel-body">
-                <form id="upload" method="post" class="form" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    <div class="form-group">
-                        <div>
-                            <h2><strong>{{ add_class_form.class_name.label }}</strong></h2>
-                        </div>
+        <div class="panel-body">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <form id="upload" method="post" class="form" enctype="multipart/form-data">
+                        {% csrf_token %}
                         <div class="form-group">
-                            {{ add_class_form.class_name }}
-                            {{ add_class_form.class_name.errors }}
-                        </div>
-
-                        <div>
-                            <h2><strong>Upload Student List</strong></h2>
-                            <div class="container">
-                                <h5>After entering student information into the spreadsheet, upload the file.</h5>
-                                <div>
-                                    <h4>STEP 1: Download template</h4>
-                                </div>
-                                <div>
-                                    <h4>STEP 2:  Add students names and parent email addresses to the template and save the file</h4>
-                                </div>
-                                <div class="form-group">
-                                    <h4>STEP 3:  Select file off your computer</h4>
-                                    <div class="col-md-4" style="padding-left: 0px;">
-                                        <input id="students_csv" name="students_csv" type="file" multiple>
+                            <div>
+                                <h2><strong>{{ add_class_form.class_name.label }}</strong></h2>
+                            </div>
+                            <div class="form-group">
+                                {{ add_class_form.class_name }}
+                                {{ add_class_form.class_name.errors }}
+                            </div>
+                            <div>
+                                <h2><strong>Upload Student List</strong></h2>
+                                <div class="container">
+                                    <h5>After entering student information into the spreadsheet, upload the file.</h5>
+                                    <div>
+                                        <h4>STEP 1: <a href="/foraliving/teacher/class/new/download/template">Download template</a></h4>
+                                    </div>
+                                    <div>
+                                        <h4>STEP 2:  Add students names and parent email addresses to the template and save the file</h4>
+                                    </div>
+                                    <div class="form-group">
+                                        <h4>STEP 3:  Select file off your computer</h4>
+                                        <div class="col-md-4" style="padding-left: 0px;">
+                                            <input id="students_csv" name="students_csv" type="file" multiple>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </form>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
-    </div>
 </div>
+
+{% include 'teacher/new_assignment_modal.html' %}
 {% endblock %}
 
 {% block scripts %}
 <script>
 $(document).ready(function () {
+    var upload_complete = "{{upload_complete}}";
+
     $("#students_csv").fileinput({
         showUpload: true,
         showCaption: false,
         browseClass: "btn btn-default btn-sm",
         fileType: "csv",
-        allowedFileExtensions: ['csv']
+        allowedFileExtensions: ['csv'],
+        allowedPreviewTypes: [],
+        fileActionSettings: {
+            showZoom: false,
+            showUpload: false,
+            indicatorNew: ''
+        }
     });
 
     $("#upload").validate({
@@ -95,10 +117,43 @@ $(document).ready(function () {
             },
             students_csv: {
                 required: true
-                // extension: "csv"
             }
         }
     });
+
+    // Necessary to eval against a String, because of the parsing from Django to JS
+    if (upload_complete == "True") {
+        $('#show-message').hide();
+        var class_id = "{{class_id}}";
+
+        $('#new_assgingment').modal('show');
+        $("#new_assgingment_form").validate();
+
+        $("#new_assgingment_form").submit(function(event) {
+            var add_url = '/foraliving/teacher/class/' + class_id + '/new/assignment/';
+            var token = $('input[name="csrfmiddlewaretoken"]').prop('value');
+            var assignment_name = $('#assignment_name').val();
+            var description = $('#description').val();
+
+            event.preventDefault();
+
+            $.ajax({
+                method: 'POST',
+                url: add_url,
+                data: {
+                    'csrfmiddlewaretoken': token,
+                    'assignment_name': assignment_name,
+                    'description': description
+                },
+                dataType: 'json',
+            }).done(function (data) {
+                $('#show-message').show();
+                $('#success-message').html( "<strong>Success:</strong> " + data);
+                $(location).attr('href','/foraliving/teacher/class');
+            });
+        });
+
+    }
 });
 </script>
 {% endblock %}

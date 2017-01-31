@@ -134,8 +134,8 @@ class Class(models.Model):
     lms = models.ForeignKey(LMS, on_delete=models.CASCADE)
     teacher = models.ForeignKey(User_Add_Ons, on_delete=models.CASCADE, )
     name = models.CharField(max_length=128)
-    academic_year = models.IntegerField()
-    semester = models.CharField(max_length=128)
+    academic_year = models.IntegerField(default=None, null=True)
+    semester = models.CharField(max_length=128, default=None, null=True)
 
     class Meta:
         verbose_name = 'FAL Class'
@@ -168,10 +168,10 @@ class Student_Class(models.Model):
 class Assignment(models.Model):
     title = models.CharField(max_length=128)
     falClass = models.ForeignKey(Class, on_delete=models.CASCADE)
-    document = models.CharField(max_length=128)
-    due_date = models.DateTimeField()
-    creation_date = models.DateTimeField()
-    description = models. CharField(max_length=256)
+    document = models.CharField(max_length=128, blank=True, null=True)
+    due_date = models.DateTimeField(blank=True, null=True)
+    creation_date = models.DateTimeField(auto_now_add=True)
+    description = models. CharField(max_length=256, blank=True, null=True)
 
     def __unicode__(self):
         return str(self.title) + ' (' + str(self.falClass) + ')'

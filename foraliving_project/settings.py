@@ -145,6 +145,3 @@ STATIC_URL = '/static/'
 PROJECT_PATH = os.path.realpath(os.path.dirname(__file__))
 MEDIA_ROOT = PROJECT_PATH + '/media'
 MEDIA_URL = '/media/'
-
-EMAIL_BACKEND = "sgbackend.SendGridBackend"
-SENDGRID_API_KEY = "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"

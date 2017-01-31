@@ -1,16 +1,19 @@
-import json
+import csv
+import io
+import urllib.request
+import os
 from django.urls import reverse
 from django.shortcuts import redirect
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import connection
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse, Http404
 from django.conf import settings
 from django.shortcuts import render
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import generic
 from django.contrib.auth.models import User
 from .forms import *
-from foraliving.models import Class, User_Add_Ons, Volunteer_User_Add_Ons
+from foraliving.models import Class, User_Add_Ons, Volunteer_User_Add_Ons, Assignment
 
 
 class TeacherStudentT1(LoginRequiredMixin, generic.View):
@@ -416,15 +419,24 @@ class GroupInterface(LoginRequiredMixin, generic.View):
 
 
 class AddClass(LoginRequiredMixin, generic.View):
+    """
+    Here the Teacher will be able to SetUp a class and upload a csv
+    with the students information and this info will be used to
+    instance a user per student.
+    """
     template = 'teacher/add_class.html'
 
     def get(self, request):
+        """
+        Here will be rendered the Form to Setup a class and upload a CSV
+        """
         form = TeacherAddClass()
 
         return render(
             request,
             self.template,
             {
+                'upload_complete': False,
                 'add_class_form': form
             }
         )
@@ -448,3 +460,197 @@ def getPassword(request):
     user_id = request.GET.get('user_id')
     user = User.objects.get(pk=user_id).values('password')
     return HttpResponse(user)
+
+    def post(self, request):
+        """
+        Here will be managed the data uploaded and will be instanciated the class with the
+        students
+        """
+
+        # First of all we validate the form
+        form = TeacherAddClass(data=request.POST, files=request.FILES)
+        if form.is_valid():
+            # csv_data will contain the byte object which represents the data in the file uploaded
+            csv_data = None
+            # csv_headers is the headers acceptance criteria
+            csv_headers = ["Student's First Name", "Student's Last Name", "Parent's Email Address"]
+
+            # We get the byte object with the data in the file
+            for chunk in form.cleaned_data['students_csv'].chunks():
+                csv_data = chunk
+
+            # We parse the byte object to a CSV file
+            reader_list = csv.DictReader(io.StringIO(csv_data.decode("utf-8")))
+
+            # Here we validate the three headers, the function 'enumerate' is used to have an index
+            for idx, header in enumerate(reader_list.fieldnames):
+                # We validate the headers not just by name but by order too
+                if (header != csv_headers[idx]):
+                    # If the header is wrong then we show up an error message
+                    csv_error = "'" + header + "' should have to be '" + csv_headers[idx] + "'"
+
+                    return render(
+                        request,
+                        self.template,
+                        {
+                            'upload_complete': False,
+                            'add_class_form': form,
+                            'error': csv_error
+                        }
+                    )
+
+            # First we generate the class
+            new_class = self.generate_class(
+                user=request.user,
+                name=form.cleaned_data['class_name']
+            )
+
+            new_students = []
+            # Second we are going to generate all students with their user_type
+            for row in reader_list:
+                student, user_type = self.generate_save_student(row)
+                new_students.append(student)
+
+            self.generate_student_class(new_students, new_class)
+
+        return render(
+            request,
+            self.template,
+            {
+                'upload_complete': True,
+                'class_id': new_class.id,
+                'class_name': new_class.name,
+                'add_class_form': TeacherAddClass(),
+                'success': str(len(new_students)) + ' students added correctly'
+            }
+        )
+
+    def get_next_id(self):
+        """
+        This function will get the next id of User
+        """
+        curr_id = User.objects.latest('id')
+        return curr_id.id + 1
+
+    def generate_username(self, fname, lname):
+        """
+        We generate the username of a student (without blank spaces):
+            firstname + first letter of lastname + next_id of auth_user table
+        Return:
+            username: String
+        """
+        username = fname + lname[0] + str(self.get_next_id())
+        username = "".join(username.split())
+
+        return username
+
+    def get_password(self):
+        """
+        Here we get a simple password from dinopass
+        Return:
+            Password: string
+        """
+        request = urllib.request.urlopen("http://www.dinopass.com/password/simple").read()
+        password = request.decode("utf-8")
+
+        return password
+
+    def generate_save_student(self, data):
+        """
+        Here we generate a student based on the information provided and
+        then we generate the user_type 1, which is student
+        Return:
+            student: Student
+            user_type: User_Type
+        """
+        fname = data["Student's First Name"].strip()
+        lname = data["Student's Last Name"].strip()
+        email = data["Parent's Email Address"].strip()
+        username = self.generate_username(fname, lname)
+        password = self.get_password()
+
+        student = User.objects.create_user(
+            first_name=fname,
+            last_name=lname,
+            email=email,
+            username=username,
+            password=password,
+            is_active=False
+        )
+        student.save()
+
+        type = Type.objects.get(pk=1)
+        user_type = User_Type(
+            type=type,
+            user=student
+        )
+        user_type.save()
+
+        return student, user_type
+
+    def generate_class(self, user, name):
+        """
+        Here will be generated a class
+        Return:
+            new_class: Class
+        """
+        new_class = Class(
+            school=user.user_add_ons.school,
+            lms=user.user_add_ons.lms,
+            teacher=user.user_add_ons,
+            name=name
+        )
+
+        new_class.save()
+
+        return new_class
+
+    def generate_student_class(self, students, teacher_class):
+        """
+        Here we associate a student with a class
+        Return:
+            StudentsInClass: Array<Student_Class>
+        """
+        studentsInClass = []
+        for student in students:
+            student_class = Student_Class(
+                falClass=teacher_class,
+                student=student
+            )
+
+            student_class.save()
+            studentsInClass.append(student_class)
+
+        return studentsInClass
+
+
+class AddClassAssignment(LoginRequiredMixin, generic.View):
+    def post(self, request, class_id):
+        new_class = Class.objects.get(pk=class_id)
+        form = TeacherAddClassAssignment(data=request.POST)
+        message = "Assignment not added"
+
+        if form.is_valid():
+            assignment = Assignment(
+                falClass=new_class,
+                title=form.cleaned_data['assignment_name'],
+                description=form.cleaned_data['description']
+            )
+            assignment.save()
+
+            message = "Assignment added successfully"
+
+        return JsonResponse(message, safe=False)
+
+
+class DownloadTemplate(LoginRequiredMixin, generic.View):
+    def get(self, request):
+        path = 'files/FAL_classroom_roster.csv'
+        file_path = os.path.join(settings.MEDIA_ROOT, path)
+        if os.path.exists(file_path):
+            with open(file_path, 'rb') as fh:
+                response = HttpResponse(fh.read(), content_type="application/vnd.ms-excel")
+                response['Content-Disposition'] = 'inline; filename=' + os.path.basename(file_path)
+                return response
+        else:
+            raise Http404

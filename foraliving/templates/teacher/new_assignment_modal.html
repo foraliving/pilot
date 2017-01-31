@@ -1,0 +1,47 @@
+<div class="modal fade" id="new_assgingment" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <form id="new_assgingment_form" method="post" class="form" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="modal-content">
+            <!-- Modal header -->
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <div id="show-message" class="alert alert-success">
+                    <p id="success-message"></p>
+                </div>
+                <h2 class="modal-title page-title" id="exampleModalLabel">Class {{class_name}} Upload Complete!</h2>
+                <h5 class="modal-title" id="exampleModalLabel"><p>
+                    Student account setup will be complete after parents agree to the terms and conditions.<br>
+                    Emails have been sent to your students’ parents.
+                    <br><br>
+                    Next, name the assignment for this class.
+                    </p>
+                </h5>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <label for="assignment_name" class="form-control-label">Assignment Name</label>
+                            <input type="text" class="form-control" id="assignment_name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="description" class="form-control-label">Assignment Description (optional)</label>
+                            <textarea class="form-control" id="description"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer" style="text-align: center;">
+                <button style="background-color: #99c64c; color: white;" id="assign-button" type="submit" class="btn btn-default">Save</button>
+            </div>
+        </div>
+        </form>
+    </div>
+</div>
