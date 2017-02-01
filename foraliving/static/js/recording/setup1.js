@@ -69,6 +69,7 @@ function start() {
         video: {deviceId: videoSource ? {exact: videoSource} : undefined}
     };
 
+    navigator.mediaDevices.getUserMedia(constraints).then(handleSuccess).catch(handleError);
     // create our webrtc connection
     webrtc = new SimpleWebRTC({
         // the id/element dom element that will hold "our" video
