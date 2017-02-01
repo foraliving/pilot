@@ -51,8 +51,15 @@ class RecordingSetupFace(LoginRequiredMixin, generic.View):
     login_url = settings.LOGIN_URL
     setup_view = 'recording/setup_face.html'
 
-    def get(self, request, interview_id):
-        return render(request, self.setup_view, {'interview': interview_id})
+    def get(self, request, interview_id, camera_id):
+        return render(
+            request,
+            self.setup_view,
+            {
+                'interview': interview_id,
+                'camera_id': camera_id
+            }
+        )
 
 
 class RecordingSetupBattery(LoginRequiredMixin, generic.View):
@@ -166,4 +173,3 @@ class SaveRecording(LoginRequiredMixin, generic.View):
         path = default_storage.save(path, ContentFile(file.read()))
         tmp_file = os.path.join(settings.MEDIA_ROOT, path)
         return JsonResponse("Done", safe=False)
-

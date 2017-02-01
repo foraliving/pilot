@@ -12,6 +12,9 @@
         <div class="panel panel-default">
             <div class="panel-body">
                 <div class="col-md-6 col-sm-6 .col-lg-6">
+                    <div class="select" style="margin-bottom: 5px;">
+                        <label for="videoSource" style="padding-right: 10px;">Select camera: </label><select class="selectpicker show-tick" id="videoSource"></select>
+                    </div>
                     <div class="videoContainer">
                         <video id="localVideo" oncontextmenu="return false;" autoplay=""></video>
                     </div>
@@ -82,7 +85,6 @@
         e.preventDefault();
         $('#help-modal').modal();
     });
-
     var isOpera = (!!window.opr && !!opr.addons) || !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;
     // Firefox 1.0+
     var isFirefox = typeof InstallTrigger !== 'undefined';
@@ -98,14 +100,11 @@
     var isChrome = !!window.chrome && !!window.chrome.webstore;
     // Blink engine detection
     var isBlink = (isChrome || isOpera) && !!window.CSS;
-
-
     if (isChrome == true || isOpera == true || isFirefox == true) {
         navigator.getBattery().then(function (battery) {
             function updateAllBatteryInfo() {
                 updateLevelInfo();
             }
-
             updateAllBatteryInfo();
             battery.addEventListener('chargingchange', function () {
                 updateLevelInfo();
@@ -137,7 +136,6 @@
         $("#other_navigator").show();
         $("#low").show();
         $("#full").show();
-
     }
 </script>
 {% endblock %}
