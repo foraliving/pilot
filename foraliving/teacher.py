@@ -467,7 +467,12 @@ class AddClass(LoginRequiredMixin, generic.View):
             # csv_data will contain the byte object which represents the data in the file uploaded
             csv_data = None
             # csv_headers is the headers acceptance criteria
-            csv_headers = ["Student's First Name", "Student's Last Name", "Parent's Email Address"]
+            csv_headers = [
+                "Student's First Name",
+                "Student's Last Name",
+                "Student's Password",
+                "Parent's Email Address"
+            ]
 
             # We get the byte object with the data in the file
             for chunk in form.cleaned_data['students_csv'].chunks():
@@ -480,9 +485,9 @@ class AddClass(LoginRequiredMixin, generic.View):
             for idx, header in enumerate(reader_list.fieldnames):
                 # We validate the headers not just by name but by order too
                 validate = True
-                csv_error = csv_error = "Too many headers, the file must have 3 headers"
+                csv_error = "The file must have " + str(len(csv_headers)) + " headers"
                 # We validate how many headers the file have
-                if (len(reader_list.fieldnames) != 3):
+                if (len(reader_list.fieldnames) != len(csv_headers)):
                     validate = False
 
                 if (header != csv_headers[idx] and validate):
@@ -511,8 +516,8 @@ class AddClass(LoginRequiredMixin, generic.View):
             # Second we are going to generate all students with their user_type
             for row in reader_list:
                 email = row["Parent's Email Address"].strip()
-                exist_student = self.verify_email(email)
-                if exist_student:
+                not_exist = self.verify_email(email)
+                if not_exist:
                     student, user_type = self.generate_save_student(row)
                 else:
                     student = User.objects.filter(email=email)[0]
@@ -584,7 +589,8 @@ class AddClass(LoginRequiredMixin, generic.View):
         lname = data["Student's Last Name"].strip()
         email = data["Parent's Email Address"].strip()
         username = self.generate_username(fname, lname)
-        password = self.get_password()
+        # password = self.get_password()
+        password = data["Student's Password"].strip()
 
         student = User.objects.create_user(
             first_name=fname,
