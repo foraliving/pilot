@@ -354,6 +354,18 @@ def delete_class(request):
     Class.objects.filter(pk=class_id).delete()
     return HttpResponse('true')
 
+def delete_student(request):
+    """
+    Method to remove a volunteer
+    :param request:
+    :return:
+    """
+    student_id = request.POST.get('user_id')
+    Student_Class.objects.filter(student_id=student_id).delete()
+    user = User.objects.get(pk=student_id)
+    user.groups.clear();
+
+    return HttpResponse('true')
 
 class CreateInterview(LoginRequiredMixin, generic.View):
     """Generic view to create a new interview"""
@@ -429,6 +441,8 @@ def studentPersonalInfo(request, class_id):
                                                                 'email')
 
     return JsonResponse({'results': list(students)})
+
+
 
 
 class AddClass(LoginRequiredMixin, generic.View):

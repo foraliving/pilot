@@ -57,49 +57,54 @@ $(document).ready(function () {
     //method to verify if the teacher select other class
     $("#classname").change(function () {
         if ($("#classname").val() != 0) {
-            var class_id = $("#classname").val();
-            var url = "/foraliving/get-assignment/" + class_id + "/";
-            $.ajax({
-                method: "GET",
-                url: url,
-                contentType: "application/json"
-            }).done(function (data) {
-                $("#options").html("");
-                $("#options").selectpicker('refresh');
+            getAssignment();
 
-                $("#options").html("");
-                var opt = $('<option />');
-                opt.val("C3");
-                opt.text("Student info");
-                $('#options').append(opt);
-
-                var opt = $('<option />');
-                opt.val("B2");
-                opt.text("Delete Class");
-                $('#options').append(opt);
-
-                $('#options').append(opt);
-                var opt = $('<option />');
-                opt.val("A1");
-                opt.text("New Assignment");
-                $('#options').append(opt);
-
-                $.each(data.results, function (id, data) {
-                    var opt = $('<option />');
-                    opt.val(data.id);
-                    opt.text(data.title);
-                    $('#options').append(opt);
-                });
-                $("#options").selectpicker('refresh');
-                $('#data-table').dataTable().fnClearTable();
-                $('#student-table').dataTable().fnClearTable();
-            });
-
-            return false;
         } else if ($("#classname").val() == 0) {
             window.location = "/foraliving/teacher/class/new/";
         }
     });
+
+    function getAssignment() {
+        var class_id = $("#classname").val();
+        var url = "/foraliving/get-assignment/" + class_id + "/";
+        $.ajax({
+            method: "GET",
+            url: url,
+            contentType: "application/json"
+        }).done(function (data) {
+            $("#options").html("");
+            $("#options").selectpicker('refresh');
+
+            $("#options").html("");
+            var opt = $('<option />');
+            opt.val("C3");
+            opt.text("Student info");
+            $('#options').append(opt);
+
+            var opt = $('<option />');
+            opt.val("B2");
+            opt.text("Delete Class");
+            $('#options').append(opt);
+
+            $('#options').append(opt);
+            var opt = $('<option />');
+            opt.val("A1");
+            opt.text("New Assignment");
+            $('#options').append(opt);
+
+            $.each(data.results, function (id, data) {
+                var opt = $('<option />');
+                opt.val(data.id);
+                opt.text(data.title);
+                $('#options').append(opt);
+            });
+            $("#options").selectpicker('refresh');
+            $('#data-table').dataTable().fnClearTable();
+            $('#student-table').dataTable().fnClearTable();
+        });
+
+        return false;
+    }
 
     //verify if the teacher change the option to "user an existing group"
     $("#use_group").change(function () {
@@ -118,7 +123,7 @@ $(document).ready(function () {
             type: "GET",
             url: "/foraliving/get-password/?user_id=" + user_id,
         }).done(function (data) {
-            alert (data);
+            alert(data);
         })
     });
 
@@ -210,6 +215,7 @@ $(document).ready(function () {
             focusout: false,
             focusInvalid: false,
             submitHandler: function (form) {
+                event.preventDefault();
                 sendGroup();
             },
             errorClass: "my-error-class",
@@ -252,7 +258,8 @@ $(document).ready(function () {
         });
         var class_id = $("#classname").val();
         var group = $('#group').val();
-        var group_name = $('input[name=group_name]').val()
+        var group_name = $('input[name=group_name]').val();
+
         if (selected != null) {
             $.ajax({
                 type: "POST",
@@ -275,6 +282,39 @@ $(document).ready(function () {
         e.preventDefault();
     });
 
+    $(document).on('click', '.delete-student', function (e) {
+        var student_id = e.target.id;
+        $('#delete-modal').modal();
+        $('.confirm-delete-modal', '#delete-modal').attr('id', 'student-' + student_id);
+        $('#myModalLabelDelete').text("Are you sure you want to remove this student?");
+        $("#new_assgingment_form").validate();
+        e.preventDefault();
+    });
+
+
+    $("#new_assgingment_form").submit(function (event) {
+        var class_id = $("#classname").val();
+        var add_url = '/foraliving/teacher/class/' + class_id + '/new/assignment/';
+        var token = $('input[name="csrfmiddlewaretoken"]').prop('value');
+        var assignment_name = $('#assignment_name').val();
+        var description = $('#description').val();
+        event.preventDefault();
+
+        $.ajax({
+            method: 'POST',
+            url: add_url,
+            data: {
+                'csrfmiddlewaretoken': token,
+                'assignment_name': assignment_name,
+                'description': description
+            },
+            dataType: 'json',
+        }).done(function (data) {
+            getAssignment();
+            $('#new_assgingment').modal("hide");
+        });
+    });
+
 
     $('body').on('click', 'button.confirm-delete-modal', function (e) {
         var option = e.target.id.split('-')[0];
@@ -286,7 +326,7 @@ $(document).ready(function () {
             $.ajax({
                 type: "POST",
                 url: "/foraliving/interview/delete/",
-                data: {'interview_id': interview_id},
+                data: {'interview_id': id},
             }).done(function (data) {
                 $("#delete-modal").modal("hide");
                 getClass(assignment_id, class_id);
@@ -302,12 +342,25 @@ $(document).ready(function () {
                 window.location.href = '/foraliving/teacher/class/';
             });
         }
+
+        else if (option == "student") {
+            $.ajax({
+                type: "POST",
+                url: "/foraliving/student/delete/",
+                data: {'user_id': id},
+            }).done(function (data) {
+                $("#delete-modal").modal("hide");
+                getPersonalInfo(class_id);
+            });
+        }
     });
 
     //method to verify the changes in the assignment select
     $("#options").change(function () {
         var class_id = $("#classname").val();
         if ($("#options").val() == "A1") {
+            $('#new_assgingment').modal();
+            $("#new_assgingment_form").validate();
 
         }
         else if ($("#options").val() == "B2") {
@@ -376,15 +429,9 @@ $(document).ready(function () {
                     }
                 }, {
                     "targets": 4,
-                    "data": "",
+                    "data": "id",
                     "render": function (data, type, full, meta) {
-                        return "<div id=' " + full['id'] + "' class='password'> ******** </div>";
-                    }
-                }, {
-                    "targets": 5,
-                    "data": "",
-                    "render": function (data, type, full, meta) {
-                        return '<div style="text-align: center;"><i style="color:red;" class="fa fa-times" aria-hidden="true"></i> </div>';
+                        return '<div style="text-align: center;"><i style="color:red;" id="' + data + '" class="fa fa-times delete-student" aria-hidden="true" title="Delete"></i> </div>';
                     }
                 }
                 ]
