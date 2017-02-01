@@ -5,7 +5,6 @@ var videoSelect = document.querySelector('select#videoSource');
 var selectors = [videoSelect];
 var gumVideo = document.querySelector('video#localVideo');
 
-var camera_id = $('#camera_index').val();
 var webrtc = undefined;
 
 function gotDevices(deviceInfos) {
@@ -38,10 +37,6 @@ function gotDevices(deviceInfos) {
             select.value = values[selectorIndex];
         }
     });
-
-    if (camera_id !== -1) {
-        $('select#videoSource option')[camera_id].selected = true;
-    }
 }
 
 navigator.mediaDevices.enumerateDevices().then(gotDevices).catch(handleError);
@@ -75,9 +70,7 @@ function start() {
     };
 
     navigator.mediaDevices.getUserMedia(constraints).then(handleSuccess).catch(handleError);
-    if (webrtc !== undefined) {
-        webrtc.stopLocalVideo();
-    }
+    webrtc.stopLocalVideo();
 
     // create our webrtc connection
     webrtc = new SimpleWebRTC({
