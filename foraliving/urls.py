@@ -10,7 +10,7 @@ from foraliving.student import CompleteVideo, StudentAssignment, ConductVideo, S
 from foraliving.teacher import TeacherStudentT1, TeacherVolunteerT6, TeacherVideosT8, asignment_list, \
     student_list, list_student_group, AssignGroup, uniqueGroup, TeacherVolunteerT6a, AssignVolunteer, list_groups, \
     TeacherVolunteerT9, groupList, studentList, CreateInterview, GroupInterface, update_video, delete_interview, \
-    delete_class, AddClass, AddClassAssignment, DownloadTemplate, studentPersonalInfo
+    delete_class, AddClass, AddClassAssignment, DownloadTemplate, studentPersonalInfo, delete_student
 from foraliving.volunteer import VolunteerProfile, VolunteerEdit
 from foraliving.general import Videos
 from foraliving.volunteer import Contact, editSkill, GetInterviewed, InterviewQuestionsView, JoinInterviewView, \
@@ -102,7 +102,8 @@ urlpatterns = [
     url(r"^video/update/(?P<video_id>\d+)/(?P<flag_id>\d+)/$", update_video, name='update_video'),
     url(r"^interview/delete/$", delete_interview, name='delete_interview'),
     url(r"^class/delete/$", delete_class, name='delete_class'),
-    url(r"^student-info/(?P<class_id>\d+)/$", studentPersonalInfo, name='studentPersonalInfo')
+    url(r"^student-info/(?P<class_id>\d+)/$", studentPersonalInfo, name='studentPersonalInfo'),
+    url(r"^student/delete/$", delete_student, name='delete_student'),
 
 ]
 
