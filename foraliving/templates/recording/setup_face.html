@@ -12,6 +12,7 @@
         <div class="panel panel-default">
             <div class="panel-body">
                 <div class="col-md-6 col-sm-6 .col-lg-6">
+                    <input type="hidden" id="camera_index" value="">
                     <div class="select" style="margin-bottom: 5px;">
                         <label for="videoSource" style="padding-right: 10px;">Select camera: </label><select class="selectpicker show-tick" id="videoSource"></select>
                     </div>
@@ -60,5 +61,8 @@
         e.preventDefault();
         $('#help-modal').modal();
     });
+    var camera_id = "{{camera_id}}" ? Number("{{camera_id}}") : -1;
+    $('#camera_index').val(camera_id);
+    // $('select#videoSource option')[camera_id].selected = true;
 </script>
 {% endblock %}

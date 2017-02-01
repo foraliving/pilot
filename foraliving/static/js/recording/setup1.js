@@ -5,6 +5,7 @@ var videoSelect = document.querySelector('select#videoSource');
 var selectors = [videoSelect];
 var gumVideo = document.querySelector('video#localVideo');
 
+var camera_id = $('#camera_index').val();
 var webrtc = undefined;
 
 function gotDevices(deviceInfos) {
@@ -37,6 +38,10 @@ function gotDevices(deviceInfos) {
             select.value = values[selectorIndex];
         }
     });
+
+    if (camera_id !== -1) {
+        $('select#videoSource option')[camera_id].selected = true;
+    }
 }
 
 navigator.mediaDevices.enumerateDevices().then(gotDevices).catch(handleError);
