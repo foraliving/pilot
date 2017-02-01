@@ -13,6 +13,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import generic
 from django.contrib.auth.models import User
 from .forms import *
+from django.core import serializers
 from foraliving.models import Class, User_Add_Ons, Volunteer_User_Add_Ons, Assignment
 
 
@@ -97,18 +98,17 @@ class TeacherVideosT8(LoginRequiredMixin, generic.View):
             assignments = Assignment.objects.filter(falClass__in=class_id).values('pk')
             interview = Interview.objects.filter(assignment__in=assignments).values('pk')
             interview_question = Interview_Question_Map.objects.filter(interview_id__in=interview)
+            video_archived = Video.objects.filter(status="archived").values('id')
             videos = Interview_Question_Video_Map.objects.filter(interview_question__in=interview_question).order_by(
-                '-video')
+                '-video').exclude(video__in=video_archived)
         else:
             class_id = 0
             school = School.objects.get(pk=user_add_ons.school.id)
             user_school = User_Add_Ons.objects.filter(school=school)
             videos = Video.objects.filter(created_by__in=user_school)
-            videos = Interview_Question_Video_Map.objects.filter(video__in=videos).order_by('-video')
+            video_archived = Video.objects.filter(status="archived").values('id')
+            videos = Interview_Question_Video_Map.objects.filter(video__in=videos).order_by('-video').exclude(video__in=video_archived)
         return render(request, self.question_view, {'videos': videos, 'classname': classname, 'class_id': class_id})
-
-
-from django.core import serializers
 
 
 def asignment_list(request, class_id):
@@ -413,7 +413,8 @@ class GroupInterface(LoginRequiredMixin, generic.View):
         try:
             interview = Interview.objects.get(assignment=assignment_id, group=group_id)
             interview_question = Interview_Question_Map.objects.filter(interview_id=interview.id)
-            videos = Interview_Question_Video_Map.objects.filter(interview_question__in=interview_question)
+            video_archived = Video.objects.filter(status="archived").values('id')
+            videos = Interview_Question_Video_Map.objects.filter(interview_question__in=interview_question).exclude(video__in=video_archived)
             volunteer = Volunteer_User_Add_Ons.objects.get(user=interview.interviewee.id)
 
             for data in videos:

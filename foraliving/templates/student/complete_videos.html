@@ -44,15 +44,18 @@
         {% endif %}
         {% endif %}
         {% for video in videos %}
-        <div class="col-xs-12 col-md-6 col-lg-6">
-            {% if video.video.status == "pending"%}
+        <div class="col-xs-12 col-md-6 col-lg-4">
+            {% if video.video.status == "new"%}
             <div class="thumbnail" style="border: 2px solid black; width: 82%;">
-                {% elif video.video.status == "Under Review by teacher" %}
+                {% elif video.video.status == "pending" %}
                 <div class="thumbnail" style="border: 2px solid red; width: 82%;">
                     {% else %}
                     <div class="thumbnail" style="border: 2px solid green; width: 82%;">
                         {% endif %}
-                        <div style="text-align: right;"> Delete</div>
+                        <div align="right">
+                            <a style="text-align: right;" class="delete-videos" id="{{video.video.id}}"> Delete</a>
+                        </div>
+
                         <div class="embed-responsive embed-responsive-16by9">
                             <video controls>
                                 <source src="/foraliving/media/{{video.video.url}}">
@@ -90,6 +93,32 @@
                 {% endif %}
             </div>
         </div>
-        {% endblock %}
-        {% block scripts %}{% endblock %}
+    </div>
+</div>
+{% include 'general/delete.html' %}
+{% endblock %}
+{% block scripts %}
+<script>
+    $(document).on('click', '.delete-videos', function (e) {
+        var interview_id = e.target.id;
+        $('#delete-modal').modal();
+        $('.confirm-delete-modal', '#delete-modal').attr('id', 'video-' + interview_id);
+        $('#myModalLabelDelete').text("Are you sure you want to delete this video?")
+        e.preventDefault();
+    });
+
+    $('body').on('click', 'button.confirm-delete-modal', function (e) {
+        var id = e.target.id.split('-')[1];
+        $.ajax({
+            type: "POST",
+            url: "/foraliving/video/delete/",
+            data: {'video_id': id},
+        }).done(function (data) {
+            alert ("hola");
+            location.reload();
+        });
+    });
+
+</script>
+{% endblock %}
 

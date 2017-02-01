@@ -287,12 +287,12 @@ $(document).ready(function () {
         $('#delete-modal').modal();
         $('.confirm-delete-modal', '#delete-modal').attr('id', 'student-' + student_id);
         $('#myModalLabelDelete').text("Are you sure you want to remove this student?");
-        $("#new_assgingment_form").validate();
         e.preventDefault();
     });
 
 
     $("#new_assgingment_form").submit(function (event) {
+        $("#new_assgingment_form").validate();
         var class_id = $("#classname").val();
         var add_url = '/foraliving/teacher/class/' + class_id + '/new/assignment/';
         var token = $('input[name="csrfmiddlewaretoken"]').prop('value');
@@ -310,10 +310,17 @@ $(document).ready(function () {
             },
             dataType: 'json',
         }).done(function (data) {
-            getAssignment();
-            $('#new_assgingment').modal("hide");
+            if (data == "Assignment added successfully") {
+                getAssignment();
+                $('#new_assgingment').modal("hide");
+            }
         });
     });
+
+
+    $('#new_assgingment').on('hidden.bs.modal', function () {
+        getAssignment();
+    })
 
 
     $('body').on('click', 'button.confirm-delete-modal', function (e) {
@@ -359,8 +366,12 @@ $(document).ready(function () {
     $("#options").change(function () {
         var class_id = $("#classname").val();
         if ($("#options").val() == "A1") {
+            var assignment_name = $('#assignment_name').val("");
+            var description = $('#description').val("");
             $('#new_assgingment').modal();
-            $("#new_assgingment_form").validate();
+            $('#new_assgingment').show();
+            var formID2 = $('#new_assgingment_form');
+            formID2.validate().resetForm();
 
         }
         else if ($("#options").val() == "B2") {
