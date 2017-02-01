@@ -70,6 +70,8 @@ function start() {
     };
 
     navigator.mediaDevices.getUserMedia(constraints).then(handleSuccess).catch(handleError);
+    webrtc.stopLocalVideo();
+
     // create our webrtc connection
     webrtc = new SimpleWebRTC({
         // the id/element dom element that will hold "our" video
@@ -83,6 +85,7 @@ function start() {
         autoAdjustMic: false,
         media: constraints
     });
+    webrtc.startLocalVideo();
 }
 
 videoSelect.onchange = start;
