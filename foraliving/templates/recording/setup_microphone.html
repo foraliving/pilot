@@ -12,6 +12,7 @@
         <div class="panel panel-default">
             <div class="panel-body">
                 <div class="col-md-6 col-sm-6 .col-lg-6">
+                    <input type="hidden" id="camera_index" value="">
                     <div class="select" style="margin-bottom: 5px;">
                         <label for="videoSource" style="padding-right: 10px;">Select camera: </label><select class="selectpicker show-tick" id="videoSource"></select>
                     </div>
@@ -31,7 +32,7 @@
                     </div>
                     <div style="text-align: center;" class="col-md-12 col-sm-12 col-xs-12">
                         <button class="btn btn-success" id="yes"
-                                onclick="location.href='{% url 'recording_setup_face' interview_id=interview%}'">Yes
+                                onclick="next_step()">Yes
                         </button>
                         <button class="btn btn-not" id="no">No</button>
                     </div>
@@ -61,5 +62,14 @@
         $('#help-modal').modal();
     });
 
+    var camera_id = "{{camera_id}}" ? Number("{{camera_id}}") : -1;
+    $('#camera_index').val(camera_id);
+
+    function next_step() {
+        var camera_selected = $("select#videoSource")[0].selectedIndex;
+        var url = "{% url 'recording_setup_face' interview_id=interview camera_id=1001 %}";
+        url = url.replace(/1001/, camera_selected);
+        $(location).attr('href', url);
+    }
 </script>
 {% endblock %}
