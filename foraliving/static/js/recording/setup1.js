@@ -70,7 +70,9 @@ function start() {
     };
 
     navigator.mediaDevices.getUserMedia(constraints).then(handleSuccess).catch(handleError);
-    webrtc.stopLocalVideo();
+    if (webrtc !== undefined) {
+        webrtc.stopLocalVideo();
+    }
 
     // create our webrtc connection
     webrtc = new SimpleWebRTC({
