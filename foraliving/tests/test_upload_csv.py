@@ -72,7 +72,7 @@ class TestUpload(TestCase):
             )
 
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, ' Too many headers, the file must have 3 headers')
+        self.assertContains(response, ' The file must have 4 headers')
 
     def test_add_new_class_wrong_headers(self):
         """
