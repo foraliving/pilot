@@ -85,7 +85,6 @@
         e.preventDefault();
         $('#help-modal').modal();
     });
-
     var isOpera = (!!window.opr && !!opr.addons) || !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;
     // Firefox 1.0+
     var isFirefox = typeof InstallTrigger !== 'undefined';
@@ -101,14 +100,11 @@
     var isChrome = !!window.chrome && !!window.chrome.webstore;
     // Blink engine detection
     var isBlink = (isChrome || isOpera) && !!window.CSS;
-
-
     if (isChrome == true || isOpera == true || isFirefox == true) {
         navigator.getBattery().then(function (battery) {
             function updateAllBatteryInfo() {
                 updateLevelInfo();
             }
-
             updateAllBatteryInfo();
             battery.addEventListener('chargingchange', function () {
                 updateLevelInfo();
@@ -140,7 +136,6 @@
         $("#other_navigator").show();
         $("#low").show();
         $("#full").show();
-
     }
 </script>
 {% endblock %}

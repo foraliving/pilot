@@ -5,6 +5,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 from django.contrib.auth.models import User, Group
 from django.views import generic
+from django.http import HttpResponse
 from mail_templated import EmailMessage
 from foraliving.models import Video, Interview_Question_Map, Interview, Question, \
     User_Group_Role_Map, Interview_Question_Video_Map, User_Add_Ons, Volunteer_User_Add_Ons, Assignment, Student_Class
@@ -30,7 +31,8 @@ class CompleteVideo(LoginRequiredMixin, generic.View):
         except ObjectDoesNotExist:
             group = None
         interview_question = Interview_Question_Map.objects.filter(interview_id=interview_id)
-        videos = Interview_Question_Video_Map.objects.filter(interview_question__in=interview_question)
+        video_archived = Video.objects.filter(status="archived").values('id')
+        videos = Interview_Question_Video_Map.objects.filter(interview_question__in=interview_question).exclude(video__in=video_archived)
 
         if videos:
             volunteer = Volunteer_User_Add_Ons.objects.get(user=videos[0].interview_question.interview.interviewee.id)
@@ -207,4 +209,15 @@ class AssignmentList(LoginRequiredMixin, generic.View):
             return redirect('assignment', interview_id=interview[0].id)
         else:
             return render(request, self.select_assignment, {'interview': interview})
+
+
+def delete_video(request):
+    """
+    Method to remove a volunteer
+    :param request:
+    :return:
+    """
+    video_id = request.POST.get('video_id')
+    video = Video.objects.filter(pk=video_id).update(status='archived')
+    return HttpResponse('true')
 

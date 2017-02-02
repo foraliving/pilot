@@ -173,4 +173,3 @@ class SaveRecording(LoginRequiredMixin, generic.View):
         path = default_storage.save(path, ContentFile(file.read()))
         tmp_file = os.path.join(settings.MEDIA_ROOT, path)
         return JsonResponse("Done", safe=False)
-

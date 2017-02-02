@@ -73,7 +73,8 @@
     <tr>
         {% if interview %}
         <td class="" style="text-align: left;">
-            4. Conduct interview with <a href="{% url 'volunteer_profile' user_id=interview.interviewee.id interview_id=interview.id %}">{{interview.interviewee.first_name}} </a>
+            4. Conduct interview with <a
+                href="{% url 'volunteer_profile' user_id=interview.interviewee.id interview_id=interview.id %}">{{interview.interviewee.first_name}} </a>
         </td>
         {% else %}
         <td class="" style="text-align: left;">
@@ -81,8 +82,7 @@
         </td>
         {% endif %}
         <td class="" style="text-align: center;">
-            <button class='btn btn-menu btn-title border-radius'
-                    onclick="location.href='{% url 'recording_type' interview_id=interview.id %}'">
+            <button class='btn btn-menu btn-title border-radius' id="start-interview">
                 Go
             </button>
         </td>
@@ -105,5 +105,21 @@
     </tr>
 </table>
 {% endblock %}
-{% block scripts %}{% endblock %}
+{% block scripts %}
+<script>
+    $('html').on('click', '#start-interview', function (e) {
+        e.preventDefault();
+        var query = window.matchMedia("(orientation:landscape)");
+        console.log("Device held " + (query.matches ? "horizontally" : "vertically"));
+
+        if (query.matches == true) {
+            window.location.href = '/foraliving/setup_microphone/' + {{interview.id}};
+        }
+        else {
+            window.location.href = '/foraliving/orientation/' + {{interview.id}};
+        }
+
+    });
+</script>
+{% endblock %}
 
