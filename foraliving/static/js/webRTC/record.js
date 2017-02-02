@@ -430,7 +430,7 @@ function save() {
         if (xhr.status === 200) {
             // $('.overlay').css({opacity: 0});
             $.LoadingOverlay("hide");
-            window.location = "/foraliving/question_interview/" + interview + "/";
+            window.location = "/foraliving/question_interview/" + interview + "/" + camera_id + "/";
 
         } else {
             alert('An error occurred!');
