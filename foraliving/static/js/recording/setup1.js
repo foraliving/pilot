@@ -8,44 +8,6 @@ var gumVideo = document.querySelector('video#localVideo');
 var camera_id = $('#camera_index').val();
 var webrtc = undefined;
 
-function gotDevices(deviceInfos) {
-    // Handles being called several times to update labels. Preserve values.
-    var values = selectors.map(function (select) {
-        return select.value;
-    });
-    selectors.forEach(function (select) {
-        while (select.firstChild) {
-            select.removeChild(select.firstChild);
-        }
-    });
-
-    for (var i = 0; i !== deviceInfos.length; ++i) {
-        var deviceInfo = deviceInfos[i];
-        var option = document.createElement('option');
-        option.value = deviceInfo.deviceId;
-        if (deviceInfo.kind === 'videoinput') {
-            option.text = deviceInfo.label || 'camera ' + (videoSelect.length + 1);
-            videoSelect.appendChild(option);
-        } else {
-            // console.log('Some other kind of source/device: ', deviceInfo);
-        }
-    }
-
-    selectors.forEach(function (select, selectorIndex) {
-        if (Array.prototype.slice.call(select.childNodes).some(function (n) {
-                return n.value === values[selectorIndex];
-            })) {
-            select.value = values[selectorIndex];
-        }
-    });
-
-    if (camera_id !== -1) {
-        $('select#videoSource option')[camera_id].selected = true;
-    }
-}
-
-navigator.mediaDevices.enumerateDevices().then(gotDevices).catch(handleError);
-
 function handleError(error) {
     console.log('navigator.getUserMedia error: ', error);
 }
@@ -60,248 +22,303 @@ function handleSuccess(stream) {
     }
 }
 
+function setUpDevices() {
+    var deferred = $.Deferred();
+    navigator.mediaDevices.enumerateDevices().then(
+        function (deviceInfos) {
+            // Handles being called several times to update labels. Preserve values.
+            var values = selectors.map(function (select) {
+                return select.value;
+            });
+            selectors.forEach(function (select) {
+                while (select.firstChild) {
+                    select.removeChild(select.firstChild);
+                }
+            });
+
+            for (var i = 0; i !== deviceInfos.length; ++i) {
+                var deviceInfo = deviceInfos[i];
+                var option = document.createElement('option');
+                option.value = deviceInfo.deviceId;
+                if (deviceInfo.kind === 'videoinput') {
+                    option.text = deviceInfo.label || 'camera ' + (videoSelect.length + 1);
+                    videoSelect.appendChild(option);
+                } else {
+                    // console.log('Some other kind of source/device: ', deviceInfo);
+                }
+            }
+
+            selectors.forEach(function (select, selectorIndex) {
+                if (Array.prototype.slice.call(select.childNodes).some(function (n) {
+                        return n.value === values[selectorIndex];
+                    })) {
+                    select.value = values[selectorIndex];
+                }
+            });
+
+            if (camera_id !== -1) {
+                $('select#videoSource option')[camera_id].selected = true;
+            }
+            deferred.resolve(camera_id);
+        }
+    ).catch(handleError);
+
+    return deferred.promise();
+}
+
 function start() {
-    if (window.stream) {
-        window.stream.getTracks().forEach(function (track) {
-            track.stop();
+    var deferred = $.Deferred();
+    var devicesUp = setUpDevices();
+
+    devicesUp.then(function() {
+        if (window.stream) {
+            window.stream.getTracks().forEach(function (track) {
+                track.stop();
+            });
+        }
+
+        console.log('videoSelect value ' + videoSelect.value);
+        var videoSource = videoSelect.value;
+
+        var constraints = {
+            audio: true,
+            video: {deviceId: videoSource ? {exact: videoSource} : undefined}
+        };
+
+        navigator.mediaDevices.getUserMedia(constraints).then(handleSuccess).catch(handleError);
+        if (webrtc !== undefined) {
+            webrtc.stopLocalVideo();
+        }
+
+        // create our webrtc connection
+        webrtc = new SimpleWebRTC({
+            // the id/element dom element that will hold "our" video
+            localVideoEl: 'localVideo',
+            // the id/element dom element that will hold remote videos
+            remoteVideosEl: '',
+            // immediately ask for camera access
+            autoRequestMedia: true,
+            debug: false,
+            detectSpeakingEvents: true,
+            autoAdjustMic: false,
+            media: constraints
         });
-    }
-
-    var videoSource = videoSelect.value;
-
-    var constraints = {
-        audio: true,
-        video: {deviceId: videoSource ? {exact: videoSource} : undefined}
-    };
-
-    navigator.mediaDevices.getUserMedia(constraints).then(handleSuccess).catch(handleError);
-    if (webrtc !== undefined) {
-        webrtc.stopLocalVideo();
-    }
-
-    // create our webrtc connection
-    webrtc = new SimpleWebRTC({
-        // the id/element dom element that will hold "our" video
-        localVideoEl: 'localVideo',
-        // the id/element dom element that will hold remote videos
-        remoteVideosEl: '',
-        // immediately ask for camera access
-        autoRequestMedia: true,
-        debug: false,
-        detectSpeakingEvents: true,
-        autoAdjustMic: false,
-        media: constraints
+        webrtc.startLocalVideo();
+        deferred.resolve(camera_id);
     });
-    webrtc.startLocalVideo();
+
+    return deferred.promise();
 }
 
 videoSelect.onchange = start;
-start();
+var start = start();
 
+start.then(function() {
+    // when it's ready, join if we got a room from the URL
+    webrtc.on('readyToCall', function () {
+        // you can name it anything
+        if (room) webrtc.joinRoom(room);
+    });
 
-// when it's ready, join if we got a room from the URL
-webrtc.on('readyToCall', function () {
-    // you can name it anything
-    if (room) webrtc.joinRoom(room);
-});
+    function showVolume(el, volume) {
+        if (!el) return;
+        if (volume < -45) volume = -45; // -45 to -20 is
+        if (volume > -20) volume = -20; // a good range
+        el.value = volume;
+    }
 
-function showVolume(el, volume) {
-    if (!el) return;
-    if (volume < -45) volume = -45; // -45 to -20 is
-    if (volume > -20) volume = -20; // a good range
-    el.value = volume;
-}
+    // we got access to the camera
+    webrtc.on('localStream', function (stream) {
+        var button = document.querySelector('form>button');
+        if (button) button.removeAttribute('disabled');
+        $('#localVolume').show();
+    });
+    // we did not get access to the camera
+    webrtc.on('localMediaError', function (err) {
+    });
 
-// we got access to the camera
-webrtc.on('localStream', function (stream) {
-    var button = document.querySelector('form>button');
-    if (button) button.removeAttribute('disabled');
-    $('#localVolume').show();
-});
-// we did not get access to the camera
-webrtc.on('localMediaError', function (err) {
-});
-
-// local screen obtained
-webrtc.on('localScreenAdded', function (video) {
-    video.onclick = function () {
-        video.style.width = video.videoWidth + 'px';
-        video.style.height = video.videoHeight + 'px';
-    };
-    document.getElementById('localScreenContainer').appendChild(video);
-    $('#localScreenContainer').show();
-});
-// local screen removed
-webrtc.on('localScreenRemoved', function (video) {
-    document.getElementById('localScreenContainer').removeChild(video);
-    $('#localScreenContainer').hide();
-});
-
-// a peer video has been added
-webrtc.on('videoAdded', function (video, peer) {
-    console.log('video added', peer);
-    var remotes = document.getElementById('remotes');
-    if (remotes) {
-        var container = document.createElement('div');
-        container.className = 'videoContainer';
-        container.id = 'container_' + webrtc.getDomId(peer);
-        container.appendChild(video);
-
-        // suppress contextmenu
-        video.oncontextmenu = function () {
-            return false;
-        };
-
-        // resize the video on click
+    // local screen obtained
+    webrtc.on('localScreenAdded', function (video) {
         video.onclick = function () {
-            container.style.width = video.videoWidth + 'px';
-            container.style.height = video.videoHeight + 'px';
+            video.style.width = video.videoWidth + 'px';
+            video.style.height = video.videoHeight + 'px';
         };
+        document.getElementById('localScreenContainer').appendChild(video);
+        $('#localScreenContainer').show();
+    });
+    // local screen removed
+    webrtc.on('localScreenRemoved', function (video) {
+        document.getElementById('localScreenContainer').removeChild(video);
+        $('#localScreenContainer').hide();
+    });
 
-        // show the remote volume
-        var vol = document.createElement('meter');
-        vol.id = 'volume_' + peer.id;
-        vol.className = 'volume';
-        vol.min = -45;
-        vol.max = -20;
-        vol.low = -40;
-        vol.high = -25;
-        container.appendChild(vol);
+    // a peer video has been added
+    webrtc.on('videoAdded', function (video, peer) {
+        console.log('video added', peer);
+        var remotes = document.getElementById('remotes');
+        if (remotes) {
+            var container = document.createElement('div');
+            container.className = 'videoContainer';
+            container.id = 'container_' + webrtc.getDomId(peer);
+            container.appendChild(video);
 
-        // show the ice connection state
-        if (peer && peer.pc) {
-            var connstate = document.createElement('div');
-            connstate.className = 'connectionstate';
-            container.appendChild(connstate);
-            peer.pc.on('iceConnectionStateChange', function (event) {
-                switch (peer.pc.iceConnectionState) {
-                    case 'checking':
-                        connstate.innerText = 'Connecting to peer...';
-                        break;
-                    case 'connected':
-                    case 'completed': // on caller side
-                        $(vol).show();
-                        connstate.innerText = 'Connection established.';
-                        break;
-                    case 'disconnected':
-                        connstate.innerText = 'Disconnected.';
-                        break;
-                    case 'failed':
-                        connstate.innerText = 'Connection failed.';
-                        break;
-                    case 'closed':
-                        connstate.innerText = 'Connection closed.';
-                        break;
+            // suppress contextmenu
+            video.oncontextmenu = function () {
+                return false;
+            };
+
+            // resize the video on click
+            video.onclick = function () {
+                container.style.width = video.videoWidth + 'px';
+                container.style.height = video.videoHeight + 'px';
+            };
+
+            // show the remote volume
+            var vol = document.createElement('meter');
+            vol.id = 'volume_' + peer.id;
+            vol.className = 'volume';
+            vol.min = -45;
+            vol.max = -20;
+            vol.low = -40;
+            vol.high = -25;
+            container.appendChild(vol);
+
+            // show the ice connection state
+            if (peer && peer.pc) {
+                var connstate = document.createElement('div');
+                connstate.className = 'connectionstate';
+                container.appendChild(connstate);
+                peer.pc.on('iceConnectionStateChange', function (event) {
+                    switch (peer.pc.iceConnectionState) {
+                        case 'checking':
+                            connstate.innerText = 'Connecting to peer...';
+                            break;
+                        case 'connected':
+                        case 'completed': // on caller side
+                            $(vol).show();
+                            connstate.innerText = 'Connection established.';
+                            break;
+                        case 'disconnected':
+                            connstate.innerText = 'Disconnected.';
+                            break;
+                        case 'failed':
+                            connstate.innerText = 'Connection failed.';
+                            break;
+                        case 'closed':
+                            connstate.innerText = 'Connection closed.';
+                            break;
+                    }
+                });
+            }
+            remotes.appendChild(container);
+        }
+    });
+    // a peer was removed
+    webrtc.on('videoRemoved', function (video, peer) {
+        console.log('video removed ', peer);
+        var remotes = document.getElementById('remotes');
+        var el = document.getElementById(peer ? 'container_' + webrtc.getDomId(peer) : 'localScreenContainer');
+        if (remotes && el) {
+            remotes.removeChild(el);
+        }
+    });
+
+    // local volume has changed
+    webrtc.on('volumeChange', function (volume, treshold) {
+        showVolume(document.getElementById('localVolume'), volume);
+    });
+    // remote volume has changed
+    webrtc.on('remoteVolumeChange', function (peer, volume) {
+        showVolume(document.getElementById('volume_' + peer.id), volume);
+    });
+
+    // local p2p/ice failure
+    webrtc.on('iceFailed', function (peer) {
+        var connstate = document.querySelector('#container_' + webrtc.getDomId(peer) + ' .connectionstate');
+        console.log('local fail', connstate);
+        if (connstate) {
+            connstate.innerText = 'Connection failed.';
+            fileinput.disabled = 'disabled';
+        }
+    });
+
+    // remote p2p/ice failure
+    webrtc.on('connectivityError', function (peer) {
+        var connstate = document.querySelector('#container_' + webrtc.getDomId(peer) + ' .connectionstate');
+        console.log('remote fail', connstate);
+        if (connstate) {
+            connstate.innerText = 'Connection failed.';
+            fileinput.disabled = 'disabled';
+        }
+    });
+
+    // Since we use this twice we put it here
+    function setRoom(name) {
+        document.querySelector('form').remove();
+        document.getElementById('title').innerText = 'Room: ' + name;
+        document.getElementById('subTitle').innerText = 'Link to join: ' + location.href;
+        $('body').addClass('active');
+    }
+
+    if (room) {
+        setRoom(room);
+    } else {
+        $('form').submit(function () {
+            var val = $('#sessionInput').val().toLowerCase().replace(/\s/g, '-').replace(/[^A-Za-z0-9_\-]/g, '');
+            webrtc.createRoom(val, function (err, name) {
+                console.log(' create room cb', arguments);
+
+                var newUrl = location.pathname + '?' + name;
+                if (!err) {
+                    history.replaceState({foo: 'bar'}, null, newUrl);
+                    setRoom(name);
+                } else {
+                    console.log(err);
                 }
             });
-        }
-        remotes.appendChild(container);
-    }
-});
-// a peer was removed
-webrtc.on('videoRemoved', function (video, peer) {
-    console.log('video removed ', peer);
-    var remotes = document.getElementById('remotes');
-    var el = document.getElementById(peer ? 'container_' + webrtc.getDomId(peer) : 'localScreenContainer');
-    if (remotes && el) {
-        remotes.removeChild(el);
-    }
-});
-
-// local volume has changed
-webrtc.on('volumeChange', function (volume, treshold) {
-    showVolume(document.getElementById('localVolume'), volume);
-});
-// remote volume has changed
-webrtc.on('remoteVolumeChange', function (peer, volume) {
-    showVolume(document.getElementById('volume_' + peer.id), volume);
-});
-
-// local p2p/ice failure
-webrtc.on('iceFailed', function (peer) {
-    var connstate = document.querySelector('#container_' + webrtc.getDomId(peer) + ' .connectionstate');
-    console.log('local fail', connstate);
-    if (connstate) {
-        connstate.innerText = 'Connection failed.';
-        fileinput.disabled = 'disabled';
-    }
-});
-
-// remote p2p/ice failure
-webrtc.on('connectivityError', function (peer) {
-    var connstate = document.querySelector('#container_' + webrtc.getDomId(peer) + ' .connectionstate');
-    console.log('remote fail', connstate);
-    if (connstate) {
-        connstate.innerText = 'Connection failed.';
-        fileinput.disabled = 'disabled';
-    }
-});
-
-// Since we use this twice we put it here
-function setRoom(name) {
-    document.querySelector('form').remove();
-    document.getElementById('title').innerText = 'Room: ' + name;
-    document.getElementById('subTitle').innerText = 'Link to join: ' + location.href;
-    $('body').addClass('active');
-}
-
-if (room) {
-    setRoom(room);
-} else {
-    $('form').submit(function () {
-        var val = $('#sessionInput').val().toLowerCase().replace(/\s/g, '-').replace(/[^A-Za-z0-9_\-]/g, '');
-        webrtc.createRoom(val, function (err, name) {
-            console.log(' create room cb', arguments);
-
-            var newUrl = location.pathname + '?' + name;
-            if (!err) {
-                history.replaceState({foo: 'bar'}, null, newUrl);
-                setRoom(name);
-            } else {
-                console.log(err);
-            }
+            return false;
         });
-        return false;
-    });
-}
+    }
 
-var desktopConstraints = {
+    var desktopConstraints = {
 
-    video: {
-        mandatory: {
-            maxWidth: 800,
-            maxHeight: 600
-        }
-    },
+        video: {
+            mandatory: {
+                maxWidth: 800,
+                maxHeight: 600
+            }
+        },
 
-    audio: true
-};
+        audio: true
+    };
 
-// var button = document.getElementById('screenShareButton'),
-//         setButton = function (bool) {
-//             button.innerText = bool ? 'share screen' : 'stop sharing';
-//         };
-// if (!webrtc.capabilities.screenSharing) {
-//     button.disabled = 'disabled';
-// }
-// webrtc.on('localScreenRemoved', function () {
-//     setButton(true);
-// });
-//
-// setButton(true);
+    // var button = document.getElementById('screenShareButton'),
+    //         setButton = function (bool) {
+    //             button.innerText = bool ? 'share screen' : 'stop sharing';
+    //         };
+    // if (!webrtc.capabilities.screenSharing) {
+    //     button.disabled = 'disabled';
+    // }
+    // webrtc.on('localScreenRemoved', function () {
+    //     setButton(true);
+    // });
+    //
+    // setButton(true);
 
-// button.onclick = function () {
-//     if (webrtc.getLocalScreen()) {
-//         webrtc.stopScreenShare();
-//         setButton(true);
-//     } else {
-//         webrtc.shareScreen(function (err) {
-//             if (err) {
-//                 setButton(true);
-//             } else {
-//                 setButton(false);
-//             }
-//         });
-//
-//     }
-// };
+    // button.onclick = function () {
+    //     if (webrtc.getLocalScreen()) {
+    //         webrtc.stopScreenShare();
+    //         setButton(true);
+    //     } else {
+    //         webrtc.shareScreen(function (err) {
+    //             if (err) {
+    //                 setButton(true);
+    //             } else {
+    //                 setButton(false);
+    //             }
+    //         });
+    //
+    //     }
+    // };
+
+});
