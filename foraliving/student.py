@@ -213,7 +213,7 @@ class AssignmentList(LoginRequiredMixin, generic.View):
 
 def delete_video(request):
     """
-    Method to remove a volunteer
+    Method to remove a video
     :param request:
     :return:
     """

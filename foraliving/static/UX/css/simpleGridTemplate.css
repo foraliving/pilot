@@ -8,6 +8,11 @@ body {
 
 }
 
+.button.disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
 .page-title {
     font-family: 'Open Sans', sans-serif;
     color: #99c64c;
@@ -402,15 +407,15 @@ h2 {
     box-shadow: inset 0 3px 5px rgba(0, 0, 0, .125);
 }
 
-.btn.disabled,
-.btn[disabled],
-fieldset[disabled] .btn {
-    cursor: not-allowed;
-    filter: alpha(opacity=65);
-    -webkit-box-shadow: none;
-    box-shadow: none;
-    opacity: 1;
-}
+/*.btn.disabled,*/
+/*.btn[disabled],*/
+/*fieldset[disabled] .btn {*/
+    /*cursor: not-allowed;*/
+    /*filter: alpha(opacity=65);*/
+    /*-webkit-box-shadow: none;*/
+    /*box-shadow: none;*/
+    /*opacity: 1;*/
+/*}*/
 
 a.btn.disabled,
 fieldset[disabled] a.btn {
