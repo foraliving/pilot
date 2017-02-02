@@ -43,12 +43,6 @@
 <script src="{% static 'js/select/bootstrap-select.min.js' %}"></script>
 <script src="{% static 'js/teacher/navigation.js' %}"></script>
 <style>
-    .btn-default.active.focus, .btn-default.active:focus, .btn-default.active:hover, .btn-default:active.focus, .btn-default:active:focus, .btn-default:active:hover, .open > .dropdown-toggle.btn-default.focus, .open > .dropdown-toggle.btn-default:focus, .open > .dropdown-toggle.btn-default:hover {
-        color: black;
-        background-color: white;
-        border-color: #8c8c8c;
-    }
-
     .bootstrap-select.btn-group .dropdown-toggle .caret {
         color: #5da4d2;
     }
@@ -61,8 +55,8 @@
             Students
         </div>
         <div class="col-lg-3 col-md-4 col-sm-4">
-            <select class="selectpicker" id="classname" name="classname" data-live-search="true"
-                    title="Search menu items">
+            <select class="selectpicker" id="classname" name="classname" data-live-search="true" data-live-search-placeholder="Search"
+                    title="Classrooms">
                 {%for data in class_info%}
                 <option value="{{data.id}}">{{data.name}}</option>
                 {%endfor%}
@@ -70,7 +64,7 @@
             </select>
         </div>
         <div class="col-lg-3 col-md-4 col-sm-4">
-            <select class="selectpicker" id="options" name="options" data-live-search="true" title="Search menu items">
+            <select class="selectpicker" id="options" name="options" data-live-search="true" title="Assignments" data-live-search-placeholder="Search">
             </select>
         </div>
     </div>

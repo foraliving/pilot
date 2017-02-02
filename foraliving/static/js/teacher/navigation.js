@@ -131,13 +131,11 @@ $(document).ready(function () {
     $('html').on('click', '#add_to_group', function (e) {
         class_id = $("#classname").val();
         assignment_id = $("#options").val();
-        if (assignment_id != "") {
-
-            var selected = [];
-            $('.checkboxes input:checked').each(function () {
-                selected.push($(this).attr('value'));
-            });
-
+        var selected = [];
+        $('.checkboxes input:checked').each(function () {
+            selected.push($(this).attr('value'));
+        });
+        if (assignment_id != "" && selected != "") {
             $.ajax({
                 type: "POST",
                 url: "/foraliving/list-student-group/",

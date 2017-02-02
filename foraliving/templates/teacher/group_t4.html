@@ -12,6 +12,8 @@
 {% block styles %}
 <link rel="stylesheet" href="{% static 'UX/css/student/recording.css' %}">
 <link rel="stylesheet" href="{% static 'UX/css/simpleGridTemplate.css' %}">
+<link rel="stylesheet" href="{% static 'UX/css/bootstrap-select/bootstrap-select.min.css' %}">
+<script src="{% static 'js/select/bootstrap-select.min.js' %}"></script>
 <script src="{% static 'js/teacher/group.js' %}"></script>
 {% endblock %}
 {% block body %}
@@ -20,7 +22,7 @@
         <div class="panel-heading">
             <div class="row">
                 <div class="col-xs-4 col-sm-5 col-md-4 col-lg-8 title-line-height page-title">
-                    Group: {{group.name}}
+                    Group: <span id="group_name">{{group.name}} </span>
                 </div>
                 <div class="col-xs-4 col-sm-4 col-md-4 col-lg-2 title-line-height text-right">
                     <div class="btn-group">
@@ -118,6 +120,7 @@
     </div>
 </div>
 {% include 'general/delete.html' %}
+{% include 'teacher/edit_group.html' %}
 {% endblock %}
 {% block scripts %}
 <script>

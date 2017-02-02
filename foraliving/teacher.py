@@ -95,7 +95,7 @@ class TeacherVideosT8(LoginRequiredMixin, generic.View):
         classname = Class.objects.filter(teacher=user_add_ons)
         class_id = request.GET.get('class')
         if class_id and class_id != '0':
-            assignments = Assignment.objects.filter(falClass__in=class_id).values('pk')
+            assignments = Assignment.objects.filter(falClass=class_id).values('pk')
             interview = Interview.objects.filter(assignment__in=assignments).values('pk')
             interview_question = Interview_Question_Map.objects.filter(interview_id__in=interview)
             video_archived = Video.objects.filter(status="archived").values('id')
@@ -428,14 +428,13 @@ class GroupInterface(LoginRequiredMixin, generic.View):
 
         group = Group.objects.get(pk=group_id)
         student_class = Student_Class.objects.filter(falClass=class_id).values('student')
+        video_archived = Video.objects.filter(status="archived").values('id')
         try:
             interview = Interview.objects.get(assignment=assignment_id, group=group_id)
             interview_question = Interview_Question_Map.objects.filter(interview_id=interview.id)
-            video_archived = Video.objects.filter(status="archived").values('id')
             videos = Interview_Question_Video_Map.objects.filter(interview_question__in=interview_question).exclude(
                 video__in=video_archived)
             volunteer = Volunteer_User_Add_Ons.objects.get(user=interview.interviewee.id)
-
             for data in videos:
                 if data.video.status == "pending" or data.video.status == 'new':
                     count = count + 1
@@ -454,7 +453,7 @@ class GroupInterface(LoginRequiredMixin, generic.View):
         except:
             videos_count = None
 
-        users = User.objects.filter(groups__in=group_id, pk__in=student_class)
+        users = User.objects.filter(groups=group_id, pk__in=student_class)
         return render(request, self.group_view, {'group': group, 'users': users,
                                                  'interview': interview, 'videos': videos, 'volunteer': volunteer,
                                                  'count': count, 'videos_count': videos_count,
@@ -725,3 +724,32 @@ class DownloadTemplate(LoginRequiredMixin, generic.View):
                 return response
         else:
             raise Http404
+
+
+def group_members(request):
+    """
+    Return the student list in relation with group_id
+    :param request:
+    :return:
+    """
+    group_id = request.POST.get("group_id")
+    student = User.objects.filter(groups=group_id)
+
+    leads_as_json = serializers.serialize('json', student)
+
+    return HttpResponse(leads_as_json, content_type='application/json')
+
+
+def student_without_group(request):
+    """
+    Return the student list in relation with class_id without group
+    :param request:
+    :return:
+    """
+    group_id = request.POST.get("group_id")
+    class_id = request.POST.get("class_id")
+    student = User.objects.filter(groups=group_id)
+    student_class = Student_Class.objects.filter(falClass=class_id).values('student')
+    student_without_group = User.objects.filter(pk__in=student_class).exclude(pk__in=student)
+    leads_as_json = serializers.serialize('json', student_without_group)
+    return HttpResponse(leads_as_json, content_type='application/json')
