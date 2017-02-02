@@ -30,6 +30,7 @@ var recordButton = document.querySelector('button#record');
 var saveButton = document.querySelector('button#save');
 // var playButton = document.querySelector('button#play');
 var downloadButton = document.querySelector('button#download');
+var camera_id = $('#camera_index').val();
 recordButton.onclick = toggleRecording;
 saveButton.onclick = save;
 // playButton.onclick = play;
@@ -54,39 +55,50 @@ var videoSelect = document.querySelector('select#videoSource');
 var selectors = [videoSelect];
 // var videoElement = document.getElementById('gum');
 
-function gotDevices(deviceInfos) {
-    // Handles being called several times to update labels. Preserve values.
-    var values = selectors.map(function (select) {
-        return select.value;
-    });
-    selectors.forEach(function (select) {
-        while (select.firstChild) {
-            select.removeChild(select.firstChild);
-        }
-    });
+function setUpDevices() {
+    var deferred = $.Deferred();
+    navigator.mediaDevices.enumerateDevices().then(
+        function (deviceInfos) {
+            // Handles being called several times to update labels. Preserve values.
+            var values = selectors.map(function (select) {
+                return select.value;
+            });
+            selectors.forEach(function (select) {
+                while (select.firstChild) {
+                    select.removeChild(select.firstChild);
+                }
+            });
 
-    for (var i = 0; i !== deviceInfos.length; ++i) {
-        var deviceInfo = deviceInfos[i];
-        var option = document.createElement('option');
-        option.value = deviceInfo.deviceId;
-        if (deviceInfo.kind === 'videoinput') {
-            option.text = deviceInfo.label || 'camera ' + (videoSelect.length + 1);
-            videoSelect.appendChild(option);
-        } else {
-            // console.log('Some other kind of source/device: ', deviceInfo);
-        }
-    }
+            for (var i = 0; i !== deviceInfos.length; ++i) {
+                var deviceInfo = deviceInfos[i];
+                var option = document.createElement('option');
+                option.value = deviceInfo.deviceId;
+                if (deviceInfo.kind === 'videoinput') {
+                    option.text = deviceInfo.label || 'camera ' + (videoSelect.length + 1);
+                    videoSelect.appendChild(option);
+                } else {
+                    // console.log('Some other kind of source/device: ', deviceInfo);
+                }
+            }
 
-    selectors.forEach(function (select, selectorIndex) {
-        if (Array.prototype.slice.call(select.childNodes).some(function (n) {
-                return n.value === values[selectorIndex];
-            })) {
-            select.value = values[selectorIndex];
+            selectors.forEach(function (select, selectorIndex) {
+                if (Array.prototype.slice.call(select.childNodes).some(function (n) {
+                        return n.value === values[selectorIndex];
+                    })) {
+                    select.value = values[selectorIndex];
+                }
+            });
+
+            console.log('camera: ' + camera_id);
+            if (camera_id !== -1) {
+                $('select#videoSource option')[camera_id].selected = true;
+            }
+            deferred.resolve(camera_id);
         }
-    });
+    ).catch(handleError);
+
+    return deferred.promise();
 }
-
-navigator.mediaDevices.enumerateDevices().then(gotDevices).catch(handleError);
 
 function handleSuccess(stream) {
     console.log('getUserMedia() got stream: ', stream);
@@ -103,38 +115,47 @@ function handleError(error) {
 }
 
 function start() {
-    if (window.stream) {
-        window.stream.getTracks().forEach(function (track) {
-            track.stop();
-        });
-    }
+    var deferred = $.Deferred();
+    var devicesUp = setUpDevices();
 
-    var videoSource = videoSelect.value;
+    devicesUp.then(function() {
+        if (window.stream) {
+            window.stream.getTracks().forEach(function (track) {
+                track.stop();
+            });
+        }
 
-    var constraints = {
-        audio: true,
-        // video: {facingMode: "environment", deviceId: videoSource ? {exact: videoSource} : undefined}
-        video: {deviceId: videoSource ? {exact: videoSource} : undefined}
-    };
+        console.log('camera select start: ' + camera_id);
+        var videoSource = videoSelect.value;
 
-    if (/Edge\/\d./i.test(navigator.userAgent)) {
-        // This is Microsoft Edge
-        navigator.mediaDevices.getUserMedia({
-            video: {
-                facingMode: "user",
-                audio: true
-            }
-        }).then(function (stream) {
-            var video = document.getElementById('gum');
-            video.srcObject = stream;
-            var mediaRecorder = new MediaRecorder(stream);
-        }).catch(function (error) {
-            console.log(error.name + ": " + error.message);
-            handleSuccess();
-        });
-    } else {
-        navigator.mediaDevices.getUserMedia(constraints).then(handleSuccess).catch(handleError);
-    }
+        var constraints = {
+            audio: true,
+            // video: {facingMode: "environment", deviceId: videoSource ? {exact: videoSource} : undefined}
+            video: {deviceId: videoSource ? {exact: videoSource} : undefined}
+        };
+
+        if (/Edge\/\d./i.test(navigator.userAgent)) {
+            // This is Microsoft Edge
+            navigator.mediaDevices.getUserMedia({
+                video: {
+                    facingMode: "user",
+                    audio: true
+                }
+            }).then(function (stream) {
+                var video = document.getElementById('gum');
+                video.srcObject = stream;
+                var mediaRecorder = new MediaRecorder(stream);
+            }).catch(function (error) {
+                console.log(error.name + ": " + error.message);
+                handleSuccess();
+            });
+        } else {
+            navigator.mediaDevices.getUserMedia(constraints).then(handleSuccess).catch(handleError);
+        }
+        deferred.resolve(camera_id);
+    });
+
+    return deferred.promise();
 }
 
 videoSelect.onchange = start;

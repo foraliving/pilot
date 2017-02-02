@@ -46,7 +46,7 @@
                     <tbody style="vertical-align: inherit;">
                     {% if  questions or results %}
                     {% for result in results %}
-                    <tr data-link="{% url 'recording' question_id=result.1 %}" style="vertical-align: middle;">
+                    <tr data-link="{% url 'recording' question_id=result.1 camera_id=camera_id %}" style="vertical-align: middle;">
                         <td style="vertical-align: middle;"> {{result.0}}
                         </td>
                         <td style="font-size:14px; text-align: center; vertical-align: middle;">

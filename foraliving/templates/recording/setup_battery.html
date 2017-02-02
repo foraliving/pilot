@@ -40,12 +40,12 @@
                     </div>
                     <div style="text-align: center;" class="col-md-12 col-sm-12 col-xs-12">
                         <button class="btn btn-success" id="yes"
-                                onclick="location.href='{% url 'question_interview' interview_id=interview %}'"
+                                onclick="next_step()"
                                 style="display:none;">
                             Next
                         </button>
                         <button class="btn btn-not" id="no"
-                                onclick="location.href='{% url 'question_interview' interview_id=interview %}'"
+                                onclick="next_step()"
                                 style="display:none;">I want to
                             continue anyway
                         </button>
@@ -53,7 +53,7 @@
                     <div style="text-align: center; display:none;" class="col-md-12 col-sm-12 col-xs-12"
                          id="other_navigator">
                         <button class="btn btn-success" id="yes"
-                                onclick="location.href='{% url 'question_interview'  interview_id=interview %}'">
+                                onclick="next_step()">
                             Yes
                         </button>
                         <button class="btn btn-not" id="no">No</button>
@@ -61,8 +61,7 @@
 
                     <div class="skip col-md-12 col-sm-12 col-xs-12" style="margin-top: 5%;">
                         <a class="skip" style=text-decoration:none;
-                           href="{% url 'question_interview' interview_id=interview %}">Skip setup
-                            check
+                           onclick="next_step()"
                         </a>
                     </div>
                 </div>
@@ -85,6 +84,14 @@
         e.preventDefault();
         $('#help-modal').modal();
     });
+    var camera_id = "{{camera_id}}" ? Number("{{camera_id}}") : -1;
+    $('#camera_index').val(camera_id);
+    function next_step() {
+        var camera_selected = $("select#videoSource")[0].selectedIndex;
+        var url = "{% url 'question_interview' interview_id=interview camera_id=1001 %}";
+        url = url.replace(/1001/, camera_selected);
+        $(location).attr('href', url);
+    }
     var isOpera = (!!window.opr && !!opr.addons) || !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;
     // Firefox 1.0+
     var isFirefox = typeof InstallTrigger !== 'undefined';

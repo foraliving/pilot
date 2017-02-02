@@ -30,11 +30,19 @@ urlpatterns = [
     url(r'^recording_type/(?P<interview_id>\d+)/$', RecordingType.as_view(), name='recording_type'),
     url(r'^setup_microphone/(?P<interview_id>\d+)/$', RecordingSetupMicrophone.as_view(),
         name='recording_setup_microphone'),
-    url(r'^setup_face/(?P<interview_id>\d+)/(?P<camera_id>\d+)$', RecordingSetupFace.as_view(),
+    url(r'^setup_face/(?P<interview_id>\d+)/(?P<camera_id>\d+)/$', RecordingSetupFace.as_view(),
         name='recording_setup_face'),
-    url(r'^setup_battery/(?P<interview_id>\d+)/$', RecordingSetupBattery.as_view(), name='recording_setup_battery'),
-    url(r'^question_interview/(?P<interview_id>\d+)/$', QuestionInterview.as_view(), name='question_interview'),
-    url(r'^recording/(?P<question_id>\d+)/$', Recording.as_view(), name='recording'),
+    url(
+        r'^setup_battery/(?P<interview_id>\d+)/(?P<camera_id>\d+)/$',
+        RecordingSetupBattery.as_view(),
+        name='recording_setup_battery'
+    ),
+    url(
+        r'^question_interview/(?P<interview_id>\d+)/(?P<camera_id>\d+)/$',
+        QuestionInterview.as_view(),
+        name='question_interview'
+    ),
+    url(r'^recording/(?P<question_id>\d+)/(?P<camera_id>\d+)/$', Recording.as_view(), name='recording'),
     url(r'^orientation/(?P<interview_id>\d+)/$', Orientation.as_view(), name='orientation'),
 
     # student urls

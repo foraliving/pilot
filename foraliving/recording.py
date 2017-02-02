@@ -68,8 +68,15 @@ class RecordingSetupBattery(LoginRequiredMixin, generic.View):
     login_url = settings.LOGIN_URL
     setup_view = 'recording/setup_battery.html'
 
-    def get(self, request, interview_id):
-        return render(request, self.setup_view, {'interview': interview_id})
+    def get(self, request, interview_id, camera_id):
+        return render(
+            request,
+            self.setup_view,
+            {
+                'interview': interview_id,
+                'camera_id': camera_id
+            }
+        )
 
 
 class QuestionInterview(LoginRequiredMixin, generic.View):
@@ -78,7 +85,7 @@ class QuestionInterview(LoginRequiredMixin, generic.View):
     login_url = settings.LOGIN_URL
     question_view = 'recording/questions.html'
 
-    def get(self, request, interview_id):
+    def get(self, request, interview_id, camera_id):
         general_videos = []
         practice_question = Question.objects.get(
             name="What is your favorite book and why? (student practice question)")
@@ -115,8 +122,16 @@ on Q.id=IQ.question_id where IQ.interview_id=(%s) group by Q.name, IQ.id""", (in
                     all[3] = question_video.video.url
             general_videos.append(all)
 
-        return render(request, self.question_view,
-                      {'questions': questions, 'interview': interview_id, 'results': general_videos})
+        return render(
+            request,
+            self.question_view,
+            {
+                'questions': questions,
+                'interview': interview_id,
+                'results': general_videos,
+                'camera_id': camera_id
+            }
+        )
 
 
 class Recording(LoginRequiredMixin, generic.View):
@@ -125,9 +140,17 @@ class Recording(LoginRequiredMixin, generic.View):
     login_url = settings.LOGIN_URL
     question_view = 'recording/recording.html'
 
-    def get(self, request, question_id):
+    def get(self, request, question_id, camera_id):
         questions = Interview_Question_Map.objects.get(pk=question_id)
-        return render(request, self.question_view, {'questions': questions, 'question_name': questions.question.name})
+        return render(
+            request,
+            self.question_view,
+            {
+                'questions': questions,
+                'question_name': questions.question.name,
+                'camera_id': camera_id
+            }
+        )
 
 
 class Orientation(LoginRequiredMixin, generic.View):
