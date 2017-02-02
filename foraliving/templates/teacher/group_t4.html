@@ -24,15 +24,29 @@
                 </div>
                 <div class="col-xs-4 col-sm-4 col-md-4 col-lg-2 title-line-height text-right">
                     <div class="btn-group">
-                        <button class="btn button-general" type="submit" id="edit_group" style="width: 120px;"> Edit
+                        {% if videos_count %}
+                        <button class="btn button-general edit-group" type="submit" style="width: 120px;" disabled>
+                            Edit
                         </button>
+                        {% else %}
+                        <button class="btn button-general edit-group" type="submit" id="{{group.id}}"
+                                style="width: 120px;"> Edit
+                        </button>
+                        {% endif %}
                     </div>
+
                 </div>
                 <div class="col-xs-4 col-sm-3 col-md-4 col-lg-2 title-line-height text-right">
                     <div class="btn-group">
-                        <button class="btn button-general" type="submit" id="delete_group"
+                        {% if videos_count %}
+                        <button class="btn button-general delete_group" type="submit"
+                                style="background-color: grey; color: white; width: 120px;" disabled> Delete
+                        </button>
+                        {% else %}
+                        <button class="btn button-general delete_group" type="submit" id="{{group.id}}"
                                 style="background-color: grey; color: white; width: 120px;"> Delete
                         </button>
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -62,6 +76,8 @@
             You have {{count}} video(s) waiting to be approved
         </div>
         {% endif %}
+        <input type="hidden" value="{{classname}}" id="classname">
+        <input type="hidden" value="{{assignment}}" id="assignment">
         <div class="panel-body">
             <div class="container">
                 <div class="gallery">
@@ -101,9 +117,9 @@
         </div>
     </div>
 </div>
+{% include 'general/delete.html' %}
 {% endblock %}
 {% block scripts %}
 <script>
-
 </script>
 {% endblock %}

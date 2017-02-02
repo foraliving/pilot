@@ -107,7 +107,8 @@ class TeacherVideosT8(LoginRequiredMixin, generic.View):
             user_school = User_Add_Ons.objects.filter(school=school)
             videos = Video.objects.filter(created_by__in=user_school)
             video_archived = Video.objects.filter(status="archived").values('id')
-            videos = Interview_Question_Video_Map.objects.filter(video__in=videos).order_by('-video').exclude(video__in=video_archived)
+            videos = Interview_Question_Video_Map.objects.filter(video__in=videos).order_by('-video').exclude(
+                video__in=video_archived)
         return render(request, self.question_view, {'videos': videos, 'classname': classname, 'class_id': class_id})
 
 
@@ -334,6 +335,7 @@ def update_video(request, video_id, flag_id):
 
     return HttpResponse(count)
 
+
 def delete_interview(request):
     """
     Method to remove a volunteer
@@ -343,6 +345,7 @@ def delete_interview(request):
     interview = request.POST.get('interview_id')
     Interview.objects.filter(pk=interview).delete()
     return HttpResponse('true')
+
 
 def delete_class(request):
     """
@@ -354,9 +357,10 @@ def delete_class(request):
     Class.objects.filter(pk=class_id).delete()
     return HttpResponse('true')
 
+
 def delete_student(request):
     """
-    Method to remove a volunteer
+    Method to remove a student
     :param request:
     :return:
     """
@@ -366,6 +370,19 @@ def delete_student(request):
     user.groups.clear();
 
     return HttpResponse('true')
+
+
+def delete_group(request):
+    """
+    Method to remove a group
+    :param request:
+    :return:
+    """
+    group_id = request.POST.get('group_id')
+    Group.objects.filter(pk=group_id).delete()
+
+    return HttpResponse('true')
+
 
 class CreateInterview(LoginRequiredMixin, generic.View):
     """Generic view to create a new interview"""
@@ -408,13 +425,15 @@ class GroupInterface(LoginRequiredMixin, generic.View):
         :return:
         """
         count = 0
+
         group = Group.objects.get(pk=group_id)
         student_class = Student_Class.objects.filter(falClass=class_id).values('student')
         try:
             interview = Interview.objects.get(assignment=assignment_id, group=group_id)
             interview_question = Interview_Question_Map.objects.filter(interview_id=interview.id)
             video_archived = Video.objects.filter(status="archived").values('id')
-            videos = Interview_Question_Video_Map.objects.filter(interview_question__in=interview_question).exclude(video__in=video_archived)
+            videos = Interview_Question_Video_Map.objects.filter(interview_question__in=interview_question).exclude(
+                video__in=video_archived)
             volunteer = Volunteer_User_Add_Ons.objects.get(user=interview.interviewee.id)
 
             for data in videos:
@@ -426,9 +445,20 @@ class GroupInterface(LoginRequiredMixin, generic.View):
             videos = None
             volunteer = None
 
+        try:
+            interview_count = Interview.objects.filter(group=group_id).values('id')
+            interview_question_count = Interview_Question_Map.objects.filter(interview_id__in=interview_count)
+            videos_count = Interview_Question_Video_Map.objects.filter(
+                interview_question__in=interview_question_count).exclude(
+                video__in=video_archived)
+        except:
+            videos_count = None
+
         users = User.objects.filter(groups__in=group_id, pk__in=student_class)
         return render(request, self.group_view, {'group': group, 'users': users,
-                'interview': interview, 'videos': videos, 'volunteer': volunteer, 'count': count})
+                                                 'interview': interview, 'videos': videos, 'volunteer': volunteer,
+                                                 'count': count, 'videos_count': videos_count,
+                                                 'classname': class_id, 'assignment': assignment_id})
 
 
 def studentPersonalInfo(request, class_id):
@@ -442,8 +472,6 @@ def studentPersonalInfo(request, class_id):
                                                                 'email')
 
     return JsonResponse({'results': list(students)})
-
-
 
 
 class AddClass(LoginRequiredMixin, generic.View):
