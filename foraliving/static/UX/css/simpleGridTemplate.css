@@ -67,6 +67,32 @@ body {
     color: white;
 }
 
+.btn-toggle-success {
+    background-color: #99c64c;
+    color:white;
+    width: 140px;
+    max-height: 35px;
+    border-color: white;
+    font-size: 16px;
+    border-style: groove;
+    margin-bottom: 3px;
+    margin-top: 8px;
+    margin-right: 5px;
+}
+
+.btn-toggle-danger {
+    background-color: #f05a28;
+    color:white;
+    width: 140px;
+    max-height: 35px;
+    border-color: white;
+    font-size: 16px;
+    border-style: groove;
+    margin-bottom: 3px;
+    margin-top: 8px;
+    margin-right: 5px;
+}
+
 .fileinput-remove {
     background-color: #FF0000;
     color: white;
@@ -200,7 +226,7 @@ tr.shown td.details-control2 {
 }
 
 .active {
-    color: #555;
+    /*color: #555;*/
     background-color: transparent;
     border-bottom: 3px solid #74bf43;
 }
@@ -397,7 +423,7 @@ h2 {
 .btn:hover,
 .btn:focus,
 .btn.focus {
-    color: #FFF;
+    /*color: #FFF;*/
     text-decoration: none;
 }
 

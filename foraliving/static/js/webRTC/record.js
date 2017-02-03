@@ -93,6 +93,7 @@ function setUpDevices() {
             if (camera_id !== -1) {
                 $('select#videoSource option')[camera_id].selected = true;
             }
+            $('#videoSource').selectpicker('refresh');
             deferred.resolve(camera_id);
         }
     ).catch(handleError);

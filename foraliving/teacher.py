@@ -318,8 +318,10 @@ def update_video(request, video_id, flag_id):
     :return:
     """
     if flag_id == '1':
+        print ('pending')
         video = Video.objects.filter(pk=video_id).update(status='pending')
     else:
+        print('pending', flag_id)
         video = Video.objects.filter(pk=video_id).update(status='approved')
 
     interview_question_video = Interview_Question_Video_Map.objects.get(video=video_id)

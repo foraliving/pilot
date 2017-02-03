@@ -43,7 +43,7 @@
         {% for video in videos %}
         <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 videos-display">
             <div class="thumbnail" style="text-align: center; width: 82%;">
-                <div style="text-align: right;"> </div>
+                <div style="text-align: right;"></div>
                 <div class="embed-responsive embed-responsive-16by9">
                     <video controls>
                         <source src="/foraliving/media/{{video.video.url}}">
@@ -55,11 +55,13 @@
                         {{video.interview_question.interview.interviewee.volunteer_user_add_ons.workTitle}}</p>
                     {% if video.video.status == "approved"%}
                     <div class="checkbox" style="font-size:14px;">
-                        <input type="checkbox" disabled checked data-toggle="toggle" data-on="Approved" data-off="Not Approved" data-onstyle="success" data-offstyle="danger">
+                        <input type="checkbox" id="{{video.video.id}}" class="status" checked data-toggle="toggle" data-on="Approved"
+                               data-off="Not Approved" data-onstyle="toggle-success" data-offstyle="toggle-danger">
                     </div>
                     {% else %}
                     <div class="checkbox disabled">
-                        <input type="checkbox" disabled data-toggle="toggle" data-on="Approved" data-off="Not Approved" data-onstyle="success" data-offstyle="danger">
+                        <input type="checkbox" id="{{video.video.id}}" class="status" data-toggle="toggle" data-on="Approved"
+                               data-off="Not Approved" data-onstyle="toggle-success" data-offstyle="toggle-danger">
                     </div>
                     {% endif %}
                 </div>
@@ -71,6 +73,5 @@
 {% endblock %}
 {% block scripts %}
 <script>
-
 </script>
 {% endblock %}
