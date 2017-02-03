@@ -66,9 +66,6 @@
 
 {% endblock %}
 {% block scripts %}
-<script src="{% static 'js/webRTC/adapter.js' %}"></script>
-<script src="{% static 'js/webRTC/record.js' %}"></script>
-<script src='{% static "js/recording/loadingoverlay.min.js" %}'></script>
 <script>
     var orientation = screen.orientation || screen.mozOrientation || screen.msOrientation;
     var query = window.matchMedia("(orientation:landscape)");
@@ -79,4 +76,8 @@
     var camera_id = "{{camera_id}}" ? Number("{{camera_id}}") : -1;
     $('#camera_index').val(camera_id);
 </script>
+<script src="{% static 'js/webRTC/adapter.js' %}"></script>
+<script src="{% static 'js/webRTC/record.js' %}"></script>
+<script src='{% static "js/recording/loadingoverlay.min.js" %}'></script>
+
 {% endblock %}

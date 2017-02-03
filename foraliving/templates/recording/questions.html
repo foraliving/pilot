@@ -64,7 +64,7 @@
                     </tr>
                     {% endfor %}
                     {% for question in questions %}
-                    <tr data-link="{% url 'recording' question_id=question.0 %}">
+                    <tr data-link="{% url 'recording' question_id=question.0 camera_id=camera_id %}">
                         <td> {{question.4}}</td>
                         <td></td>
                     </tr>
