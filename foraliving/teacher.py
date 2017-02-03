@@ -425,7 +425,7 @@ class GroupInterface(LoginRequiredMixin, generic.View):
         :return:
         """
         count = 0
-
+        falClass = Class.objects.get(pk=class_id)
         group = Group.objects.get(pk=group_id)
         student_class = Student_Class.objects.filter(falClass=class_id).values('student')
         video_archived = Video.objects.filter(status="archived").values('id')
@@ -457,7 +457,7 @@ class GroupInterface(LoginRequiredMixin, generic.View):
         return render(request, self.group_view, {'group': group, 'users': users,
                                                  'interview': interview, 'videos': videos, 'volunteer': volunteer,
                                                  'count': count, 'videos_count': videos_count,
-                                                 'classname': class_id, 'assignment': assignment_id})
+                                                 'classname': class_id, 'assignment': assignment_id, 'name': falClass.name})
 
 
 def studentPersonalInfo(request, class_id):
@@ -753,3 +753,50 @@ def student_without_group(request):
     student_without_group = User.objects.filter(pk__in=student_class).exclude(pk__in=student)
     leads_as_json = serializers.serialize('json', student_without_group)
     return HttpResponse(leads_as_json, content_type='application/json')
+
+
+def uniqueGroupEdit(request):
+    """
+    Method to validate if the group name exist on the system
+    :param request:
+    :return:
+    """
+    if request.is_ajax():
+        group_id = request.GET.get('group_id')
+        group = request.GET.get('group')
+        currentyGroup = Group.objects.get(pk=group_id)
+        count_group = (Group.objects.filter(name__iexact=group).exclude(pk=currentyGroup.id).count())
+        if count_group >= 1:
+            return HttpResponse('true')
+        else:
+            return HttpResponse('false')
+
+
+class AssignGroupEdit(LoginRequiredMixin, generic.View):
+    """Generic view to assign a student list to group"""
+    login_url = settings.LOGIN_URL
+
+    def post(self, request):
+        """
+        :param request:
+        :return:
+        """
+        group_name = request.POST.get("group_name")
+        group_id = request.POST.get('group_id')
+        studentGroup = User.objects.filter(groups=group_id)
+        groupUpdate = Group.objects.filter(pk=group_id).update(name=group_name)
+        group = Group.objects.get(pk=group_id)
+
+        if studentGroup:
+            for data in studentGroup:
+                group.user_set.remove(data)
+
+        student = request.POST.getlist("students[]")
+        print (student, "this is the student")
+
+        if student[0] != "":
+            students = User.objects.filter(pk__in=student)
+            for data in students:
+                group.user_set.add(data)
+
+        return HttpResponse('true')

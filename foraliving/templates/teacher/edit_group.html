@@ -6,33 +6,29 @@
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h4 class="modal-title" id="myModalLabel">Edit Group</h4>
             </div>
-            <form id="addGroup" class="form">
+            <form id="editGroup" class="form">
                 {% csrf_token %}
                 <div class="modal-body" style="margin: 4px; font-size: 16px;">
                     <div class="form-group">
                         <label>Group name </label>
                     </div>
                     <div class="form-group" id="group_name">
-                        <input name="group_name" value="" type="text" class="form-control">
+                        <input name="group_name" value="" type="text" class="form-control" id="{{group.id}}">
                     </div>
-                    <div class="form-group">
-                        <table id="students_name" class="table" style="width: 80%; text-align: center;">
-                            <thead>
-                            <tr>
-                                <th style="text-align: center;"> Student Name</th>
-                            </tr>
-                            </thead>
-
-                        </table>
-                        <div style="color: white; border: none; background: transparent;">
-                            <input name="data" value="" type="text" class="form-control"
-                                   style="color: white; border: none; background: transparent;" readonly="readonly">
+                    <div class="form-group" align="center">
+                        <p style="color: #827a7a;">To add and remove a student, click the student's name</p>
+                        <div style="background-color: #eceaea">
+                            <p>{{name}} </p>
+                            <select id='pre-selected-options' multiple='multiple'>
+                            </select>
+                            <br>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer" style="text-align:center;">
-                    <button class="btn btn-success" data-dismiss="modal">Cancel</button>
-                    <button class="btn btn-success modal-button" id="save_group" type="submit">Done
+                    <button class="btn button-general" data-dismiss="modal">Cancel</button>
+                    <button class="btn button-general update_group" style="background-color: dimgrey;" type="submit">
+                        Done
                     </button>
                 </div>
             </form>

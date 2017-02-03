@@ -11,7 +11,7 @@ from foraliving.teacher import TeacherStudentT1, TeacherVolunteerT6, TeacherVide
     student_list, list_student_group, AssignGroup, uniqueGroup, TeacherVolunteerT6a, AssignVolunteer, list_groups, \
     TeacherVolunteerT9, groupList, studentList, CreateInterview, GroupInterface, update_video, delete_interview, \
     delete_class, AddClass, AddClassAssignment, DownloadTemplate, studentPersonalInfo, delete_student, delete_group, \
-    group_members, student_without_group
+    group_members, student_without_group, uniqueGroupEdit, AssignGroupEdit
 from foraliving.volunteer import VolunteerProfile, VolunteerEdit
 from foraliving.general import Videos
 from foraliving.volunteer import Contact, editSkill, GetInterviewed, InterviewQuestionsView, JoinInterviewView, \
@@ -95,7 +95,7 @@ urlpatterns = [
     url(r"^teacher/volunteer/assign/(?P<user_id>\d+)/(?P<assignment_id>\d+)/$", TeacherVolunteerT6a.as_view(),
         name='teacher_volunteer_assign'),
     url(r"^teacher/videos/$", TeacherVideosT8.as_view(), name='teacher_videos'),
-    url(r"assign_group/$", AssignGroup.as_view(), name='assign_group'),
+    url(r"^assign_group/$", AssignGroup.as_view(), name='assign_group'),
     url(r"^assign/volunteer/(?P<volunteer_id>\d+)/(?P<assignment_id>\d+)/(?P<user_id>\d+)/$",
         AssignVolunteer.as_view(), name='assign_volunteer'),
     url(r"^teacher/class/new/$", AddClass.as_view(), name='teacher_add_class'),
@@ -118,6 +118,8 @@ urlpatterns = [
     url(r"^group/delete/$", delete_group, name='delete_group'),
     url(r"^group/members/$", group_members, name='list-group_members'),
     url(r"^class/members/$", student_without_group, name='student_without_group'),
+    url(r"^unique-group-edit/$", uniqueGroupEdit, name='uniqueGroupEdit'),
+    url(r"^assign_group/edit/$", AssignGroupEdit.as_view(), name='assign_group_edit'),
 
 ]
 

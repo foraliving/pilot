@@ -1,3 +1,8 @@
 .page-title {
     color: #99c64c;
 }
+
+.custom-header {
+    background-color: #99c64c;
+    color: white;
+}

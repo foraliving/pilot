@@ -11,10 +11,16 @@
 {% load staticfiles %}
 {% block styles %}
 <link rel="stylesheet" href="{% static 'UX/css/student/recording.css' %}">
+<link rel="stylesheet" href="{% static 'UX/css/multiselect.css' %}">
+<link rel="stylesheet" href="{% static 'UX/css/teacher/styles.css' %}">
 <link rel="stylesheet" href="{% static 'UX/css/simpleGridTemplate.css' %}">
 <link rel="stylesheet" href="{% static 'UX/css/bootstrap-select/bootstrap-select.min.css' %}">
 <script src="{% static 'js/select/bootstrap-select.min.js' %}"></script>
 <script src="{% static 'js/teacher/group.js' %}"></script>
+<script src="{% static 'js/teacher/jquery.multi-select.js' %}"></script>
+<script type="text/javascript"
+        src='{% static "jquery-validate/jquery.validate.min.js" %}'></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.15.0/additional-methods.js"></script>
 {% endblock %}
 {% block body %}
 <div class="container">

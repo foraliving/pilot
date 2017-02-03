@@ -12,9 +12,8 @@ $(document).ready(function () {
 
     $('html').on('click', '.edit-group', function (e) {
         var group_id = e.target.id;
-        $('#edit_group').modal();
-        $('#save_group', '#edit_group').attr('id', 'group_id-' + group_id);
-
+        $('.update_group', '#edit_group').attr('id', 'group_id-' + group_id);
+        var result = [];
         $.ajax({
             type: "POST",
             url: "/foraliving/group/members/",
@@ -22,22 +21,101 @@ $(document).ready(function () {
         }).done(function (data) {
             $("#students_name > tbody").html("");
             $.each(data, function (id, data) {
-                $('#students_name').append('<tr><td>' + data.fields.first_name + ' ' + data.fields.last_name + '</td></tr>')
+                var opt = $('<option />');
+                opt.val(data.pk);
+                opt.text(data.fields.first_name + ' ' + data.fields.last_name);
+                $('#pre-selected-options').append(opt);
+                result.push(data.pk.toString());
             });
             $('input[name=group_name]').val($("#group_name").text());
+
+            var class_id = $("#classname").val();
+            $.ajax({
+                type: "POST",
+                url: "/foraliving/class/members/",
+                data: {'class_id': class_id, 'group_id': group_id},
+            }).done(function (data) {
+                $.each(data, function (id, data) {
+                    var opt = $('<option />');
+                    opt.val(data.pk);
+                    opt.text(data.fields.first_name + ' ' + data.fields.last_name);
+                    $('#pre-selected-options').append(opt);
+                });
+                $('#pre-selected-options').multiSelect({
+                    selectableHeader: "<div class='custom-header'>Student's Class</div>",
+                    selectionHeader: "<div class='custom-header'>Student's Group</div>",
+                });
+                $('input[name=group_name]').val($("#group_name").text());
+
+                result.forEach(function (element) {
+                    $('#pre-selected-options').multiSelect('select', String(element));
+                });
+                $('#edit_group').modal();
+            });
         });
-        var class_id = $("#classname").val();
+
+    });
+
+    $.validator.addMethod("uniqueGroup", function () {
+        var group = $("input[name=group_name]").val().trim();
+        var group_id = $('input[name=group_name]').attr('id');
+        var valid = false
         $.ajax({
-            type: "POST",
-            url: "/foraliving/class/members/",
-            data: {'class_id': class_id, 'group_id': group_id},
-        }).done(function (data) {
-            $.each(data, function (id, data) {
-                $('#students_name').append('<tr><td>' + data.fields.first_name + ' ' + data.fields.last_name + '</td></tr>')
-            });
-            $('input[name=group_name]').val($("#group_name").text());
+            type: "GET",
+            async: false,
+            url: "/foraliving/unique-group-edit/",
+            data: "group=" + group + "&group_id=" + group_id,
+            dataType: "json",
+            async: false,
+            success: function (response) {
+                valid = !response;
+            }
+        });
+        return valid;
+
+
+    }, "This group name is already taken! Try another.");
+
+
+    $(document).on('click', '.update_group', function (e) {
+        var modal = $("#editGroup").validate({
+            onkeyup: false,
+            focusout: false,
+            focusInvalid: false,
+            submitHandler: function (form) {
+                event.preventDefault();
+                updateGroup();
+            },
+            errorClass: "my-error-class",
+            rules: {
+                group_name: {
+                    required: true,
+                    uniqueGroup: true
+                }
+            },
+            messages: {
+                group_name: {
+                    required: "The Group name is required"
+                }
+            }
         });
     });
+
+    function updateGroup() {
+        var group_id = $('input[name=group_name]').attr('id');
+        var group_name = $('input[name=group_name]').val().trim();;
+        var students = $('#pre-selected-options').val();
+        $.ajax({
+            type: "POST",
+            url: "/foraliving/assign_group/edit/",
+            data: {'group_name': group_name, 'students[]': students, 'group_id' : group_id},
+        }).done(function (data) {
+            $('#edit_group').modal("hide");
+            location.reload();
+        });
+
+
+    }
 
 
     $('body').on('click', 'button.confirm-delete-modal', function (e) {
@@ -46,8 +124,8 @@ $(document).ready(function () {
         var assignment = $("#assignment").val();
         $.ajax({
             type: "POST",
-            url: "/foraliving/group/delete/",
-            data: {'group_id': id},
+            url: "/foraliving/group/update/",
+            data: {'group_name': id},
         }).done(function (data) {
             $("#delete-modal").modal("hide");
             window.location.href = '/foraliving/teacher/class/?class=' + class_id + "&assignment=" + assignment;
