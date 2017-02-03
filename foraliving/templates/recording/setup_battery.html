@@ -13,7 +13,8 @@
             <div class="panel-body">
                 <div class="col-md-6 col-sm-6 .col-lg-6">
                     <div class="select" style="margin-bottom: 5px;">
-                        <label for="videoSource" style="padding-right: 10px;">Select camera: </label><select class="selectpicker show-tick" id="videoSource"></select>
+                        <label for="videoSource" style="padding-right: 10px;">Select camera: </label><select
+                            class="selectpicker show-tick" id="videoSource"></select>
                     </div>
                     <div class="videoContainer">
                         <video id="localVideo" oncontextmenu="return false;" autoplay=""></video>
@@ -77,13 +78,7 @@
 <script src="{% static 'js/recording/getUserMedia.js' %}"></script>
 <script src="{% static 'js/recording/setup1.js' %}"></script>
 <script src="{% static 'js/recording/getusermedia_edge.js' %}"></script>
-
-
 <script>
-    $('html').on('click', '#no', function (e) {
-        e.preventDefault();
-        $('#help-modal').modal();
-    });
     var camera_id = "{{camera_id}}" ? Number("{{camera_id}}") : -1;
     $('#camera_index').val(camera_id);
     function next_step() {
@@ -92,57 +87,65 @@
         url = url.replace(/1001/, camera_selected);
         $(location).attr('href', url);
     }
-    var isOpera = (!!window.opr && !!opr.addons) || !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;
-    // Firefox 1.0+
-    var isFirefox = typeof InstallTrigger !== 'undefined';
-    // Safari 3.0+ "[object HTMLElementConstructor]"
-    var isSafari = Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0 || (function (p) {
-                return p.toString() === "[object SafariRemoteNotification]";
-            })(!window['safari'] || safari.pushNotification);
-    // Internet Explorer 6-11
-    var isIE = /*@cc_on!@*/false || !!document.documentMode;
-    // Edge 20+
-    var isEdge = !isIE && !!window.StyleMedia;
-    // Chrome 1+
-    var isChrome = !!window.chrome && !!window.chrome.webstore;
-    // Blink engine detection
-    var isBlink = (isChrome || isOpera) && !!window.CSS;
-    if (isChrome == true || isOpera == true || isFirefox == true) {
-        navigator.getBattery().then(function (battery) {
-            function updateAllBatteryInfo() {
-                updateLevelInfo();
-            }
-            updateAllBatteryInfo();
-            battery.addEventListener('chargingchange', function () {
-                updateLevelInfo();
-            });
-            battery.addEventListener('levelchange', function () {
-                updateLevelInfo();
-            });
-            function updateLevelInfo() {
-                if (battery.level <= 0.35 && battery.charging == false) {
-                    $("#low").show();
-                    $("#setup2").show();
-                    $("#setup").hide();
-                    $("#full").hide();
-                    $("#yes").hide();
-                    $("#no").show();
-                    $(".btn-not").css("width", "auto");
-                } else {
-                    $("#setup2").hide();
-                    $("#setup").show();
-                    $("#low").hide();
-                    $("#full").show();
-                    $("#yes").show();
-                    $("#no").hide();
+
+    $(document).ready(function () {
+        $('html').on('click', '#no', function (e) {
+            e.preventDefault();
+            $('#help-modal').modal();
+        });
+        var isOpera = (!!window.opr && !!opr.addons) || !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;
+        // Firefox 1.0+
+        var isFirefox = typeof InstallTrigger !== 'undefined';
+        // Safari 3.0+ "[object HTMLElementConstructor]"
+        var isSafari = Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0 || (function (p) {
+                    return p.toString() === "[object SafariRemoteNotification]";
+                })(!window['safari'] || safari.pushNotification);
+        // Internet Explorer 6-11
+        var isIE = /*@cc_on!@*/false || !!document.documentMode;
+        // Edge 20+
+        var isEdge = !isIE && !!window.StyleMedia;
+        // Chrome 1+
+        var isChrome = !!window.chrome && !!window.chrome.webstore;
+        // Blink engine detection
+        var isBlink = (isChrome || isOpera) && !!window.CSS;
+        if (isChrome == true || isOpera == true || isFirefox == true) {
+            navigator.getBattery().then(function (battery) {
+                function updateAllBatteryInfo() {
+                    updateLevelInfo();
                 }
-            }
-        })
-    } else {
-        $("#text-default").show();
-        $("#other_navigator").show();
-        $("#low").show();
-        $("#full").show();
-    }
+
+                updateAllBatteryInfo();
+                battery.addEventListener('chargingchange', function () {
+                    updateLevelInfo();
+                });
+                battery.addEventListener('levelchange', function () {
+                    updateLevelInfo();
+                });
+                function updateLevelInfo() {
+                    if (battery.level <= 0.35 && battery.charging == false) {
+                        $("#low").show();
+                        $("#setup2").show();
+                        $("#setup").hide();
+                        $("#full").hide();
+                        $("#yes").hide();
+                        $("#no").show();
+                        $(".btn-not").css("width", "auto");
+                    } else {
+                        $("#setup2").hide();
+                        $("#setup").show();
+                        $("#low").hide();
+                        $("#full").show();
+                        $("#yes").show();
+                        $("#no").hide();
+                    }
+                }
+            })
+        } else {
+            $("#text-default").show();
+            $("#other_navigator").show();
+            $("#low").show();
+            $("#full").show();
+        }
+    });
 </script>
 {% endblock %}
