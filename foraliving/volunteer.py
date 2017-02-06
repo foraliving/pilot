@@ -25,6 +25,8 @@ class VolunteerProfile(LoginRequiredMixin, generic.View):
         :param interview_id:
         :return:
         """
+        class_id = request.GET.get("class")
+        assignment = request.GET.get("assignment")
         volunteer = Volunteer_User_Add_Ons.objects.get(user=user_id)
         interview = Interview.objects.filter(interviewee=user_id)
         interview_question = Interview_Question_Map.objects.filter(interview__in=interview)
@@ -35,7 +37,8 @@ class VolunteerProfile(LoginRequiredMixin, generic.View):
         user_type = User_Type.objects.get(user=user)
 
         return render(request, self.question_view,
-                      {'volunteer': volunteer, 'interview': interview_id, 'videos': interview_question_video, 'user_type': user_type.type.name})
+                      {'volunteer': volunteer, 'interview': interview_id, 'videos': interview_question_video,
+                       'user_type': user_type.type.name, 'class_id': class_id, 'assignment': assignment})
 
 
 class Contact(LoginRequiredMixin, generic.View):
@@ -68,7 +71,8 @@ class Contact(LoginRequiredMixin, generic.View):
                 domain = request.build_absolute_uri('/')[:-1]
                 url = domain + "/volunteer/create/?email=" + email_to + "&phone=" + phone + "&workTitle=" + workTitle + "&first_name=" + first_name + "&last_name=" + last_name;
                 message = EmailMessage('volunteer/invitation.html',
-                                       {'url': url, 'first_name': first_name, 'last_name': last_name, 'phone': phone, 'workTitle': workTitle},
+                                       {'url': url, 'first_name': first_name, 'last_name': last_name, 'phone': phone,
+                                        'workTitle': workTitle},
                                        "noelia.pazos@viaro.net", cc=["jacquie@foraliving.org"],
                                        to=[email_to])
                 message.send()
@@ -175,7 +179,7 @@ class GetInterviewed(LoginRequiredMixin, generic.View):
                 cont = 0
                 for user in students_class_group:
                     user_names += user.first_name
-                    if not(cont == (len(users) - 1)):
+                    if not (cont == (len(users) - 1)):
                         user_names += ', '
                     cont += 1
             # This is the base case (Just one student)
@@ -258,6 +262,7 @@ class GetQuestionFromInterviewQuestion(LoginRequiredMixin, generic.View):
     """
         Get the GPG key for customer
     """
+
     def get(self, request, question_id):
         interview_question = get_object_or_404(Interview_Question_Map, pk=question_id)
 

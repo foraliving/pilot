@@ -105,6 +105,7 @@ urlpatterns = [
     url(r"^groups/$", list_groups, name='list_groups'),
     url(r"^unique-group/$", uniqueGroup, name='uniqueGroup'),
     url(r"^get/student-group/(?P<assignment_id>\d+)/$", groupList, name='group_list'),
+    url(r"^get/student-list/(?P<assignment_id>\d+)/$", studentList, name='student_list'),
     url(r"^get-assignment/(?P<class_id>\d+)/$", asignment_list, name='assignment_list'),
     url(r"^student-list/(?P<class_id>\d+)/(?P<assignment_id>\d+)/$", student_list, name='class_student_list'),
     url(r"list-student-group", list_student_group, name='list-student_group'),

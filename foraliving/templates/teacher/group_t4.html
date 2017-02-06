@@ -4,9 +4,9 @@
 {% bootstrap_javascript jquery=1 %}
 {% bootstrap_messages %}
 {% block list %}
-<li><a href="{% url 'teacher_class' %}">Student</a></li>
-<li><a href="{%url 'teacher_volunteer'%}">Volunteers</a></li>
-<li class="active"><a href="{%url 'teacher_videos'%}">Videos</a></li>
+<li><a href="{% url 'teacher_class' %}?class={{classname}}&assignment={{assignment}}">Students</a></li>
+<li><a href="{%url 'teacher_volunteer'%}?class={{classname}}&assignment={{assignment}}">Volunteers</a></li>
+<li class="active"><a href="{%url 'teacher_videos'%}?class_id={{classname}}&assignment={{assignment}}">Videos</a></li>
 {% endblock %}
 {% load staticfiles %}
 {% block styles %}

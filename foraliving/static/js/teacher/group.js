@@ -124,8 +124,8 @@ $(document).ready(function () {
         var assignment = $("#assignment").val();
         $.ajax({
             type: "POST",
-            url: "/foraliving/group/update/",
-            data: {'group_name': id},
+            url: "/foraliving/group/delete/",
+            data: {'group_id': id},
         }).done(function (data) {
             $("#delete-modal").modal("hide");
             window.location.href = '/foraliving/teacher/class/?class=' + class_id + "&assignment=" + assignment;

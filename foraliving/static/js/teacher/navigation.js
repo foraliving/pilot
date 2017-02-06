@@ -50,17 +50,36 @@ $(document).ready(function () {
             $("#options").selectpicker('refresh');
 
             //get the student in relation with the assignment and ckass
-            getClass(assignment_id, class_id);
+            if ($("#options").val() == "C3") {
+                $("#assignment-div").hide();
+                $("#student-div").show();
+                $("#student-table").DataTable({
+                    'destroy': true,
+                    "paging": false,
+                });
+                getPersonalInfo(class_id);
+            }
+            else if (assignment_id != "None" && assignment_id != "null") {
+                $("#assignment-div").show();
+                $("#student-div").hide();
+                getClass(assignment_id, class_id);
+            }
         });
     }
 
     //method to verify if the teacher select other class
-    $("#classname").change(function () {
+    var class_prev = $("#classname");
+    class_prev.data("prev", class_prev.val());
+
+    class_prev.change(function(data){
         if ($("#classname").val() != 0) {
-            getAssignment();
+            window.location = "/foraliving/teacher/class/?class=" + $("#classname").val();
+
 
         } else if ($("#classname").val() == 0) {
-            window.location = "/foraliving/teacher/class/new/";
+            var prev = $(this).data("prev")
+            window.location = "/foraliving/teacher/class/new/?class=" +
+                prev + "&assignment=" + $('#options').val();
         }
     });
 
@@ -115,16 +134,6 @@ $(document).ready(function () {
             $("#group_name").show();
             $('#group').selectpicker('hide');
         }
-    });
-
-    $('html').on('click', '.password', function (e) {
-        var user_id = e.target.id;
-        $.ajax({
-            type: "GET",
-            url: "/foraliving/get-password/?user_id=" + user_id,
-        }).done(function (data) {
-            alert(data);
-        })
     });
 
     //method to make the ajax call that get the student list that the teacher want to assign
@@ -379,22 +388,14 @@ $(document).ready(function () {
 
         }
         else if ($("#options").val() == "C3") {
-            $("#assignment-div").hide();
-            $("#student-div").show();
-            $("#student-table").DataTable({
-                'destroy': true,
-                "paging": false,
-            });
 
-            getPersonalInfo(class_id);
+            window.location = "/foraliving/teacher/class/?class=" + class_id + "&assignment=" + $("#options").val();
+
+
         }
         else {
-            $("#assignment-div").show();
-            $("#student-div").hide();
-            var assignment_id = $("#options").val();
-            var class_id = $("#classname").val();
-            getClass(assignment_id, class_id);
 
+            window.location = "/foraliving/teacher/class/?class=" + class_id + "&assignment=" + $("#options").val();
         }
     });
 
@@ -517,7 +518,7 @@ $(document).ready(function () {
                     "targets": 3,
                     "render": function (data, type, full, meta) {
                         if (full[4] != null && (full[12] == 0 && full[11] == 0)) {
-                            return "<div> <a href='/foraliving/volunteer/profile/" + full[4] + "/0'>" + full[5] +
+                            return "<div> <a href='/foraliving/volunteer/profile/" + full[4] + "/0?class=" + class_id +"&assignment=" + assignment_id  +"'>" + full[5] +
                                 " " + full[6] + "</a> <i class='fa fa-btn fa-close delete-volunteer' id=' " + full[10] + "'" +
                                 " style='margin-left: 10px; color:red;' title='Delete'></i></div>";
                         }
@@ -526,7 +527,7 @@ $(document).ready(function () {
                                 " " + full[6] + "</a></div>";
                         }
                         else {
-                            return "<a href='/foraliving/teacher/volunteer/assign/" + full[0] + "/" + assignment_id + "/'> Add </a>";
+                            return "<a href='/foraliving/teacher/volunteer/assign/" + full[0] + "/" + assignment_id + "/?class=" + class_id +"&assignment=" + assignment_id  +"'> Add </a>";
                         }
                     }
                 }

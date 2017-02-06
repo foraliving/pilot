@@ -4,9 +4,9 @@
 {% bootstrap_javascript jquery=1 %}
 {% bootstrap_messages %}
 {% block list %}
-<li><a href="{% url 'teacher_class' %}">Students</a></li>
-<li class="active"><a href="{%url 'teacher_volunteer'%}">Volunteers</a></li>
-<li><a href="{%url 'teacher_videos'%}">Videos</a></li>
+<li><a href="{% url 'teacher_class' %}?class={{class_id}}&assignment={{assignment}}">Students</a></li>
+<li class="active"><a href="{%url 'teacher_volunteer'%}?class={{class_id}}&assignment={{assignment}}">Volunteers</a></li>
+<li><a href="{%url 'teacher_videos'%}?class_id={{class_id}}&assignment={{assignment}}">Videos</a></li>
 {% endblock %}
 {% load staticfiles %}
 {% block styles %}
@@ -52,7 +52,7 @@
                     <tr data-link="" style="vertical-align: middle;">
                         <td></td>
                         <td style="font-size:14px; text-align: center; vertical-align: middle;">
-                            <a  class="btn" href="/foraliving/teacher/interview/create/{{data.id}}/"
+                            <a  class="btn" href="/foraliving/teacher/interview/create/{{data.id}}/?class={{class_id}}&assignment={{assignment}}"
                                     style="margin-top: 0px; margin-bottom: 0px;
                                     font-size: 14px; max-height: 30px; background-color:#8CCA8B; border-color: #8CCA8B; border-style: hidden; color:white">
                                 Assign

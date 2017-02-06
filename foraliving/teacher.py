@@ -49,9 +49,11 @@ class TeacherVolunteerT6(LoginRequiredMixin, generic.View):
         :param request:
         :return:
         """
+        class_id = request.GET.get("class")
+        assignment = request.GET.get("assignment")
         volunteer_initial = Volunteer_User_Add_Ons.objects.values('user')
         volunteers = User.objects.filter(pk__in=volunteer_initial)
-        return render(request, self.question_view, {'volunteers': volunteers})
+        return render(request, self.question_view, {'volunteers': volunteers, 'class_id': class_id, 'assignment': assignment})
 
 
 class TeacherVolunteerT6a(LoginRequiredMixin, generic.View):
@@ -65,6 +67,8 @@ class TeacherVolunteerT6a(LoginRequiredMixin, generic.View):
         :param request:
         :return:
         """
+        class_id = request.GET.get("class")
+        assignment_id_prev = request.GET.get("assignment")
         assignment = Assignment.objects.get(pk=assignment_id)
         volunteer_initial = Volunteer_User_Add_Ons.objects.values('user')
         volunteers = User.objects.filter(pk__in=volunteer_initial)
@@ -77,7 +81,7 @@ class TeacherVolunteerT6a(LoginRequiredMixin, generic.View):
 
         return render(request, self.question_view,
                       {'volunteers': volunteers, 'group': group, 'userInfo': user, 'assignment_id': assignment_id,
-                       'user_id': user_id, 'class': assignment.falClass.id})
+                       'user_id': user_id, 'class': assignment.falClass.id, 'class_id': class_id, 'assignment': assignment_id_prev})
 
 
 class TeacherVideosT8(LoginRequiredMixin, generic.View):
@@ -91,6 +95,9 @@ class TeacherVideosT8(LoginRequiredMixin, generic.View):
         :param request:
         :return:
         """
+        class_id_prev = request.GET.get("class_id")
+        assignment_prev = request.GET.get("assignment")
+        class_id = request.GET.get("class")
         user_add_ons = User_Add_Ons.objects.get(user=request.user.id)
         classname = Class.objects.filter(teacher=user_add_ons)
         class_id = request.GET.get('class')
@@ -109,7 +116,9 @@ class TeacherVideosT8(LoginRequiredMixin, generic.View):
             video_archived = Video.objects.filter(status="archived").values('id')
             videos = Interview_Question_Video_Map.objects.filter(video__in=videos).order_by('-video').exclude(
                 video__in=video_archived)
-        return render(request, self.question_view, {'videos': videos, 'classname': classname, 'class_id': class_id})
+        return render(request, self.question_view, {'videos': videos, 'classname': classname,
+                                                    'class_id': class_id, 'assignment': assignment_prev,
+                                                    "class_prev": class_id_prev})
 
 
 def asignment_list(request, class_id):
@@ -268,10 +277,13 @@ class TeacherVolunteerT9(LoginRequiredMixin, generic.View):
         :param request:
         :return:
         """
+        class_id = request.GET.get("class")
+        assignment = request.GET.get("assignment")
         user = User.objects.get(pk=user_id)
         user_add_ons = User_Add_Ons.objects.get(user=request.user)
         classes = Class.objects.filter(teacher=user_add_ons)
-        return render(request, self.question_view, {'volunteer': user, 'classes': classes})
+        return render(request, self.question_view, {'volunteer': user, 'classes': classes, 'class_id':
+            class_id, 'assignment': assignment})
 
 
 def studentList(request, assignment_id):
@@ -318,7 +330,7 @@ def update_video(request, video_id, flag_id):
     :return:
     """
     if flag_id == '1':
-        print ('pending')
+        print('pending')
         video = Video.objects.filter(pk=video_id).update(status='pending')
     else:
         print('pending', flag_id)
@@ -459,7 +471,8 @@ class GroupInterface(LoginRequiredMixin, generic.View):
         return render(request, self.group_view, {'group': group, 'users': users,
                                                  'interview': interview, 'videos': videos, 'volunteer': volunteer,
                                                  'count': count, 'videos_count': videos_count,
-                                                 'classname': class_id, 'assignment': assignment_id, 'name': falClass.name})
+                                                 'classname': class_id, 'assignment': assignment_id,
+                                                 'name': falClass.name})
 
 
 def studentPersonalInfo(request, class_id):
@@ -489,13 +502,16 @@ class AddClass(LoginRequiredMixin, generic.View):
         Here will be rendered the Form to Setup a class and upload a CSV
         """
         form = TeacherAddClass()
-
+        class_id = request.GET.get("class")
+        assignment = request.GET.get("assignment")
         return render(
             request,
             self.template,
             {
                 'upload_complete': False,
-                'add_class_form': form
+                'add_class_form': form,
+                'class_id': class_id,
+                'assignment': assignment
             }
         )
 
@@ -504,6 +520,8 @@ class AddClass(LoginRequiredMixin, generic.View):
         Here will be managed the data uploaded and will be instanciated the class with the
         students
         """
+        class_id = request.GET.get("class")
+        assignment = request.GET.get("assignment")
         self.teacher = request.user
         # First of all we validate the form
         form = TeacherAddClass(data=request.POST, files=request.FILES)
@@ -546,7 +564,9 @@ class AddClass(LoginRequiredMixin, generic.View):
                         {
                             'upload_complete': False,
                             'add_class_form': form,
-                            'error': csv_error
+                            'error': csv_error,
+                            'class_id': class_id,
+                            'assignment': assignment
                         }
                     )
 
@@ -577,7 +597,9 @@ class AddClass(LoginRequiredMixin, generic.View):
                     'class_id': new_class.id,
                     'class_name': new_class.name,
                     'add_class_form': TeacherAddClass(),
-                    'success': str(len(new_students)) + ' students added correctly'
+                    'success': str(len(new_students)) + ' students added correctly',
+                    'class_id': class_id,
+                    'assignment': assignment
                 }
             )
 
@@ -587,7 +609,10 @@ class AddClass(LoginRequiredMixin, generic.View):
             {
                 'upload_complete': False,
                 'add_class_form': form,
-                'error': 'Class name missed'
+                'error': 'Class name missed',
+                'class_id': class_id,
+                'assignment': assignment
+
             }
         )
 
@@ -794,7 +819,7 @@ class AssignGroupEdit(LoginRequiredMixin, generic.View):
                 group.user_set.remove(data)
 
         student = request.POST.getlist("students[]")
-        print (student, "this is the student")
+        print(student, "this is the student")
 
         if student[0] != "":
             students = User.objects.filter(pk__in=student)

@@ -4,9 +4,9 @@
 {% bootstrap_javascript jquery=1 %}
 {% bootstrap_messages %}
 {% block list %}
-<li><a href="{% url 'teacher_class' %}">Student</a></li>
-<li><a href="{%url 'teacher_volunteer'%}">Volunteers</a></li>
-<li class="active"><a href="{%url 'teacher_videos'%}">Videos</a></li>
+<li><a href="{% url 'teacher_class' %}?class={{class_prev}}&assignment={{assignment}}">Students</a></li>
+<li><a href="{%url 'teacher_volunteer'%}?class={{class_prev}}&assignment={{assignment}}">Volunteers</a></li>
+<li class="active"><a href="{%url 'teacher_videos'%}?class_id={{class_prev}}&assignment={{assignment}}">Videos</a></li>
 {% endblock %}
 {% load staticfiles %}
 {% block styles %}
@@ -38,6 +38,8 @@
     </div>
 </div>
 <br>
+<input type="hidden" value="{{class_prev}}" id="class_hidden">
+<input type="hidden" value="{{assignment}}" id="assignment_hidden">
 <div class="container">
     <div class="gallery">
         {% for video in videos %}

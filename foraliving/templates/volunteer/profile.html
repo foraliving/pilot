@@ -2,9 +2,9 @@
 {% load staticfiles %}
 {% block list %}
 {% if user_type == "Teacher" %}
-<li><a href="{% url 'teacher_class' %}">Student</a></li>
-<li><a href="{%url 'teacher_volunteer'%}">Volunteers</a></li>
-<li><a href="{%url 'teacher_videos'%}">Videos</a></li>
+<li><a href="{% url 'teacher_class' %}?class={{class_id}}&assignment={{assignment}}">Students</a></li>
+<li><a href="{%url 'teacher_volunteer'%}?class={{class_id}}&assignment={{assignment}}">Volunteers</a></li>
+<li><a href="{%url 'teacher_videos'%?class_id={{class_id}}&assignment={{assignment}}}">Videos</a></li>
 {% elif user_type == "Volunteer" %}
 <li class="active"><a href="{% url 'volunteer_profile'  user_id=request.user.id interview_id=0%}">Profile</a></li>
 <li><a href="{% url 'volunteer_get_interviewed' %}">Get Interviewed</a></li>
