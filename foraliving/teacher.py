@@ -583,6 +583,7 @@ class AddClass(LoginRequiredMixin, generic.View):
                 not_exist = self.verify_email(email)
                 if not_exist:
                     student, user_type = self.generate_save_student(row)
+                    self.generate_user_add_ons(student, self.teacher)
                 else:
                     student = User.objects.filter(email=email)[0]
                 new_students.append(student)
@@ -667,7 +668,7 @@ class AddClass(LoginRequiredMixin, generic.View):
             email=email,
             username=username,
             password=password,
-            is_active=False
+            is_active=True
         )
         student.save()
 
@@ -714,6 +715,16 @@ class AddClass(LoginRequiredMixin, generic.View):
             studentsInClass.append(student_class)
 
         return studentsInClass
+
+    def generate_user_add_ons(self, student, teacher):
+        add_ons = User_Add_Ons(
+            user=student,
+            school=user.user_add_ons.school,
+            lms=user.user_add_ons.lms,
+        )
+        add_ons.save()
+
+        return add_ons
 
     def verify_email(self, email):
         if len(User.objects.filter(email=email)) > 0:
