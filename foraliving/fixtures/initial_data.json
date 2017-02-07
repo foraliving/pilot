@@ -125,7 +125,7 @@
       "is_staff": true,
       "last_login": "2008-09-05 12:40:34",
       "groups": [
-        2
+
       ],
       "user_permissions": [],
       "password": "pbkdf2_sha256$30000$pOAjkIh9uSt3$W3ZN4v4dui8TDQhhvWU5ucDu/G1wqljjwfsGKgN5rbQ=",
@@ -144,7 +144,7 @@
       "is_staff": true,
       "last_login": "2008-09-05 12:40:34",
       "groups": [
-        1
+        2
       ],
       "user_permissions": [],
       "password": "pbkdf2_sha256$30000$pOAjkIh9uSt3$W3ZN4v4dui8TDQhhvWU5ucDu/G1wqljjwfsGKgN5rbQ=",

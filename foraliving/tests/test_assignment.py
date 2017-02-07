@@ -28,20 +28,20 @@ class AssignmentPage(TestCase):
         response = self.client.get(
             reverse('assignment', kwargs={'interview_id': interview.id}))
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, ' Conduct interview with <a href="/foraliving/volunteer/profile/1/1">Vivian')
+        self.assertContains(response, 'href="/foraliving/volunteer/profile/1/1">Vivian </a>')
 
     def test_group_name(self):
         """
         Test to verify that the group name is displayed on the assignment page
         :return:
         """
-        group = Group.objects.get(name='Science')
+        group = Group.objects.get(name='Sports')
         group.user_set.add(2)
         interview = Interview.objects.get(pk=1)
         response = self.client.get(
             reverse('assignment', kwargs={'interview_id': interview.id}))
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, 'Science Assignment')
+        self.assertContains(response, 'Sports Assignment')
 
     def test_verify_user_without_group(self):
         """
@@ -49,7 +49,7 @@ class AssignmentPage(TestCase):
         :return:
         """
         self.client.logout()
-        self.client.login(username="volunteer_admin", password="admin123")
+        self.client.login(username="student_admin", password="admin123")
         self.user = User.objects.get(pk=1)
         interview = Interview.objects.get(pk=1)
         response = self.client.get(

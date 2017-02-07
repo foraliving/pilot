@@ -285,6 +285,9 @@ class Assignment_Submission(models.Model):
 class Type(models.Model):
     name = models.CharField(max_length=128)
 
+    def __str__(self):
+        return self.name
+
     def __unicode__(self):
         return str(self.name)
 
@@ -294,7 +297,7 @@ class User_Type(models.Model):
     type = models.ForeignKey(Type)
 
     def __unicode__(self):
-        return str(self.user) + ':' + str(self.type)
+        return str(self.user.username) + ':' + str(self.type.name)
 
 
 class Submission_Interview_Map(models.Model):

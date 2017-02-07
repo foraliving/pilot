@@ -1,7 +1,7 @@
 from django.test import TestCase, Client
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User, Group
-from foraliving.models import Volunteer_User_Add_Ons, Class, Assignment, Interview, User_Add_Ons
+from foraliving.models import Volunteer_User_Add_Ons, Class, Assignment, Interview, User_Add_Ons, Student_Class
 
 
 class Teacher(TestCase):
@@ -26,9 +26,9 @@ class Teacher(TestCase):
         response = self.client.get(
             reverse('videos'))
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, ' href="/foraliving/teacher/class/">Student')
-        self.assertContains(response, ' href="/foraliving/teacher/volunteer/list/">Volunteers')
-        self.assertContains(response, ' href="/foraliving/teacher/videos/">Videos')
+        self.assertContains(response, 'Students')
+        self.assertContains(response, 'Volunteers')
+        self.assertContains(response, 'Videos')
 
     def test_verify_teacher_selection_navigation_student(self):
         """
@@ -38,9 +38,9 @@ class Teacher(TestCase):
         response = self.client.get(
             reverse('teacher_class'))
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, ' href="/foraliving/teacher/class/">Student')
-        self.assertContains(response, ' href="/foraliving/teacher/volunteer/list/">Volunteers')
-        self.assertContains(response, ' href="/foraliving/teacher/videos/">Videos')
+        self.assertContains(response, 'Students')
+        self.assertContains(response, 'Volunteers')
+        self.assertContains(response, 'Videos')
 
     def test_verify_teacher_selection_navigation_volunteer(self):
         """
@@ -50,10 +50,9 @@ class Teacher(TestCase):
         response = self.client.get(
             reverse('teacher_volunteer'))
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, ' href="/foraliving/teacher/class/">Student')
-        self.assertContains(response, ' href="/foraliving/teacher/class/">Student')
-        self.assertContains(response, ' href="/foraliving/teacher/volunteer/list/">Volunteers')
-        self.assertContains(response, ' href="/foraliving/teacher/videos/">Videos')
+        self.assertContains(response, 'Students')
+        self.assertContains(response, 'Volunteers')
+        self.assertContains(response, 'Videos')
 
     def test_verify_teacher_selection_navigation_videos(self):
         """
@@ -63,9 +62,9 @@ class Teacher(TestCase):
         response = self.client.get(
             reverse('teacher_videos'))
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, ' href="/foraliving/teacher/class/">Student')
-        self.assertContains(response, ' href="/foraliving/teacher/volunteer/list/">Volunteers')
-        self.assertContains(response, ' href="/foraliving/teacher/videos/">Videos')
+        self.assertContains(response, 'Students')
+        self.assertContains(response, 'Volunteers')
+        self.assertContains(response, 'Videos')
 
     def test_volunteer_list_name(self):
         """
@@ -120,3 +119,77 @@ class Teacher(TestCase):
         for data in volunteers:
             for skill in data.volunteer_user_add_ons.skills.all():
                 self.assertContains(response, skill.name)
+
+    def test_assignment_list(self):
+        """
+        Test to verify that the assignment list is displayed with the student info, volunteer and group
+        :return:
+        """
+        user = User.objects.get(pk=2)
+        student_class = Student_Class.objects.get(student=user)
+        assignment = Assignment.objects.get(falClass=student_class.falClass)
+        response = self.client.get(reverse('class_student_list', kwargs={'class_id': student_class.falClass.id,
+                                                                         'assignment_id': assignment.id}))
+        self.assertContains(response, user.first_name)
+        self.assertContains(response, user.last_name)
+
+    def test_assignment_list_group(self):
+        """
+        Test to verify that the assignment list is displayed with the student info, volunteer and group
+        :return:
+        """
+        user = User.objects.get(pk=6)
+        group = Group.objects.get(user=user)
+        student_class = Student_Class.objects.get(student=user)
+        assignment = Assignment.objects.get(falClass=student_class.falClass)
+        response = self.client.get(reverse('class_student_list', kwargs={'class_id': student_class.falClass.id,
+                                                                         'assignment_id': assignment.id}))
+        self.assertContains(response, group)
+
+    def test_assignment_remove_volunteer(self):
+        """
+        Test to verify when a volunteeer is removed of the system from T3 interface
+        :return:
+        """
+        user = User.objects.get(pk=1)
+        response = self.client.get(reverse('delete_interview'), data={'interview_id': user.id})
+        self.assertEquals(response.status_code, 200)
+
+    def test_assign_volunter_t3_interface(self):
+        """
+        Test to assign a volunteer to interview from t3 interface
+        :return:
+        """
+        user = User.objects.get(pk=6)
+        group = Group.objects.get(user=user)
+        student_class = Student_Class.objects.get(student=user)
+        assignment = Assignment.objects.get(falClass=student_class.falClass)
+        volunteer = User.objects.get(pk=1)
+        response = self.client.get(reverse('assign_volunteer',
+                                           kwargs={'volunteer_id': volunteer.id, 'assignment_id': assignment.id,
+                                                   'user_id': user.id}))
+
+        redirect_url = '/foraliving/teacher/class/?class=' + str(student_class.falClass.id) + '&assignment=' + str(
+            assignment.id)
+        self.assertRedirects(response, redirect_url)
+
+
+    def test_assign_volunter_t6_interface(self):
+        """
+        Test to assign a volunteer to interview from t9 interface
+        :return:
+        """
+        user = User.objects.get(pk=6)
+        group = Group.objects.get(user=user)
+        student_class = Student_Class.objects.get(student=user)
+        assignment = Assignment.objects.get(falClass=student_class.falClass)
+        volunteer = User.objects.get(pk=1)
+        response = self.client.get(reverse('create_interview_volunteer',
+                                           kwargs={'volunteer_id': volunteer.id, 'assignment_id': assignment.id,
+                                                   'user_id': user.id}))
+
+        redirect_url = '/foraliving/teacher/class/?class=' + str(student_class.falClass.id) + '&assignment=' + str(
+            assignment.id)
+        self.assertRedirects(response, redirect_url)
+
+

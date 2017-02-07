@@ -31,7 +31,7 @@ class VideosPage(TestCase):
         interview_question = Interview_Question_Map(interview=interview, question=question)
         interview_question.save()
         video = Video(name=interview_question.question.name, url="www.foraliving.org", tags="student", created_by=user,
-                      creation_date="2016-11-11", status="Approved by teacher")
+                      creation_date="2016-11-11", status="approved")
         video.save()
         interview_question_video = Interview_Question_Video_Map(interview_question=interview_question, video=video)
         interview_question_video.save()
@@ -65,7 +65,7 @@ class VideosPage(TestCase):
         interview_question = Interview_Question_Map(interview=interview, question=question)
         interview_question.save()
         video = Video(name=interview_question.question.name, url="www.youtube.com/watch?v=oFnH9TsNRPo", tags="student", created_by=user,
-                      creation_date="2016-11-11", status="Approved by teacher")
+                      creation_date="2016-11-11", status="approved")
         video.save()
         interview_question_video = Interview_Question_Video_Map(interview_question=interview_question, video=video)
         interview_question_video.save()
@@ -102,13 +102,13 @@ class VideosPage(TestCase):
         interview_question.save()
         video = Video(name=interview_question.question.name, url="www.youtube.com/watch?v=oFnH9TsNRPo", tags="student",
                       created_by=user,
-                      creation_date="2016-11-11", status="Approved by teacher")
+                      creation_date="2016-11-11", status="approved")
         video.save()
         interview_question_video = Interview_Question_Video_Map(interview_question=interview_question, video=video)
         interview_question_video.save()
         response = self.client.get(reverse('videos'))
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "www.youtube.com/watch?v=oFnH9TsNRPo")
+        self.assertContains(response, "/foraliving/media/www.youtube.com/watch?v=oFnH9TsNRPo")
         self.assertContains(response, "Profile")
         self.assertContains(response, "Get Interviewed")
 

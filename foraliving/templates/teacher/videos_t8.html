@@ -42,6 +42,7 @@
 <input type="hidden" value="{{assignment}}" id="assignment_hidden">
 <div class="container">
     <div class="gallery">
+        {% if videos  %}
         {% for video in videos %}
         <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 videos-display">
             <div class="thumbnail" style="text-align: center; width: 82%;">
@@ -70,6 +71,11 @@
             </div>
         </div>
         {% endfor %}
+        {% else  %}
+        <div>
+            <h3 style="text-align: center;">There are no videos for this class</h3>
+        </div>
+        {% endif %}
     </div>
 </div>
 {% endblock %}

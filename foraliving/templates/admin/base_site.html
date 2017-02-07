@@ -1,0 +1,9 @@
+{% extends "admin/base.html" %}
+{% load i18n admin_static %}
+{% block title %}{{ title }} | {{ site_title|default:_('Foraliving site admin') }}{% endblock %}
+
+{% block branding %}
+ <a class="navbar-brand" href="http://foraliving.org"><img src="{% static 'admin/images/FAL-Logo.png' %}" class="img-responsive"></a>
+{% endblock %}
+
+{% block nav-global %}{% endblock %}

@@ -29,7 +29,7 @@ class Recording(TestCase):
         interview_question = Interview_Question_Map(interview=interview, question=question)
         interview_question.save()
         response = self.client.get(
-            reverse('question_interview', kwargs={'interview_id': interview.id}))
+            reverse('question_interview', kwargs={'interview_id': interview.id, 'camera_id': 0}))
         self.assertEqual(response.status_code, 200)
 
     def test_display_questions_interview(self):
@@ -44,7 +44,7 @@ class Recording(TestCase):
         count = Interview_Question_Map.objects.filter(interview=interview).count()
         iq = Interview_Question_Map.objects.filter(interview=interview)
         response = self.client.get(
-            reverse('question_interview', kwargs={'interview_id': interview.id}))
+            reverse('question_interview', kwargs={'interview_id': interview.id, 'camera_id': 0}))
         self.assertEqual(response.status_code, 200)
 
     def test_display_count_video(self):
@@ -59,7 +59,7 @@ class Recording(TestCase):
         count = Interview_Question_Map.objects.filter(interview=interview).count()
         iq = Interview_Question_Map.objects.filter(interview=interview)
         response = self.client.get(
-            reverse('question_interview', kwargs={'interview_id': interview.id}))
+            reverse('question_interview', kwargs={'interview_id': interview.id, 'camera_id': 0}))
         self.assertEqual(response.status_code, 200)
 
     def test_save_video(self):
@@ -94,7 +94,7 @@ class Recording(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Done")
         interview_question_video = Interview_Question_Video_Map.objects.get(interview_question=interview_question)
-        self.assertIn('pending', interview_question_video.video.status)
+        self.assertIn('new', interview_question_video.video.status)
 
     def test_verify_created_by_video(self):
         """

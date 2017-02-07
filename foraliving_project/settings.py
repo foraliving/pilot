@@ -16,6 +16,8 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'bootstrap_admin',
+    'foraliving',
     'django.contrib.admin',
     'django.contrib.sites',
     'django.contrib.auth',
@@ -23,7 +25,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'foraliving',
     "account",
     'pinax_theme_bootstrap',
     'bootstrapform',
@@ -82,6 +83,8 @@ TEMPLATES = [
         },
     },
 ]
+
+BOOTSTRAP_ADMIN_SIDEBAR_MENU = True
 
 WSGI_APPLICATION = 'foraliving_project.wsgi.application'
 

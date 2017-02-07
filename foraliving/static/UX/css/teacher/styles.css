@@ -2,6 +2,10 @@
     color: #99c64c;
 }
 
+.dataTables_filter {
+   display: none;
+}
+
 .custom-header {
     background-color: #99c64c;
     color: white;

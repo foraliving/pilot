@@ -4,6 +4,27 @@ $(document).ready(function () {
         'destroy': true,
         "paging": false,
     });
+    $('#data-table_filter').css('display', 'none');
+
+
+    $('#searchbox').keyup(function () {
+        var user_table = $("#data-table").DataTable({
+            'destroy': true,
+            "paging": false,
+        });
+        $('#data-table_filter').css('display', 'none');
+        user_table.search(this.value).draw();
+    });
+
+    $('#searchboxstudent').keyup(function () {
+        var student_table = $("#student-table").DataTable({
+            'destroy': true,
+            "paging": false,
+        });
+        $('#student-table_filter').css('display', 'none');
+        student_table.search(this.value).draw();
+    });
+
 
     var assignment_id = $("#assignment_hidden").val();
     var class_id = $("#class_hidden").val();
@@ -71,7 +92,7 @@ $(document).ready(function () {
     var class_prev = $("#classname");
     class_prev.data("prev", class_prev.val());
 
-    class_prev.change(function(data){
+    class_prev.change(function (data) {
         if ($("#classname").val() != 0) {
             window.location = "/foraliving/teacher/class/?class=" + $("#classname").val();
 
@@ -409,7 +430,7 @@ $(document).ready(function () {
         }).done(function (data) {
             var data_s = data.results;
             $('#student-table').dataTable().fnClearTable();
-            $("#student-table").DataTable({
+            var student = $("#student-table").DataTable({
                 'destroy': true,
                 "paging": true,
                 'data': data_s,
@@ -446,6 +467,7 @@ $(document).ready(function () {
                 }
                 ]
             });
+            $('#student-table_filter').css('display', 'none');
         });
     }
 
@@ -503,10 +525,10 @@ $(document).ready(function () {
                             return "<div style='color:black;'>" + full[11] + "</div>"
                         }
                         else if (full[11] == 0 && full[12] != 0) {
-                            return "<div style='color:#99c64c; font-weight: 600;'>" + full[12] + "</div>"
+                            return "<div > <a style='color:#99c64c; font-weight: 600;' href='/foraliving/teacher/group/" + class_id + "/" + assignment_id + "/" + full[9] + "/'> " + full[12] + "</a></div>"
                         }
                         else {
-                            return "<div style='color:red; font-weight: 600;'>" + full[11] + "</div>"
+                            return "<div > <a style='color:red; font-weight: 600;' href='/foraliving/teacher/group/" + class_id + "/" + assignment_id + "/" + full[9] + "/'> " + full[11] + "</a></div>"
                         }
                     }
                 }, {
@@ -518,7 +540,7 @@ $(document).ready(function () {
                     "targets": 3,
                     "render": function (data, type, full, meta) {
                         if (full[4] != null && (full[12] == 0 && full[11] == 0)) {
-                            return "<div> <a href='/foraliving/volunteer/profile/" + full[4] + "/0?class=" + class_id +"&assignment=" + assignment_id  +"'>" + full[5] +
+                            return "<div> <a href='/foraliving/volunteer/profile/" + full[4] + "/0?class=" + class_id + "&assignment=" + assignment_id + "'>" + full[5] +
                                 " " + full[6] + "</a> <i class='fa fa-btn fa-close delete-volunteer' id=' " + full[10] + "'" +
                                 " style='margin-left: 10px; color:red;' title='Delete'></i></div>";
                         }
@@ -527,12 +549,13 @@ $(document).ready(function () {
                                 " " + full[6] + "</a></div>";
                         }
                         else {
-                            return "<a href='/foraliving/teacher/volunteer/assign/" + full[0] + "/" + assignment_id + "/?class=" + class_id +"&assignment=" + assignment_id  +"'> Add </a>";
+                            return "<a href='/foraliving/teacher/volunteer/assign/" + full[0] + "/" + assignment_id + "/?class=" + class_id + "&assignment=" + assignment_id + "'> Add </a>";
                         }
                     }
                 }
                 ]
             });
+            $('#data-table_filter').css('display', 'none');
         });
     }
 });
