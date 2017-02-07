@@ -668,7 +668,7 @@ class AddClass(LoginRequiredMixin, generic.View):
             email=email,
             username=username,
             password=password,
-            is_active=False
+            is_active=True
         )
         student.save()
 
