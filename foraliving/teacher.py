@@ -330,10 +330,8 @@ def update_video(request, video_id, flag_id):
     :return:
     """
     if flag_id == '1':
-        print('pending')
         video = Video.objects.filter(pk=video_id).update(status='pending')
     else:
-        print('pending', flag_id)
         video = Video.objects.filter(pk=video_id).update(status='approved')
 
     interview_question_video = Interview_Question_Video_Map.objects.get(video=video_id)
@@ -716,15 +714,16 @@ class AddClass(LoginRequiredMixin, generic.View):
 
         return studentsInClass
 
+
     def generate_user_add_ons(self, student, teacher):
         add_ons = User_Add_Ons(
-            user=student,
-            school=user.user_add_ons.school,
-            lms=user.user_add_ons.lms,
+            user = student,
+           school = teacher.user_add_ons.school,
+            lms = teacher.user_add_ons.lms,
         )
         add_ons.save()
-
         return add_ons
+
 
     def verify_email(self, email):
         if len(User.objects.filter(email=email)) > 0:
@@ -830,7 +829,6 @@ class AssignGroupEdit(LoginRequiredMixin, generic.View):
                 group.user_set.remove(data)
 
         student = request.POST.getlist("students[]")
-        print(student, "this is the student")
 
         if student[0] != "":
             students = User.objects.filter(pk__in=student)

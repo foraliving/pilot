@@ -101,7 +101,7 @@ class AssignmentPage(TestCase):
         """
         interview = Interview.objects.get(pk=1)
         response = self.client.post(
-            reverse('select_question', kwargs={'interview_id': interview.id}), data={'question':[1, 2, 3]})
+            reverse('select_question', kwargs={'interview_id': interview.id}), data={'question': [1, 2, 3]})
         self.assertRedirects(response, reverse('assignment', kwargs={'interview_id': interview.id}),
                              msg_prefix='Questions Added Successfully')
         count = Interview_Question_Map.objects.filter(interview=interview).count()
@@ -114,12 +114,24 @@ class AssignmentPage(TestCase):
         """
         interview = Interview.objects.get(pk=1)
         response = self.client.post(
-            reverse('select_question_edit', kwargs={'interview_id': interview.id}), data={'question': [1, 2, 3,4,5]})
+            reverse('select_question_edit', kwargs={'interview_id': interview.id}), data={'question': [1, 2, 3, 4, 5]})
         self.assertRedirects(response, reverse('assignment', kwargs={'interview_id': interview.id}),
                              msg_prefix='Questions Edited Successfully')
 
         count = Interview_Question_Map.objects.filter(interview=interview).count()
         self.assertEquals(count, 5)
 
-
+    def test_assignment_page(self):
+        """
+        Test to verify the functionality of the assignment list interface
+        :return:
+        """
+        group = Group.objects.get(name='Sports')
+        group.user_set.add(2)
+        interview = Interview.objects.get(pk=1)
+        response = self.client.get(
+            reverse('assignment_list'))
+        self.assertEqual(response.status_code, 302)
+        redirect_url = "/foraliving/assignment/" + str(interview.id) + "/"
+        self.assertRedirects(response, redirect_url)
 

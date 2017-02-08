@@ -173,23 +173,94 @@ class Teacher(TestCase):
             assignment.id)
         self.assertRedirects(response, redirect_url)
 
-
     def test_assign_volunter_t6_interface(self):
         """
         Test to assign a volunteer to interview from t9 interface
         :return:
         """
-        user = User.objects.get(pk=6)
-        group = Group.objects.get(user=user)
+        user = User.objects.get(pk=2)
         student_class = Student_Class.objects.get(student=user)
         assignment = Assignment.objects.get(falClass=student_class.falClass)
         volunteer = User.objects.get(pk=1)
-        response = self.client.get(reverse('create_interview_volunteer',
-                                           kwargs={'volunteer_id': volunteer.id, 'assignment_id': assignment.id,
-                                                   'user_id': user.id}))
+        response = self.client.post(reverse('create_interview_volunteer'),
+                                    data={'volunteer_id': volunteer.id, 'assignment': assignment.id,
+                                          'new_option': user.id, 'result': 'a'})
+        self.assertEquals(response.status_code, 200)
 
-        redirect_url = '/foraliving/teacher/class/?class=' + str(student_class.falClass.id) + '&assignment=' + str(
-            assignment.id)
-        self.assertRedirects(response, redirect_url)
+    def test_assign_volunter_t6_interface_with_group(self):
+        """
+        Test to assign a volunteer to interview from t9 interface
+        :return:
+        """
+        user = User.objects.get(pk=2)
+        student_class = Student_Class.objects.get(student=user)
+        assignment = Assignment.objects.get(falClass=student_class.falClass)
+        volunteer = User.objects.get(pk=1)
+        group = Group.objects.get(user=user)
+        response = self.client.post(reverse('create_interview_volunteer'),
+                                    data={'volunteer_id': volunteer.id, 'assignment': assignment.id,
+                                          'new_option': group.id, 'result': 'b'})
+        self.assertEquals(response.status_code, 200)
+
+    def test_assign_group_with_new_group(self):
+        """
+        Assignt students to new group from T3 interface
+        :return:
+        """
+        user = User.objects.get(pk=2)
+        student_class = Student_Class.objects.get(student=user)
+        response = self.client.post(reverse('assign_group'),
+                                    data={'selected[]': [user.id], 'group': "",
+                                          'group_name': "tests", 'class_id': student_class.falClass.id})
+        self.assertEquals(response.status_code, 200)
+
+    def test_assign_group_with_existing_group(self):
+        """
+        Assignt students to new group from T3 interface
+        :return:
+        """
+        user = User.objects.get(pk=7)
+        group = Group.objects.get(name="Sports")
+        student_class = Student_Class.objects.get(student=user)
+        response = self.client.post(reverse('assign_group'),
+                                    data={'selected[]': [user.id], 'group': group.id,
+                                          'group_name': "", 'class_id': student_class.falClass.id})
+        self.assertEquals(response.status_code, 200)
+
+
+    def test_group_data(self):
+        """
+        Test to display the group information (name) from t4
+        :return:
+        """
+        user = User.objects.get(pk=6)
+        student_class = Student_Class.objects.get(student=user)
+        group = Group.objects.get(user=user)
+        assignment = Assignment.objects.get(falClass=student_class.falClass)
+        response = self.client.get(reverse('group_info', kwargs={'class_id': student_class.falClass.id,
+                                                                         'assignment_id': assignment.id, 'group_id': group.id}))
+        self.assertContains(response, group.name)
+
+    def test_group_student_list(self):
+        """
+        Test to display the student list from t4
+        :return:
+        """
+        user = User.objects.get(pk=6)
+        student_class = Student_Class.objects.get(student=user)
+        group = Group.objects.get(user=user)
+        assignment = Assignment.objects.get(falClass=student_class.falClass)
+        response = self.client.get(reverse('group_info', kwargs={'class_id': student_class.falClass.id,
+                                                                 'assignment_id': assignment.id, 'group_id': group.id}))
+        self.assertContains(response, user.first_name + " " + user.last_name + ",")
+
+
+
+
+
+
+
+
+
 
 
