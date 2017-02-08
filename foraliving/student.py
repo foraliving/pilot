@@ -8,7 +8,7 @@ from django.views import generic
 from django.http import HttpResponse
 from mail_templated import EmailMessage
 from foraliving.models import Video, Interview_Question_Map, Interview, Question, \
-    User_Group_Role_Map, Interview_Question_Video_Map, User_Add_Ons, Volunteer_User_Add_Ons, Assignment, Student_Class
+    User_Group_Role_Map, Interview_Question_Video_Map, User_Add_Ons, Volunteer_User_Add_Ons, Assignment, Student_Class, Class
 from django.views.decorators.clickjacking import xframe_options_exempt
 
 
@@ -199,8 +199,8 @@ class AssignmentList(LoginRequiredMixin, generic.View):
         except ObjectDoesNotExist:
             group = None
 
-        student_class = Student_Class.objects.get(student=request.user.id)
-        assignment = Assignment.objects.filter(falClass=student_class.falClass)
+        student_class = Student_Class.objects.filter(student=request.user.id).values('falClass')
+        assignment = Assignment.objects.filter(falClass__in=student_class)
         interview = Interview.objects.filter(assignment__in=assignment, group__in=group)
 
         count_interview = (Interview.objects.filter(group__in=group, assignment__in=assignment).count())

@@ -101,11 +101,11 @@ class TeacherVideosT8(LoginRequiredMixin, generic.View):
         user_add_ons = User_Add_Ons.objects.get(user=request.user.id)
         classname = Class.objects.filter(teacher=user_add_ons)
         class_id = request.GET.get('class')
+        video_archived = Video.objects.filter(status="archived").values('id')
         if class_id and class_id != '0':
             assignments = Assignment.objects.filter(falClass=class_id).values('pk')
             interview = Interview.objects.filter(assignment__in=assignments).values('pk')
             interview_question = Interview_Question_Map.objects.filter(interview_id__in=interview)
-            video_archived = Video.objects.filter(status="archived").values('id')
             videos = Interview_Question_Video_Map.objects.filter(interview_question__in=interview_question).order_by(
                 '-video').exclude(video__in=video_archived)
         else:
@@ -113,7 +113,6 @@ class TeacherVideosT8(LoginRequiredMixin, generic.View):
             school = School.objects.get(pk=user_add_ons.school.id)
             user_school = User_Add_Ons.objects.filter(school=school)
             videos = Video.objects.filter(created_by__in=user_school)
-            video_archived = Video.objects.filter(status="archived").values('id')
             videos = Interview_Question_Video_Map.objects.filter(video__in=videos).order_by('-video').exclude(
                 video__in=video_archived)
         return render(request, self.question_view, {'videos': videos, 'classname': classname,
@@ -508,7 +507,7 @@ class AddClass(LoginRequiredMixin, generic.View):
             {
                 'upload_complete': False,
                 'add_class_form': form,
-                'class_id': class_id,
+                'class_id_data': class_id,
                 'assignment': assignment
             }
         )
@@ -563,7 +562,7 @@ class AddClass(LoginRequiredMixin, generic.View):
                             'upload_complete': False,
                             'add_class_form': form,
                             'error': csv_error,
-                            'class_id': class_id,
+                            'class_id_data': class_id,
                             'assignment': assignment
                         }
                     )
@@ -597,7 +596,7 @@ class AddClass(LoginRequiredMixin, generic.View):
                     'class_name': new_class.name,
                     'add_class_form': TeacherAddClass(),
                     'success': str(len(new_students)) + ' students added correctly',
-                    'class_id': class_id,
+                    'class_id_data': class_id,
                     'assignment': assignment
                 }
             )
@@ -609,7 +608,7 @@ class AddClass(LoginRequiredMixin, generic.View):
                 'upload_complete': False,
                 'add_class_form': form,
                 'error': 'Class name missed',
-                'class_id': class_id,
+                'class_id_data': class_id,
                 'assignment': assignment
 
             }
