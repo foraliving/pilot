@@ -179,7 +179,7 @@ class SendEmail(LoginRequiredMixin, generic.View):
         if count == 0:
             email_to = assignment.falClass.teacher.user.email
             message = EmailMessage('student/send_email.html', {'assignment': assignment}, "noelia.pazos@viaro.net",
-                                   to=['noelia3pazos@gmail.com'])
+                                   to=[email_to])
             message.send()
 
         video = Video.objects.get(pk=video_id)
