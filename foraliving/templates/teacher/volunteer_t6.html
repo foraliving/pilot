@@ -5,7 +5,8 @@
 {% bootstrap_messages %}
 {% block list %}
 <li><a href="{% url 'teacher_class' %}?class={{class_id}}&assignment={{assignment}}">Students</a></li>
-<li class="active"><a href="{%url 'teacher_volunteer'%}?class={{class_id}}&assignment={{assignment}}">Volunteers</a></li>
+<li class="active"><a href="{%url 'teacher_volunteer'%}?class={{class_id}}&assignment={{assignment}}">Volunteers</a>
+</li>
 <li><a href="{%url 'teacher_videos'%}?class_id={{class_id}}&assignment={{assignment}}">Videos</a></li>
 {% endblock %}
 {% load staticfiles %}
@@ -27,7 +28,16 @@
 {% endblock %}
 {% block body %}
 <div class="container">
-    <h2 style="text-align: center;"> Assign a volunteer to be interviewed </h2>
+    <div class="row">
+    <div class="col-lg-3 col-md-3 col-sm-3 page-title">
+    </div>
+    <div class="col-lg-6 col-md-6 col-sm-6 page-title" align="center">
+        <h2 style="text-align: center;"> Assign a volunteer to be interviewed </h2>
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-3 page-title" style="float:right;">
+        <a class="btn button-general" href="{% url 'contact' %}" style="float:right; margin-right: 13px; width:110px">Add Volunteer</a>
+    </div>
+        </div>
     <div class="panel-body">
         <div class="panel panel-default">
             <div class="panel-body">
@@ -51,31 +61,36 @@
 
                     <tr data-link="" style="vertical-align: middle;">
                         <td></td>
-                        <td style="font-size:14px; text-align: center; vertical-align: middle;">
-                            <a  class="btn" href="/foraliving/teacher/interview/create/{{data.id}}/?class={{class_id}}&assignment={{assignment}}"
-                                    style="margin-top: 0px; margin-bottom: 0px;
-                                    font-size: 14px; max-height: 30px; background-color:#8CCA8B; border-color: #8CCA8B; border-style: hidden; color:white">
+                        <td style="font-size:14px; text-align: center; vertical-align: middle; width: 5%">
+                            <a class="btn button-general"
+                               href="/foraliving/teacher/interview/create/{{data.id}}/?class={{class_id}}&assignment={{assignment}}"
+                               style="margin-top: 0px; margin-bottom: 0px;
+                                    font-size: 14px; max-height: 30px; border-style: hidden; color:white">
                                 Assign
                             </a>
                         </td>
-                        <td>{{data.first_name}}
+                        <td style="width: 13%">{{data.first_name}}
                             {{data.last_name}}
                         </td>
                         <td>
                             {{data.volunteer_user_add_ons.workTitle}}
                         </td>
-                        <td style="text-align: center; vertical-align: middle;">
+                        <td style="text-align: left; vertical-align: middle; width: 28%">
                             {% for data in data.interviewee.all %}
                             {% if forloop.last %}
-                            {{data.group}}
-                            {% for info in data.group.user_set.all %}
-                            ({{info.first_name}} {{info.last_name }} )
-                            {% endfor %}
+                            <span style="font-weight: bold;">{{data.group}} </span>
+                            -
+                                {% for info in data.group.user_set.all %}{% if forloop.last %}{{info.first_name}} {{info.last_name }}</br>
+                                {% else %}
+                                {{info.first_name}} {{info.last_name }},{% endif %}
+                                {% endfor %}
                             {% else %}
-                            {{data.group}},
-                            {% for info in data.group.user_set.all %}
-                            ({{info.first_name}} {{info.last_name }} )
-                            {% endfor %}
+                           <span style="font-weight: bold;"> {{data.group}}</span>
+                            -
+                                {% for info in data.group.user_set.all %}{% if forloop.last %}{{info.first_name}} {{info.last_name }}</br>
+                                {% else %}
+                                {{info.first_name}} {{info.last_name }},{% endif %}
+                                {% endfor %}
                             {% endif %}
                             {% endfor %}
                         </td>
