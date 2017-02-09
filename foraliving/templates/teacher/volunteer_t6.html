@@ -67,9 +67,15 @@
                         <td style="text-align: center; vertical-align: middle;">
                             {% for data in data.interviewee.all %}
                             {% if forloop.last %}
-                            {{data.assignment.title}}
+                            {{data.group}}
+                            {% for info in data.group.user_set.all %}
+                            ({{info.first_name}} {{info.last_name }} )
+                            {% endfor %}
                             {% else %}
-                            {{data.assignment.title}},
+                            {{data.group}},
+                            {% for info in data.group.user_set.all %}
+                            ({{info.first_name}} {{info.last_name }} )
+                            {% endfor %}
                             {% endif %}
                             {% endfor %}
                         </td>

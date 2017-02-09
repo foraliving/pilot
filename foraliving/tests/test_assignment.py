@@ -135,3 +135,12 @@ class AssignmentPage(TestCase):
         redirect_url = "/foraliving/assignment/" + str(interview.id) + "/"
         self.assertRedirects(response, redirect_url)
 
+    def test_delete_video(self):
+        """
+        Test to verify when a student delete a video
+        :return:
+        """
+        video = Video.objects.get(pk=1)
+        response = self.client.post(
+            reverse('delete_video'), data={'video_id': video.id})
+

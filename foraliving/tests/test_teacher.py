@@ -277,6 +277,10 @@ class Teacher(TestCase):
             reverse('save_recording'), data={'data': file, 'interview_question': interview_question.id})
         self.assertEqual(response_save.status_code, 200)
         self.assertContains(response_save, "Done")
+        interview_question_video = Interview_Question_Video_Map.objects.get(interview_question=interview_question)
+        video_old = Video.objects.get(pk=interview_question_video.video.id)
+        response = self.client.get(reverse('update_video', kwargs={'video_id': video_old.id, 'flag_id': 1}))
+
         response = self.client.get(reverse('group_info', kwargs={'class_id': student_class.falClass.id,
                                                                  'assignment_id': assignment.id, 'group_id': group.id}))
         self.assertContains(response, "You have 1 video(s) waiting to be approved")
@@ -349,7 +353,6 @@ class Teacher(TestCase):
         response = self.client.post(reverse('t_new_assignment', kwargs={'class_id': student_class.falClass.id}),
                                     data={'assignment_name': 'New Assignment',
                                           'description': 'this is a test to create a new assignment'})
-        print (response.content)
         self.assertContains(response, "Assignment added successfully")
 
     def test_assignment_error_title(self):
@@ -362,5 +365,120 @@ class Teacher(TestCase):
         response = self.client.post(reverse('t_new_assignment', kwargs={'class_id': student_class.falClass.id}),
                                     data={'assignment_name': '',
                                           'description': 'this is a test to create a new assignment'})
-        print(response.content)
         self.assertContains(response, "Assignment not added")
+
+    def test_delete_class(self):
+        """
+        Test to verify when a teacher delete a class
+        :return:
+        """
+        user = User.objects.get(pk=2)
+        student_class = Student_Class.objects.get(student=user)
+        response = self.client.post(
+            reverse('delete_class'), data={'class_id': student_class.falClass.id})
+        self.assertEqual(response.status_code, 200)
+
+
+    def test_edit_group_name_without_student(self):
+        """
+        Test to verify when a teacher edit a group
+        :return:
+        """
+        group = Group.objects.get(name="Sports")
+        response = self.client.post(reverse("assign_group_edit"), data={'group_id': group.id, 'group_name': "Sports Update", 'students[]': [""]})
+        self.assertContains(response, "true")
+        self.assertEqual(response.status_code, 200)
+
+    def test_edit_group_with_student(self):
+        """
+        Test to verify when a teacher edit a group
+        :return:
+        """
+        group = Group.objects.get(name="Sports")
+        student_group = User.objects.filter(groups__name="Sports").values_list('id', flat=True)
+        test = list(student_group)
+        response = self.client.post(reverse("assign_group_edit"),
+                                    data={'group_id': group.id, 'group_name': "Sports Update", 'students[]': test})
+        self.assertContains(response, "true")
+        self.assertEqual(response.status_code, 200)
+
+    def test_delete_group(self):
+        """
+        Test to verify when a teacher delete a class
+        :return:
+        """
+        group = Group.objects.get(pk=1)
+        response = self.client.post(
+            reverse('delete_group'), data={'group_id': group.id})
+
+        self.assertEqual(response.status_code, 200)
+
+
+    def test_display_teacherVideos__without_videos(self):
+        """
+        Test to verify when a teacher to use the videos interface and not exist videos
+        :return:
+        """
+        response = self.client.get(
+            reverse('teacher_videos'))
+        self.assertContains(response, "There are no videos for this class")
+
+    def test_display_teacherVideos__with_videos(self):
+        """
+        Test to verify when a teacher to use the videos interface
+        :return:
+        """
+        file = open('examples/test.webm', 'r', encoding='utf-8', errors='ignore')
+        question = Question.objects.get(pk=23)
+        interview = Interview.objects.get(pk=1)
+        interview_question = Interview_Question_Map(interview=interview, question=question)
+        interview_question.save()
+        response = self.client.post(
+            reverse('save_recording'), data={'data': file, 'interview_question': interview_question.id})
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Done")
+        interview_question_video = Interview_Question_Video_Map.objects.get(interview_question=interview_question)
+        video_old = Video.objects.get(pk=interview_question_video.video.id)
+        self.assertEqual(video_old.status, "new")
+        response = self.client.get(reverse('update_video', kwargs={'video_id': video_old.id, 'flag_id': 0}))
+        video_new = Video.objects.get(pk=interview_question_video.video.id)
+        self.assertEqual(video_new.status, "approved")
+        response_videos = self.client.get(
+            reverse('teacher_videos'))
+        self.assertEqual(response_videos.status_code, 200)
+        self.assertContains(response_videos, video_new.url)
+
+    def test_display_teacherVideos__with_class(self):
+        """
+        Test to verify when a teacher to use the videos interface and select one class
+        :return:
+        """
+        file = open('examples/test.webm', 'r', encoding='utf-8', errors='ignore')
+        question = Question.objects.get(pk=23)
+        interview = Interview.objects.get(pk=1)
+        interview_question = Interview_Question_Map(interview=interview, question=question)
+        interview_question.save()
+        response = self.client.post(
+            reverse('save_recording'), data={'data': file, 'interview_question': interview_question.id})
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Done")
+        interview_question_video = Interview_Question_Video_Map.objects.get(interview_question=interview_question)
+        video_old = Video.objects.get(pk=interview_question_video.video.id)
+        self.assertEqual(video_old.status, "new")
+        response = self.client.get(reverse('update_video', kwargs={'video_id': video_old.id, 'flag_id': 0}))
+        video_new = Video.objects.get(pk=interview_question_video.video.id)
+        self.assertEqual(video_new.status, "approved")
+        response_videos = self.client.get(
+            reverse('teacher_videos' )+ "?class=1")
+        self.assertEqual(response_videos.status_code, 200)
+        self.assertContains(response_videos, video_new.url)
+
+
+
+
+
+
+
+
+
+
