@@ -355,7 +355,16 @@ def delete_interview(request):
     :return:
     """
     interview = request.POST.get('interview_id')
-    Interview.objects.filter(pk=interview).delete()
+    interviewDelete = Interview.objects.get(pk=interview)
+    group = Group.objects.get(pk=interviewDelete.group.id)
+    users = User.objects.filter(groups=group.id)
+    user_count = User.objects.filter(groups=group.id).count()
+    if user_count == 1:
+        for data in users:
+            if data.username == group.name:
+                Group.objects.filter(pk=group.id).delete()
+    else:
+        Interview.objects.filter(pk=interview).delete()
     return HttpResponse('true')
 
 
@@ -436,6 +445,7 @@ class GroupInterface(LoginRequiredMixin, generic.View):
         :return:
         """
         count = 0
+        equal = None
         falClass = Class.objects.get(pk=class_id)
         group = Group.objects.get(pk=group_id)
         student_class = Student_Class.objects.filter(falClass=class_id).values('student')
