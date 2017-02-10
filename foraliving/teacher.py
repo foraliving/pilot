@@ -465,11 +465,17 @@ class GroupInterface(LoginRequiredMixin, generic.View):
             videos_count = None
 
         users = User.objects.filter(groups=group_id, pk__in=student_class)
+        count_student = User.objects.filter(groups=group_id, pk__in=student_class).count()
+
+        if count_student == 1:
+            for data in users:
+                equal = True if data.username == group.name else False
+
         return render(request, self.group_view, {'group': group, 'users': users,
                                                  'interview': interview, 'videos': videos, 'volunteer': volunteer,
                                                  'count': count, 'videos_count': videos_count,
                                                  'classname': class_id, 'assignment': assignment_id,
-                                                 'name': falClass.name})
+                                                 'name': falClass.name, 'equal': equal})
 
 
 def studentPersonalInfo(request, class_id):

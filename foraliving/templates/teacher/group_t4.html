@@ -4,9 +4,9 @@
 {% bootstrap_javascript jquery=1 %}
 {% bootstrap_messages %}
 {% block list %}
-<li><a href="{% url 'teacher_class' %}?class={{classname}}&assignment={{assignment}}">Students</a></li>
+<li class="active"><a href="{% url 'teacher_class' %}?class={{classname}}&assignment={{assignment}}">Students</a></li>
 <li><a href="{%url 'teacher_volunteer'%}?class={{classname}}&assignment={{assignment}}">Volunteers</a></li>
-<li class="active"><a href="{%url 'teacher_videos'%}?class_id={{classname}}&assignment={{assignment}}">Videos</a></li>
+<li><a href="{%url 'teacher_videos'%}?class_id={{classname}}&assignment={{assignment}}">Videos</a></li>
 {% endblock %}
 {% load staticfiles %}
 {% block styles %}
@@ -26,9 +26,17 @@
 <div class="container">
     <div class="panel">
         <div class="panel-heading">
+            <div class="row"><h4 style="margin-top: 24px; margin-left: 15px;"><a
+                    href="{% url 'teacher_class' %}?class={{classname}}&assignment={{assignment}}"> <i
+                    class="fa fa-angle-left backButton" aria-hidden="true"> Back</i></a></h4></div>
             <div class="row">
                 <div class="col-xs-4 col-sm-5 col-md-4 col-lg-8 title-line-height page-title">
-                    Group: <span id="group_name">{{group.name}} </span>
+                    {% if not equal %}
+                    Group:
+                    {% else %}
+                    Student:
+                    {% endif %}
+                    <span id="group_name">{{group.name}} </span>
                 </div>
                 <div class="col-xs-4 col-sm-4 col-md-4 col-lg-2 title-line-height text-right">
                     <div class="btn-group">
@@ -83,6 +91,10 @@
         <div class="alert alert-warning alert-videos" role="alert">
             You have {{count}} video(s) waiting to be approved
         </div>
+        {% else %}
+        <div class="alert alert-warning alert-videos" role="alert" style="display:none;">
+            You have {{count}} video(s) waiting to be approved
+        </div>
         {% endif %}
         <input type="hidden" value="{{classname}}" id="classname">
         <input type="hidden" value="{{assignment}}" id="assignment">
@@ -90,6 +102,7 @@
             <div class="container">
                 <div class="gallery">
                     <div class="container-fluid">
+                        {% if videos %}
                         {% for video in videos %}
                         <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 videos-display">
                             <div class="thumbnail" style="text-align: center; width: 85%;">
@@ -119,6 +132,11 @@
                             </div>
                         </div>
                         {% endfor %}
+                        {% else %}
+                        <div>
+                            <h3 style="text-align: center;">No videos have been saved</h3>
+                        </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>
