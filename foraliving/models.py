@@ -11,6 +11,9 @@ class Skill(CategoryBase):
         verbose_name = 'Skill'
         verbose_name_plural = 'Skills'
 
+    def __str__(self):
+        return self.name
+
     def __unicode__(self):
         return str(self.name)
 
@@ -20,8 +23,12 @@ class Interest(CategoryBase):
         verbose_name = 'Interest'
         verbose_name_plural = 'Interests'
 
+    def __str__(self):
+        return self.name
+
     def __unicode__(self):
         return str(self.name)
+
 
 class LMS(models.Model):
     name = models.CharField(max_length=128)
@@ -30,6 +37,9 @@ class LMS(models.Model):
     class Meta:
         verbose_name = 'LMS'
         verbose_name_plural = 'LMS'
+
+    def __str__(self):
+        return self.name
 
     def __unicode__(self):
         return self.name
@@ -45,6 +55,9 @@ class LMS_Web_Service(models.Model):
         verbose_name = 'LMS Web Service'
         verbose_name_plural = 'LMS Web Services'
 
+    def __str__(self):
+        return self.web_service_name + " - " + self.web_service_method
+
     def __unicode__(self):
         return self.web_service_name
 
@@ -53,6 +66,9 @@ class School(models.Model):
     lms = models.ForeignKey(LMS, on_delete=models.CASCADE)
     name = models.CharField(max_length=128)
     url = models.CharField(max_length=128)
+
+    def __str__(self):
+        return self.name
 
     def __unicode__(self):
         return self.name
@@ -67,6 +83,9 @@ class User_Add_Ons(models.Model):
     class Meta:
         verbose_name = 'User Add-ons'
         verbose_name_plural = 'User Add-ons'
+
+    def __str__(self):
+        return self.user.username + " - " + self.school.name
 
     def __unicode__(self):
         return str(self.user)
@@ -104,16 +123,17 @@ class Volunteer_User_Add_Ons(models.Model):
     # User_Skill_Map
     # User_Interest_Map
 
+    class Meta:
+        verbose_name = 'Volunteer add-ons'
+        verbose_name_plural = 'Volunteer add-ons'
 
-class Meta:
-    verbose_name = 'Volunteer add-ons'
-    verbose_name_plural = 'Volunteer add-ons'
+    def __str__(self):
+        return self.user.username + " - " + self.workTitle
 
+    def __unicode__(self):
+        return "Volunteer: " + str(self.user)
 
-def __unicode__(self):
-    return "Volunteer: " + str(self.user)
-
-    # return "Volunteer: "
+        # return "Volunteer: "
 
 
 class User_Group_Role_Map(models.Model):
@@ -124,6 +144,9 @@ class User_Group_Role_Map(models.Model):
     class Meta:
         verbose_name = 'Role'
         verbose_name_plural = 'Roles'
+
+    def __str__(self):
+        return self.user.group.name + ": " + self.user.username + "-" + self.role
 
     def __unicode__(self):
         return str(self.group) + ': ' + str(self.user) + '-' + str(self.role)
@@ -141,6 +164,9 @@ class Class(models.Model):
         verbose_name = 'FAL Class'
         verbose_name_plural = 'FAL Classes'
 
+    def __str__(self):
+        return self.name + " - " + self.teacher.user.first_name
+
     def __unicode__(self):
         return str(self.name) + ':' + str(self.teacher)
 
@@ -153,13 +179,19 @@ class Class_Group(models.Model):
         verbose_name = 'Class Groups'
         verbose_name_plural = 'Class Groups'
 
+    def __str__(self):
+        return self.user.group.name + " - " + self.falClass.name
+
     def __unicode__(self):
-        return str(self.name) + ':' + str(self.teacher)
+        return str(self.group.name) + ':' + str(self.falClass.name)
 
 
 class Student_Class(models.Model):
     student = models.ForeignKey(User, on_delete=models.CASCADE, related_name='User')
     falClass = models.ForeignKey(Class, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.student.username + ": " + self.falClass.name
 
     def __unicode__(self):
         return str(self.student) + ':' + str(self.falClass)
@@ -171,10 +203,13 @@ class Assignment(models.Model):
     document = models.CharField(max_length=128, blank=True, null=True)
     due_date = models.DateTimeField(blank=True, null=True)
     creation_date = models.DateTimeField(auto_now_add=True)
-    description = models. CharField(max_length=256, blank=True, null=True)
+    description = models.CharField(max_length=256, blank=True, null=True)
+
+    def __str__(self):
+        return self.title + " - " + self.falClass.name
 
     def __unicode__(self):
-        return str(self.title) + ' (' + str(self.falClass) + ')'
+        return str(self.title) + '  (' + str(self.falClass) + ')'
 
 
 class Interview(models.Model):
@@ -184,6 +219,9 @@ class Interview(models.Model):
     date = models.DateTimeField(default=datetime.now, blank=True)
     assignment = models.ForeignKey(Assignment, on_delete=models.CASCADE, related_name='assignment')
 
+    def __str__(self):
+        return self.assignment.title + " - " + self.group.name
+
     def __unicode__(self):
         return 'Interview of ' + str(self.interviewee) + ' by ' + str(self.assignment)
 
@@ -192,6 +230,9 @@ class Question(models.Model):
     name = models.CharField(max_length=128)
     created_by = models.ForeignKey(User_Add_Ons, on_delete=models.CASCADE, )
     creation_date = models.DateTimeField()
+
+    def __str__(self):
+        return self.name + " - " + self.created_by.user.username
 
     def __unicode__(self):
         return str(self.created_by) + ':' + str(self.name)
@@ -204,6 +245,9 @@ class Interview_Question_Map(models.Model):
     class Meta:
         verbose_name = 'Interview Question'
         verbose_name_plural = 'Interview Questions'
+
+    def __str__(self):
+        return self.question.name + " - " + self.interview.interviewee.username
 
     def __unicode__(self):
         return str(self.question) + ' (' + str(self.interview) + ')'
@@ -218,6 +262,9 @@ class Answer(models.Model):
     def __unicode__(self):
         return str(self.question)
 
+    def __str__(self):
+        return self.question.name + "(" + self.result + ")"
+
 
 class Video(models.Model):
     # interview = models.ForeignKey(Interview, on_delete=models.CASCADE, null=True, blank=True, )
@@ -228,6 +275,8 @@ class Video(models.Model):
     creation_date = models.DateTimeField(default=datetime.now, blank=True)
     status = models.CharField(max_length=128)
 
+    def __str__(self):
+        return str(self.name) + ' (' + str(self.creation_date) + ')'
     def __unicode__(self):
         return str(self.name) + ' (' + str(self.creation_date) + ')'
 
@@ -240,6 +289,9 @@ class Question_Video_Map(models.Model):
         verbose_name = 'Video Question'
         verbose_name_plural = 'Video Questions'
 
+    def __str__(self):
+        return str(self.question.name) + " - " + str(self.video.name)
+
     def __unicode__(self):
         return str(self.question) + ':' + str(self.video)
 
@@ -251,6 +303,9 @@ class Interview_Question_Video_Map(models.Model):
     class Meta:
         verbose_name = 'Interview Question Video'
         verbose_name_plural = 'Interview Video Questions'
+
+    def __str__(self):
+        return str(self.interview_question.id) + " - " + str(self.video.name)
 
     def __unicode__(self):
         return str(self.interview_question) + '-' + str(self.video)
@@ -266,8 +321,11 @@ class Video_Comment(models.Model):
         verbose_name = 'Video Comment'
         verbose_name_plural = 'Video Comments'
 
+    def __str__(self):
+        return self.video.name + ' (' + str(self.created_by) + ', ' + str(self.creation_date) + ')'
+
     def __unicode__(self):
-        return str(self.video) + ' (' + str(created_by) + ', ' + str(creation_date) + ')'
+        return str(self.video) + ' (' + str(self.created_by) + ', ' + str(self.creation_date) + ')'
 
 
 class Assignment_Submission(models.Model):
@@ -277,6 +335,9 @@ class Assignment_Submission(models.Model):
     class Meta:
         verbose_name = 'Submission'
         verbose_name_plural = 'Submissions'
+
+    def __str__(self):
+        return str(self.group.name) + ':' + str(self.name)
 
     def __unicode__(self):
         return str(self.group) + ':' + str(self.name)
@@ -296,6 +357,9 @@ class User_Type(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     type = models.ForeignKey(Type)
 
+    def __str__(self):
+        return str(self.user.username) + ':' + str(self.type.name)
+
     def __unicode__(self):
         return str(self.user.username) + ':' + str(self.type.name)
 
@@ -307,6 +371,9 @@ class Submission_Interview_Map(models.Model):
     class Meta:
         verbose_name = 'Interview Submission'
         verbose_name_plural = 'Interview Submissions'
+
+    def __str__(self):
+        return str(self.submission.name) + ':' + str(self.interview.interviewee)
 
     def __unicode__(self):
         return str(self.submission) + ':' + str(self.interview)

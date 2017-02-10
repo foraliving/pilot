@@ -128,9 +128,10 @@ class Teacher(TestCase):
         Test to verify when a volunteeer is removed of the system from T3 interface
         :return:
         """
-        user = User.objects.get(pk=1)
-        response = self.client.get(reverse('delete_interview'), data={'interview_id': user.id})
+        interview = Interview.objects.get(pk=2)
+        response = self.client.post(reverse('delete_interview'), data={'interview_id': interview.id})
         self.assertEquals(response.status_code, 200)
+
 
     def test_assign_volunter_t3_interface(self):
         """

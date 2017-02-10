@@ -642,7 +642,7 @@
       "tags": "homepage",
       "created_by": 1,
       "creation_date": "2016-05-05T00:00:00Z",
-      "status": "pending"
+      "status": "approved"
     }
   },
   {
@@ -654,7 +654,7 @@
       "tags": "homepage",
       "created_by": 2,
       "creation_date": "2016-05-05T00:00:00Z",
-      "status": "pending"
+      "status": "approved"
     }
   }
 ]
