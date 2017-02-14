@@ -61,6 +61,8 @@ LOGIN_REDIRECT_URL = '/foraliving/'
 LOGIN_EXEMPT = ()
 
 ALLOWED_HOSTS = ['falpilot2017.us-east-1.elasticbeanstalk.com', 'localhost', '127.0.0.1', '192.168.1.34']
+AWS_ACCESS_KEY_ID = "AKIAJRR7IFMZEMQSE4Z"
+AWS_SECRET_ACCESS_KEY = "2EFIVYrFO7jUJAs8mt0x3RYK7cnOiLfPA2duiW59"
 
 TEMPLATES = [
     {
