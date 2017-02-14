@@ -60,7 +60,7 @@ LOGIN_URL = '/account/login/'
 LOGIN_REDIRECT_URL = '/foraliving/'
 LOGIN_EXEMPT = ()
 
-ALLOWED_HOSTS = ['192.241.156.220', 'localhost', '127.0.0.1', '192.168.1.34']
+ALLOWED_HOSTS = ['falpilot2017.us-east-1.elasticbeanstalk.com', 'localhost', '127.0.0.1', '192.168.1.34']
 
 TEMPLATES = [
     {
