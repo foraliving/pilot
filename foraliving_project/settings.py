@@ -60,7 +60,7 @@ LOGIN_URL = '/account/login/'
 LOGIN_REDIRECT_URL = '/foraliving/'
 LOGIN_EXEMPT = ()
 
-ALLOWED_HOSTS = ['192.241.156.220', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['192.241.156.220', 'localhost', '127.0.0.1', '192.168.1.34']
 
 TEMPLATES = [
     {
@@ -99,16 +99,28 @@ WSGI_APPLICATION = 'foraliving_project.wsgi.application'
 #     }
 # }
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'fal_dev',
-        'USER': 'noelia',
-        'PASSWORD': 'v1@r0.n3t',
-        'HOST': 'localhost',
-        'PORT': '5433',
+if 'RDS_DB_NAME' in os.environ:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': os.environ['RDS_DB_NAME'],
+            'USER': os.environ['RDS_USERNAME'],
+            'PASSWORD': os.environ['RDS_PASSWORD'],
+            'HOST': os.environ['RDS_HOSTNAME'],
+            'PORT': os.environ['RDS_PORT'],
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'iotd',
+            'USER': 'iotd',
+            'PASSWORD': 'iotd',
+            'HOST': 'localhost',
+            'PORT': '5432',
+        }
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/dev/ref/settings/#auth-password-validators
@@ -144,7 +156,11 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/dev/howto/static-files/
 
+STATIC_ROOT = STATIC_ROOT = os.path.join(BASE_DIR, "..", "foraliving", "static")
 STATIC_URL = '/static/'
 PROJECT_PATH = os.path.realpath(os.path.dirname(__file__))
 MEDIA_ROOT = PROJECT_PATH + '/media'
 MEDIA_URL = '/media/'
+
+EMAIL_BACKEND = "sgbackend.SendGridBackend"
+SENDGRID_API_KEY = "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"
