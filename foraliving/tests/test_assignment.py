@@ -28,7 +28,7 @@ class AssignmentPage(TestCase):
         response = self.client.get(
             reverse('assignment', kwargs={'interview_id': interview.id}))
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, 'href="/foraliving/volunteer/profile/1/1">Vivian </a>')
+        self.assertContains(response, 'href="/foraliving/volunteer/profile/1/1">Vivian. </a>')
 
     def test_group_name(self):
         """
@@ -134,4 +134,13 @@ class AssignmentPage(TestCase):
         self.assertEqual(response.status_code, 302)
         redirect_url = "/foraliving/assignment/" + str(interview.id) + "/"
         self.assertRedirects(response, redirect_url)
+
+    def test_delete_video(self):
+        """
+        Test to verify when a student delete a video
+        :return:
+        """
+        video = Video.objects.get(pk=1)
+        response = self.client.post(
+            reverse('delete_video'), data={'video_id': video.id})
 

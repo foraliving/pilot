@@ -31,7 +31,7 @@ class VolunteerProfile(LoginRequiredMixin, generic.View):
         interview = Interview.objects.filter(interviewee=user_id)
         interview_question = Interview_Question_Map.objects.filter(interview__in=interview)
         interview_question_video = Interview_Question_Video_Map.objects.filter(
-            interview_question__in=interview_question).order_by('-video')
+            interview_question__in=interview_question, video__status="approved").order_by('-video')
 
         user = User.objects.get(id=request.user.id)
         user_type = User_Type.objects.get(user=user)

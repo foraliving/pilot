@@ -8,6 +8,10 @@ body {
 
 }
 
+.backButton {
+    font-size: 19px;
+}
+
 .button.disabled {
     opacity: 0.65;
     cursor: not-allowed;

@@ -161,17 +161,18 @@ def render_menu_app_list(context):
                 if app_label in app_dict:
                     app_dict[app_label]['models'].append(model_dict)
                 else:
-                    app_dict[app_label] = {
-                        'name': apps.get_app_config(app_label).verbose_name,
-                        'app_label': app_label,
-                        'app_url': reverse(
-                            'admin:app_list',
-                            kwargs={'app_label': app_label},
-                            current_app=site.name
-                        ),
-                        'has_module_perms': has_module_perms,
-                        'models': [model_dict],
-                    }
+                    if app_label != "categories":
+                        app_dict[app_label] = {
+                            'name': apps.get_app_config(app_label).verbose_name,
+                            'app_label': app_label,
+                            'app_url': reverse(
+                                'admin:app_list',
+                                kwargs={'app_label': app_label},
+                                current_app=site.name
+                            ),
+                            'has_module_perms': has_module_perms,
+                            'models': [model_dict],
+                        }
 
     # Sort the apps alphabetically.
     app_list = list(six.itervalues(app_dict))

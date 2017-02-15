@@ -33,7 +33,7 @@
 {% block body %}
 <div class="container">
     <div>
-        <h4><a href="{% url 'teacher_volunteer' %}?class={{class_id}}&assignment={{assignment}}"> >Back</a></h4>
+        <h4><a href="{% url 'teacher_volunteer' %}?class={{class_id}}&assignment={{assignment}}"><i class="fa fa-angle-left backButton" aria-hidden="true"> Back</i></a></h4>
     </div>
     <h2 style="text-align: center;"> Assign students to {{volunteer.first_name}} {{volunteer.last_name}} </h2>
     <div class="panel-body">

@@ -494,10 +494,10 @@ $(document).ready(function () {
                     "className": 'dt-body-center',
                     "render": function (data, type, full, meta) {
                         if (full[8] == null || (full[8] == full[1] && full[4] == "Add")) {
-                            return '<div class="checkboxes"><input type="checkbox" name="student" value="' + full[0] + '"></div>';
+                            return '<div class="checkboxes"><input type="checkbox" name="student" style="margin: 10px 0 0;" value="' + full[0] + '"></div>';
                         }
                         else {
-                            return '<div> </div>';
+                            return '<div class="checkboxes"><input type="checkbox" disabled  style="margin: 10px 0 0;" name="student" value="' + full[0] + '"></div>';
                         }
                     }
                 }, {

@@ -14,6 +14,7 @@ from django.views import generic
 from django.contrib.auth.models import User
 from .forms import *
 from django.core import serializers
+from django.db.models import Q
 from foraliving.models import Class, User_Add_Ons, Volunteer_User_Add_Ons, Assignment
 
 
@@ -101,11 +102,11 @@ class TeacherVideosT8(LoginRequiredMixin, generic.View):
         user_add_ons = User_Add_Ons.objects.get(user=request.user.id)
         classname = Class.objects.filter(teacher=user_add_ons)
         class_id = request.GET.get('class')
+        video_archived = Video.objects.filter(Q(status="archived") | Q(status="new")).values('id')
         if class_id and class_id != '0':
             assignments = Assignment.objects.filter(falClass=class_id).values('pk')
             interview = Interview.objects.filter(assignment__in=assignments).values('pk')
             interview_question = Interview_Question_Map.objects.filter(interview_id__in=interview)
-            video_archived = Video.objects.filter(status="archived").values('id')
             videos = Interview_Question_Video_Map.objects.filter(interview_question__in=interview_question).order_by(
                 '-video').exclude(video__in=video_archived)
         else:
@@ -113,7 +114,6 @@ class TeacherVideosT8(LoginRequiredMixin, generic.View):
             school = School.objects.get(pk=user_add_ons.school.id)
             user_school = User_Add_Ons.objects.filter(school=school)
             videos = Video.objects.filter(created_by__in=user_school)
-            video_archived = Video.objects.filter(status="archived").values('id')
             videos = Interview_Question_Video_Map.objects.filter(video__in=videos).order_by('-video').exclude(
                 video__in=video_archived)
         return render(request, self.question_view, {'videos': videos, 'classname': classname,
@@ -148,7 +148,7 @@ def student_list(request, class_id, assignment_id):
         inner join foraliving_interview_question_video_map fiqvm2 on fv2.id=fiqvm2.video_id
         inner join foraliving_interview_question_map fiqm2 on fiqvm2.interview_question_id=fiqm2.id
         inner join foraliving_interview fi2 on fi2.id=fiqm2.interview_id
-        where fi2.id=fi.id and (fv2.status = 'pending' or  fv2.status = 'new') ) as pending,
+        where fi2.id=fi.id and fv2.status = 'pending' ) as pending,
 
         (Select count(*) From foraliving_video fv3
         inner join foraliving_interview_question_video_map fiqvm3 on fv3.id=fiqvm3.video_id
@@ -342,7 +342,7 @@ def update_video(request, video_id, flag_id):
 
     count = 0
     for data in interview_question_video_map:
-        if data.video.status == "pending" or data.video.status == "new":
+        if data.video.status == "pending":
             count = count + 1
 
     return HttpResponse(count)
@@ -355,7 +355,16 @@ def delete_interview(request):
     :return:
     """
     interview = request.POST.get('interview_id')
-    Interview.objects.filter(pk=interview).delete()
+    interviewDelete = Interview.objects.get(pk=interview)
+    group = Group.objects.get(pk=interviewDelete.group.id)
+    users = User.objects.filter(groups=group.id)
+    user_count = User.objects.filter(groups=group.id).count()
+    if user_count == 1:
+        for data in users:
+            if data.username == group.name:
+                Group.objects.filter(pk=group.id).delete()
+    else:
+        Interview.objects.filter(pk=interview).delete()
     return HttpResponse('true')
 
 
@@ -380,7 +389,6 @@ def delete_student(request):
     Student_Class.objects.filter(student_id=student_id).delete()
     user = User.objects.get(pk=student_id)
     user.groups.clear();
-
     return HttpResponse('true')
 
 
@@ -437,10 +445,11 @@ class GroupInterface(LoginRequiredMixin, generic.View):
         :return:
         """
         count = 0
+        equal = None
         falClass = Class.objects.get(pk=class_id)
         group = Group.objects.get(pk=group_id)
         student_class = Student_Class.objects.filter(falClass=class_id).values('student')
-        video_archived = Video.objects.filter(status="archived").values('id')
+        video_archived = Video.objects.filter(Q(status="archived") | Q(status="new")).values('id')
         try:
             interview = Interview.objects.get(assignment=assignment_id, group=group_id)
             interview_question = Interview_Question_Map.objects.filter(interview_id=interview.id)
@@ -448,7 +457,7 @@ class GroupInterface(LoginRequiredMixin, generic.View):
                 video__in=video_archived)
             volunteer = Volunteer_User_Add_Ons.objects.get(user=interview.interviewee.id)
             for data in videos:
-                if data.video.status == "pending" or data.video.status == 'new':
+                if data.video.status == "pending":
                     count = count + 1
 
         except:
@@ -466,11 +475,17 @@ class GroupInterface(LoginRequiredMixin, generic.View):
             videos_count = None
 
         users = User.objects.filter(groups=group_id, pk__in=student_class)
+        count_student = User.objects.filter(groups=group_id, pk__in=student_class).count()
+
+        if count_student == 1:
+            for data in users:
+                equal = True if data.username == group.name else False
+
         return render(request, self.group_view, {'group': group, 'users': users,
                                                  'interview': interview, 'videos': videos, 'volunteer': volunteer,
                                                  'count': count, 'videos_count': videos_count,
                                                  'classname': class_id, 'assignment': assignment_id,
-                                                 'name': falClass.name})
+                                                 'name': falClass.name, 'equal': equal})
 
 
 def studentPersonalInfo(request, class_id):
@@ -563,7 +578,7 @@ class AddClass(LoginRequiredMixin, generic.View):
                             'upload_complete': False,
                             'add_class_form': form,
                             'error': csv_error,
-                            'class_id': class_id,
+                            'class_id_data': class_id,
                             'assignment': assignment
                         }
                     )
@@ -597,7 +612,7 @@ class AddClass(LoginRequiredMixin, generic.View):
                     'class_name': new_class.name,
                     'add_class_form': TeacherAddClass(),
                     'success': str(len(new_students)) + ' students added correctly',
-                    'class_id': class_id,
+                    'class_id_data': class_id,
                     'assignment': assignment
                 }
             )
@@ -609,7 +624,7 @@ class AddClass(LoginRequiredMixin, generic.View):
                 'upload_complete': False,
                 'add_class_form': form,
                 'error': 'Class name missed',
-                'class_id': class_id,
+                'class_id_data': class_id,
                 'assignment': assignment
 
             }

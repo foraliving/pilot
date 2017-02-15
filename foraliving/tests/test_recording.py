@@ -32,35 +32,6 @@ class Recording(TestCase):
             reverse('question_interview', kwargs={'interview_id': interview.id, 'camera_id': 0}))
         self.assertEqual(response.status_code, 200)
 
-    def test_display_questions_interview(self):
-        """
-        Display the question selected using the interview_id
-        :return:
-        """
-        question = Question.objects.get(pk=23)
-        interview = Interview.objects.get(pk=1)
-        interview_question = Interview_Question_Map(interview=interview, question=question)
-        interview_question.save()
-        count = Interview_Question_Map.objects.filter(interview=interview).count()
-        iq = Interview_Question_Map.objects.filter(interview=interview)
-        response = self.client.get(
-            reverse('question_interview', kwargs={'interview_id': interview.id, 'camera_id': 0}))
-        self.assertEqual(response.status_code, 200)
-
-    def test_display_count_video(self):
-        """
-        If the video has video saved, display the number videos
-        :return:
-        """
-        question = Question.objects.get(pk=23)
-        interview = Interview.objects.get(pk=1)
-        interview_question = Interview_Question_Map(interview=interview, question=question)
-        interview_question.save()
-        count = Interview_Question_Map.objects.filter(interview=interview).count()
-        iq = Interview_Question_Map.objects.filter(interview=interview)
-        response = self.client.get(
-            reverse('question_interview', kwargs={'interview_id': interview.id, 'camera_id': 0}))
-        self.assertEqual(response.status_code, 200)
 
     def test_save_video(self):
         """
