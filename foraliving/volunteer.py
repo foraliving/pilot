@@ -174,6 +174,9 @@ class GetInterviewed(LoginRequiredMixin, generic.View):
             user_names = ''
             group_name = interview.group
 
+            if (len(students_class_group) == 0):
+                continue
+
             # This is the general case (more than one student)
             if (len(students_class_group) > 1):
                 cont = 0
